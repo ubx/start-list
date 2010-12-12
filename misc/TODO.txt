@@ -1,0 +1,96 @@
+o More columns in table
+
+o Show if something is in progress, clock, background color, grayed
+
+o Personal flight book, pilot summary
+
+o Club summary
+
+o Create Google accounts
+
+o UTC / local time switch (Checkbox)
+
+o After new/modify set correct date
+	OK
+
+o Refresh GUI (listbox...) if necessary
+	OK
+
+o Optimize placeListBox creation
+	New data structure in DB?
+
+o New FlightEntry not displayed in table
+	OK
+		
+o Introduce "preferred place"
+	(home base), login->set place in table.
+	OK
+
+o Refresh FlightEntry list after OLC import
+	OK
+
+o Put OLC import to a Task Queues
+	OK, found a  better way: incremental import!
+
+o Better web page layout
+
+o Change FlightEntry history
+	use doPrePersist?
+
+o Improve Listbox
+
+o Testing client side
+
+o Adlocal datastore stub. min panel: use a TabPanel?
+
+o Admin panel: manage user properties
+
+o Import from Olc on daily base (Cron Job)
+o FlightEntry history.
+
+o Slow Startup
+	Add:
+	  <precompilation-enabled>true</precompilation-enabled>
+	in appengine-web.xml
+
+o Reorganize Year -> Place -> Date -> FlightEntry selection
+	Obsolete
+	
+o Import OLC, problem with BEX
+	OK Fixed also OLC year wrap in October!
+	
+===============
+Anmerkungen:
+- Falls ich bei der Zeit was falsch mache(Zukunft, Landezeit vor Startzeit, zu langes landefeld) und "save" dr�cke sollte es zur�ckspringen, nicht einfach alles l�schen.
+	FIXED
+	
+- Wie wirds mit den Berechtigungen von vom olc importierten Fl�ge gemacht?
+	WORKAROUND: canModFlightEntry=True (for LoginInfo: sg-solothurn@gmx.ch, mazzicom@gmail.com )
+	
+- wenn ich in der startliste herumfahre und mir Fl�ge ansehe, und dann am Datum dass gerade angezeigt wird einen Flug hinzuf�gen will, sollte das Datum im new-Feld genau dem angezeigeten entsprechen(jetzt:das heutige)
+	CORRECTED
+	
+- Vorschlag(nicht so wichtig): Wenn ich ein Eintrag selektiere und auf "new" dr�cke, dann �bernimmt es die Eintr�ge des selektierten Eintrags, die ich dann nur noch anpassen muss.
+	NOT PRACTICABLE
+
+- Oder einfacher: Auch mit einem selektierten Flug kann man "new" dr�cken
+	NOT PRACTICABLE
+
+- Angeben: Zeiten UTC oder lokal
+
+- irgendwie die spalten abtrennen
+
+
+gruss mazzi
+
+
+===============
+
+Parse OLC Daily Score Worldwide:
+o Pilot name			OK
+o Take-off location		OK	
+o Club					OK
+o Aircraft				OK
+o Start					OK
+o End					OK
+

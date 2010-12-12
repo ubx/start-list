@@ -1,0 +1,11 @@
+<!-- Indices written at Sun, 5 Dec 2010 10:22:28 UTC -->
+
+<datastore-indexes>
+
+    <!-- Used 25 times in query history -->
+    <datastore-index kind="FlightEntry" ancestor="false" source="auto">
+        <property name="place" direction="asc"/>
+        <property name="startTimeInMillis" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

@@ -1,0 +1,132 @@
+http://onjava.com/pub/a/onjava/2006/05/31/working-with-google-web-toolkit.html?page=2
+
+===============
+I tried this and successful in receiving file.
+My file type is ".txt".
+
+//----------------------------------------
+
+//Write A servlet class extending HttpServerlet
+
+inside doGet method write this.
+
+resp.setContentType("application/csv");
+resp.setHeader("Content-disposition", "attachment; filename=" +
+"Report.txt");
+
+ServletOutputStream outputStream = resp.getOutputStream();
+
+for (int i = 0; i < buff.length(); ++i) {
+outputStream.write(buff.charAt(i));
+}
+outputStream.close();
+
+
+
+At client side:---
+
+String baseURL = GWT.getModuleBaseURL();
+String url = baseURL + "/VersionDetailServlet.do";
+Window.open(url, "",
+"menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=no,toolbar=true,
+width=" + Window.getClientWidth() + ",height=" + Window.getClientHeight());
+
+It will prompt a dialog to save file.
+
+==============
+
+// http://groups.google.com/group/Google-Web-Toolkit/browse_thread/thread/11b749d50221499e
+    ./appcfg.py vacuum_indexes ~/workspaces/ws0/Start-List-RC1/
+
+
+==============
+
+import java.net.*;
+import java.io.*;
+
+public class URLReader {
+public static void main(String[] ar) throws Exception {
+
+URL yahoo = new URL("http://finance.yahoo.com");
+BufferedReader in = new BufferedReader(new InputStreamReader(yahoo.openStream()));
+BufferedWriter wr=new BufferedWriter(new FileWriter("sample.txt"));
+
+String inputLine;
+while ((inputLine = in.readLine()) != null)
+// System.out.println(inputLine);
+try
+{
+wr.write(inputLine);
+}catch(Exception e)
+{
+e.printStackTrace();
+}
+in.close();
+}
+}
+
+===================
+Parse URL query
+    
+public static Map<String, String> getQueryMap(String query)
+{
+    String[] params = query.split("&");
+    Map<String, String> map = new HashMap<String, String>();
+    for (String param : params)
+    {
+        String name = param.split("=")[0];
+        String value = param.split("=")[1];
+        map.put(name, value);
+    }
+    return map;
+}
+
+    
+String query = url.getQuery();
+Map<String, String> map = getQueryMap(query);
+Set<String> keys = map.keySet();
+for (String key : keys)
+{
+   System.out.println("Name=" + key);
+   System.out.println("Value=" + map.get(key));
+}
+
+===================
+C:\google_appengine\bulkloader.py --dump --app_id=start-list-test --url=http://start-list-test.appspot.com/remote_api --filename=start-list-test.data
+andreas@andreas-HPE-340ch:~/scratch$ ~/google_appengine/bulkloader.py --dump --app_id=start-list-test --url=http://start-list-test.appspot.com/remote_api --filename=start-list-test.data
+
+C:\google_appengine\bulkloader.py --restore --app_id=start-list-test --url=http://start-list-test.appspot.com/remote_api --filename=start-list-test.data
+C:\google_appengine\bulkloader.py --restore --app_id=start-list-test --url=http://127.0.0.1:8888/remote_api --filename=start-list-test.data
+andreas@andreas-HPE-340ch:~/scratch$ ~/google_appengine/bulkloader.py --restore --app_id=start-list-test --url=http://127.0.0.1:8888/remote_api --filename=start-list-test.data
+
+
+===================
+Local Datastore Viewer
+http://localhost:8888/_ah/admin
+
+===================
+Application Stats for start-list-test
+http://start-list-test.appspot.com/appstats/stats
+
+===================
+Eclipse Plugin AppWrench
+http://appwrench.onpositive.com/static/updatesite
+
+===================
+Errors after updating to 1.3.2
+https://groups.google.com/group/google-appengine-java/browse_thread/thread/3a22c1dc376bdc19
+
+
+====================
+Load progress status
+http://www.ajaxload.info/
+http://groups.google.com/group/google-web-toolkit/browse_thread/thread/e315c7532c2ff111/4767d65461deb9fd?lnk=gst&q=progress+bar#4767d65461deb9fd
+
+====================
+CubicTest - http://boss.bekk.no/cubictest/update/
+
+====================
+Delete index
+http://groups.google.com/group/google-appengine-java/browse_thread/thread/c8a7888438efeb9/cdbaeb27befcfd75
+
+

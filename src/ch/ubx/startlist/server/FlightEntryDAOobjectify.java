@@ -1,0 +1,250 @@
+package ch.ubx.startlist.server;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import ch.ubx.startlist.client.FlightEntry;
+import ch.ubx.startlist.client.LoginInfo;
+
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Query;
+
+public class FlightEntryDAOobjectify implements FlightEntryDAO {
+
+	static {
+		ObjectifyService.register(FlightEntry.class);
+		ObjectifyService.register(LoginInfo.class);
+	}
+
+	private LoginInfo loginInfo = null;
+
+	@Override
+	public List<FlightEntry> listflightEntry(String place, long dateTimeInMillis, int startIndex, int maxCount) {
+		Calendar date = Calendar.getInstance();
+		date.setTimeInMillis(dateTimeInMillis);
+		List<FlightEntry> list = listflightEntry(date, place);
+		// TODO - use Query methods limit/ offset
+		list = list.subList(startIndex, Math.min(startIndex + maxCount, list.size()));
+		for (FlightEntry flightEntry : list) {
+			doPostLoad(flightEntry);
+		}
+		return list;
+	}
+
+	@Override
+	public FlightEntry removeFlightEntry(FlightEntry flightEntry) {
+		Objectify ofy = ObjectifyService.begin();
+		ofy.delete(flightEntry);
+		return flightEntry;
+	}
+
+	@Override
+	public FlightEntry updateFlightEntry(FlightEntry flightEntry) {
+		Objectify ofy = ObjectifyService.begin();
+		doPrePersist(flightEntry);
+		ofy.put(flightEntry);
+		return flightEntry;
+	}
+
+	@Override
+	public FlightEntry addFlightEntry(FlightEntry flightEntry) {
+		Objectify ofy = ObjectifyService.begin();
+		doPrePersist(flightEntry);
+		ofy.put(flightEntry);
+		return flightEntry;
+	}
+
+	@Override
+	public Set<Long> listDates(String place, int year) {
+		List<FlightEntry> list = listflightEntry(year, place);
+		Set<Long> dateList = new TreeSet<Long>();
+		Calendar ymd = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();
+		for (FlightEntry flightEntry : list) {
+			cal.setTimeInMillis(flightEntry.getStartTimeInMillis());
+			ymd.setTimeInMillis(0);
+			ymd.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+			ymd.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR));
+			dateList.add(ymd.getTimeInMillis());
+		}
+		if (dateList.size() == 0) {
+			dateList.add(ymd.getTime().getTime());
+		}
+		return dateList;
+	}
+
+	@Override
+	public Set<String> listAirfields(int year) {
+		List<FlightEntry> list = listflightEntry(year);
+		Set<String> places = new TreeSet<String>();
+		for (FlightEntry flightEntry : list) {
+			places.add(flightEntry.getPlace());
+		}
+		return places;
+	}
+
+	@Override
+	public Set<Integer> listYears() {
+		Objectify ofy = ObjectifyService.begin();
+
+		List<FlightEntry> list = ofy.query(FlightEntry.class).list();
+		Set<Integer> years = new TreeSet<Integer>();
+		Calendar cal = Calendar.getInstance();
+		for (FlightEntry flightEntry : list) {
+			cal.setTimeInMillis(flightEntry.getStartTimeInMillis());
+			years.add(new Integer(cal.get(Calendar.YEAR)));
+		}
+		if (years.size() == 0) {
+			years.add(cal.get(Calendar.YEAR));
+		}
+		return years;
+	}
+
+	// --------------------------------------------------------------------------------------
+	// server internal access methods
+
+	public List<FlightEntry> listflightEntry(int year) {
+		Objectify ofy = ObjectifyService.begin();
+
+		Calendar yearStart = Calendar.getInstance();
+		yearStart.setTimeInMillis(0);
+		yearStart.set(Calendar.YEAR, year);
+
+		Calendar yearEnd = Calendar.getInstance();
+		yearEnd.setTimeInMillis(0);
+		yearEnd.set(Calendar.YEAR, year + 1);
+
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", yearStart.getTimeInMillis()).filter("startTimeInMillis <",
+				yearEnd.getTimeInMillis()).order("startTimeInMillis");
+
+		return query.list();
+	}
+
+	public List<FlightEntry> listflightEntry(int year, int month, int day, String place) {
+		Objectify ofy = ObjectifyService.begin();
+		List<FlightEntry> list = new ArrayList<FlightEntry>();
+
+		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateStart.setTimeInMillis(0);
+		dateStart.set(Calendar.YEAR, year);
+		dateStart.set(Calendar.MONTH, month);
+		dateStart.set(Calendar.DAY_OF_MONTH, day);
+
+		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateEnd.setTimeInMillis(0);
+		dateEnd.set(Calendar.YEAR, year);
+		dateEnd.set(Calendar.MONTH, month);
+		dateEnd.set(Calendar.DAY_OF_MONTH, day);
+		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
+
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <",
+				dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
+
+		for (FlightEntry flightEntry : query) {
+			list.add(flightEntry);
+		}
+		return list;
+	}
+
+	public List<FlightEntry> listflightEntry(int year, String place) {
+		return listflightEntry(year, year, place);
+	}
+
+	public List<FlightEntry> listflightEntry(int yearStart, int yearEnd, String place) {
+		Objectify ofy = ObjectifyService.begin();
+
+		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateStart.setTimeInMillis(0);
+		dateStart.set(Calendar.YEAR, yearStart);
+		dateStart.set(Calendar.DAY_OF_YEAR, 1);
+
+		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateEnd.setTimeInMillis(0);
+		dateEnd.set(Calendar.YEAR, yearEnd);
+		dateEnd.set(Calendar.DAY_OF_YEAR, 1);
+		dateEnd.add(Calendar.YEAR, 1);
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <",
+				dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
+
+		return query.list();
+	}
+
+	public List<FlightEntry> listflightEntry(Calendar date, String place) {
+		Objectify ofy = ObjectifyService.begin();
+
+		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateStart.setTimeInMillis(date.getTimeInMillis());
+		dateStart.set(Calendar.HOUR_OF_DAY, 0);
+		dateStart.set(Calendar.MINUTE, 0);
+		dateStart.set(Calendar.SECOND, 0);
+		dateStart.set(Calendar.MILLISECOND, 0);
+		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateEnd.setTimeInMillis(dateStart.getTimeInMillis());
+		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
+
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter(
+				"startTimeInMillis <", dateEnd.getTimeInMillis()).order("startTimeInMillis");
+		return query.list();
+	}
+
+	public void removeFlightEntries(String place, int source) {
+		Objectify ofy = ObjectifyService.begin();
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("source ==", source);
+		ofy.delete(query);
+	}
+
+	public void addFlightEntries(List<FlightEntry> flightEntries) {
+		if (flightEntries.size() > 0) {
+			Objectify ofy = ObjectifyService.begin();
+			for (FlightEntry flightEntry : flightEntries) {
+				doPrePersist(flightEntry);
+			}
+			ofy.put(flightEntries);
+		}
+	}
+
+	// --------------------------------------------------------------------------------------
+	// private methods
+
+	private void doPostLoad(FlightEntry flightEntry) {
+		UserService userService = UserServiceFactory.getUserService();
+		if (userService.isUserLoggedIn()) {
+			boolean deletable = false;
+			boolean modifiable = false;
+			if (userService.isUserAdmin()) {
+				deletable = true;
+				modifiable = true;
+			} else {
+				if (loginInfo == null) {
+					Objectify ofy = ObjectifyService.begin();
+					loginInfo = ofy.find(LoginInfo.class, userService.getCurrentUser().getEmail());
+				}
+				if (loginInfo != null) {
+					modifiable = loginInfo.isCanModFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+					deletable = loginInfo.isCanDelFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+					;
+				}
+			}
+			flightEntry.setModifiable(modifiable);
+			flightEntry.setDeletable(deletable);
+		}
+	}
+
+	private void doPrePersist(FlightEntry flightEntry) {
+		User user = UserServiceFactory.getUserService().getCurrentUser();
+		flightEntry.setModifier(user.getEmail());
+		flightEntry.setModified(System.currentTimeMillis());
+		if (flightEntry.getId() == null) {
+			flightEntry.setCreator(user.getEmail());
+			flightEntry.setCreated(System.currentTimeMillis());
+		}
+	}
+
+}
