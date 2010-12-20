@@ -1,13 +1,13 @@
 /**
  * 
  */
-package ch.ubx.startlist.client;
+package ch.ubx.startlist.client.ui;
 
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 
-class SuggestBox2 extends SuggestBox {
+public class SuggestBox2 extends SuggestBox {
 
 	public SuggestBox2(SuggestOracle oracle) {
 		super(oracle);

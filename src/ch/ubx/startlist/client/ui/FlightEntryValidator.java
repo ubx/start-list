@@ -1,6 +1,8 @@
-package ch.ubx.startlist.client;
+package ch.ubx.startlist.client.ui;
 
 import java.util.Date;
+
+
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

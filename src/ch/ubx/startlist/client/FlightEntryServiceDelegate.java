@@ -2,6 +2,8 @@ package ch.ubx.startlist.client;
 
 import java.util.Set;
 
+import ch.ubx.startlist.client.ui.FlightEntryListGUI;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -10,7 +12,7 @@ public class FlightEntryServiceDelegate {
 	FlightEntryListGUI gui;
 
 
-	protected void updateFlightEntry(final FlightEntry flightEntry) {
+	public void updateFlightEntry(final FlightEntry flightEntry) {
 		flightEntryService.updateFlightEntry(flightEntry, new AsyncCallback<FlightEntry>() {
 			public void onFailure(Throwable caught) {
 				gui.service_eventUpdateFlightEntryFailed(caught);
@@ -22,7 +24,7 @@ public class FlightEntryServiceDelegate {
 		});
 	}
 
-	protected void removeFlightEntry(final FlightEntry flightEntry) {
+	public void removeFlightEntry(final FlightEntry flightEntry) {
 		flightEntryService.removeFlightEntry(flightEntry, new AsyncCallback<FlightEntry>() {
 			public void onFailure(Throwable caught) {
 				gui.service_eventRemoveFlightEntryFailed(caught);
@@ -34,7 +36,7 @@ public class FlightEntryServiceDelegate {
 		});
 	}
 
-	protected void listDates(final String place, final int year) {
+	public void listDates(final String place, final int year) {
 		flightEntryService.listDates(place, year, new AsyncCallback<Set<Long>>() {
 			public void onFailure(Throwable caught) {
 				gui.service_eventListDatesFailed(caught);
@@ -47,7 +49,7 @@ public class FlightEntryServiceDelegate {
 		});
 	}
 
-	protected void listYears() {
+	public void listYears() {
 		flightEntryService.listYears(new AsyncCallback<Set<Integer>>() {
 			public void onFailure(Throwable caught) {
 				gui.service_eventListYearsFailed(caught);

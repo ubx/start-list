@@ -1,4 +1,4 @@
-package ch.ubx.startlist.client;
+package ch.ubx.startlist.client.ui;
 
 /*
  * Copyright 2007 Google Inc.
@@ -16,6 +16,8 @@ package ch.ubx.startlist.client;
  * the License.
  */
 
+import ch.ubx.startlist.client.DynaTableDataProvider;
+import ch.ubx.startlist.client.RowSelectionHandler;
 import ch.ubx.startlist.client.DynaTableDataProvider.RowDataAcceptor;
 
 import com.google.gwt.event.dom.client.ClickEvent;

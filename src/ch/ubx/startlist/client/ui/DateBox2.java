@@ -1,9 +1,7 @@
-package ch.ubx.startlist.client;
+package ch.ubx.startlist.client.ui;
 
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.datepicker.client.DateBox;
-
-// XX
 
 public class DateBox2 extends DateBox {
 	public DateBox2() {

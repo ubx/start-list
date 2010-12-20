@@ -1,5 +1,7 @@
 package ch.ubx.startlist.client.admin;
 
+import ch.ubx.startlist.client.admin.ui.AdminGUI;
+
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;

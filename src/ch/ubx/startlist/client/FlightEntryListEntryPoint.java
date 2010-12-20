@@ -2,6 +2,10 @@ package ch.ubx.startlist.client;
 
 import java.util.Date;
 
+import ch.ubx.startlist.client.ui.DateBox2;
+import ch.ubx.startlist.client.ui.SuggestBox2;
+import ch.ubx.startlist.client.ui.FlightEntryListGUI;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;

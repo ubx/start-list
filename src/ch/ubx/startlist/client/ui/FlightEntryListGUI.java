@@ -1,4 +1,4 @@
-package ch.ubx.startlist.client;
+package ch.ubx.startlist.client.ui;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -6,7 +6,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import ch.ubx.startlist.client.admin.AdminGUI;
+import ch.ubx.startlist.client.Airfield;
+import ch.ubx.startlist.client.AirfieldServiceDelegate;
+import ch.ubx.startlist.client.FlightEntry;
+import ch.ubx.startlist.client.FlightEntryListeProvider;
+import ch.ubx.startlist.client.FlightEntryServiceDelegate;
+import ch.ubx.startlist.client.GwtUtil;
+import ch.ubx.startlist.client.LoginInfo;
+import ch.ubx.startlist.client.LoginServiceDelegate;
+import ch.ubx.startlist.client.RowSelectionHandler;
+import ch.ubx.startlist.client.TextConstants;
+import ch.ubx.startlist.client.TimeFormat;
+import ch.ubx.startlist.client.admin.ui.AdminGUI;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -38,7 +49,12 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	private static final String TXT_CLOSE = "Close";
 
 	/* GUI Widgets */
-	protected Button addButton, updateButton, newButton, modifyButton, deleteButton, discardButton, saveButton;
+	protected Button addButton, updateButton;
+	public Button newButton;
+	public Button modifyButton;
+	public Button deleteButton;
+	public Button discardButton;
+	public Button saveButton;
 
 	protected TextBox dateField;
 	protected TextBox pilotField;
@@ -53,14 +69,14 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 	protected StackPanel stackPanel;
 
-	protected ListBox placeListBox;
-	protected ListBox yearListBox;
+	public ListBox placeListBox;
+	public ListBox yearListBox;
 
-	protected ListBox dateListBox;
+	public ListBox dateListBox;
 
-	protected Button prevDayPushButton;
-	protected Button nextDayPushButton;
-	protected FlexTable flightEntryFlexTable;
+	public Button prevDayPushButton;
+	public Button nextDayPushButton;
+	public FlexTable flightEntryFlexTable;
 
 	protected DateBox2 dateBox;
 	protected TextBox pilotNameBox;
@@ -71,11 +87,11 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	protected TextBox userTextBox;
 	protected PasswordTextBox passwordTextBox;
 	protected Button btnLoginOkButton;
-	protected Button btnClose;
+	public Button btnClose;
 
-	protected FlightEntryServiceDelegate flightEntryService;
-	protected LoginServiceDelegate loginServiceDelegate;
-	protected AirfieldServiceDelegate airfieldServiceDelegate;
+	public FlightEntryServiceDelegate flightEntryService;
+	public LoginServiceDelegate loginServiceDelegate;
+	public AirfieldServiceDelegate airfieldServiceDelegate;
 
 	/* Data model */
 	private FlightEntry currentFlightEntry;

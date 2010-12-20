@@ -1,4 +1,4 @@
-package ch.ubx.startlist.client;
+package ch.ubx.startlist.client.ui;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;

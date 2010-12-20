@@ -1,12 +1,14 @@
-package ch.ubx.startlist.client.admin;
+package ch.ubx.startlist.client.admin.ui;
 
 import java.util.List;
 import java.util.Set;
 
 import ch.ubx.startlist.client.Airfield;
 import ch.ubx.startlist.client.FlightEntry;
-import ch.ubx.startlist.client.FlightEntryListGUI;
 import ch.ubx.startlist.client.GwtUtil;
+import ch.ubx.startlist.client.admin.AdminGUIevents;
+import ch.ubx.startlist.client.admin.OlcImportServiceDelegate;
+import ch.ubx.startlist.client.ui.FlightEntryListGUI;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -23,13 +25,13 @@ public class AdminGUI extends FormPanel {
 
 	final protected FileUpload olc2006FileUpload;
 
-	protected Button analyzeFileButton;
+	public Button analyzeFileButton;
 	protected ListBox countriesListBox;
 	protected CheckBox chekBoxEraseAirfields;
-	protected ListBox excelYearListBox;
+	public ListBox excelYearListBox;
 	protected ListBox olcImportYearListBox;
-	protected Button olcImportFlightEntryButton;
-	protected Button storeFileButton;
+	public Button olcImportFlightEntryButton;
+	public Button storeFileButton;
 
 	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL() + "olc2006airfields";
 
