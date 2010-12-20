@@ -14,10 +14,7 @@ public class AirfieldServiceDelegate {
 
 	private AirfieldServiceAsync airfieldServiceAsync = GWT.create(AirfieldService.class);
 
-	private AdminGUI gui;
-
 	public AirfieldServiceDelegate(AdminGUI gui) {
-		this.gui = gui;
 	}
 
 	public void addAirfields(final Set<Airfield> airfields) {

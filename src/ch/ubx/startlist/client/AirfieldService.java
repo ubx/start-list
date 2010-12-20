@@ -10,8 +10,7 @@ public interface AirfieldService extends RemoteService {
 
 	public void addAirfield(Airfield airfield);
 	
-	public void addAirfields(Set<Airfield> airfields);
-	
+	public void addAirfields(Set<Airfield> airfields);	
 	
 	public Set<Airfield> getAirfields();
 

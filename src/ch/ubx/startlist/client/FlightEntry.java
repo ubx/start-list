@@ -5,8 +5,6 @@ import java.io.Serializable;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import com.googlecode.objectify.Key;
-
 public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 
 	public static final int SRC_MANUEL = 0;

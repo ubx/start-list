@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * A composite Widget that implements the main interface for the dynamic table, including the data table, status
  * indicators, and paging buttons.
  */
+@SuppressWarnings("deprecation")
 public class DynaTableWidget extends Composite {
 
 	/**
