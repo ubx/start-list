@@ -12,7 +12,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class AirfieldServiceDelegate {
 
-	public FlightEntryListGUI gui;
+	private FlightEntryListGUI gui;
+
+	public AirfieldServiceDelegate(FlightEntryListGUI gui) {
+		super();
+		this.gui = gui;
+	}
+
 	private AirfieldServiceAsync airfieldServiceAsync = GWT.create(AirfieldService.class);
 
 	public void listAirfields() {
