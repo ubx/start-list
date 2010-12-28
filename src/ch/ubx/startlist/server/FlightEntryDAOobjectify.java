@@ -46,15 +46,7 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	}
 
 	@Override
-	public FlightEntry updateFlightEntry(FlightEntry flightEntry) {
-		Objectify ofy = ObjectifyService.begin();
-		doPrePersist(flightEntry);
-		ofy.put(flightEntry);
-		return flightEntry;
-	}
-
-	@Override
-	public FlightEntry addFlightEntry(FlightEntry flightEntry) {
+	public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry) {
 		Objectify ofy = ObjectifyService.begin();
 		doPrePersist(flightEntry);
 		ofy.put(flightEntry);

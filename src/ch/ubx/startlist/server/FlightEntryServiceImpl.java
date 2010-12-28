@@ -13,10 +13,6 @@ public class FlightEntryServiceImpl extends RemoteServiceServlet implements Flig
 	private static final long serialVersionUID = 1L;
 	private FlightEntryDAO flightEntryDAO = new FlightEntryDAOobjectify();
 
-	public FlightEntry addFlightEntry(FlightEntry flightEntry) {
-		return flightEntryDAO.addFlightEntry(flightEntry);
-	}
-
 	public List<FlightEntry> listFlightEntries(String place, long dateInMillies, int startIndex, int maxCount) {
 		List<FlightEntry> listFlightEntrys = flightEntryDAO.listflightEntry(place, dateInMillies, startIndex, maxCount);
 		return new ArrayList<FlightEntry>(listFlightEntrys);
@@ -27,8 +23,8 @@ public class FlightEntryServiceImpl extends RemoteServiceServlet implements Flig
 
 	}
 
-	public FlightEntry updateFlightEntry(FlightEntry flightEntry) {
-		return flightEntryDAO.updateFlightEntry(flightEntry);
+	public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry) {
+		return flightEntryDAO.createOrUpdateFlightEntry(flightEntry);
 	}
 
 	public Set<Long> listDates(String place, int year) {

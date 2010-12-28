@@ -574,7 +574,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		if (validator.isValid()) {
 			disableSCButtons();
 			saveForm(currentFlightEntry);
-			flightEntryService.updateFlightEntry(currentFlightEntry);
+			flightEntryService.createOrUpdateFlightEntry(currentFlightEntry);
 			clearForm();
 			enablePilotFields(false);
 			newButton.setEnabled(true);

@@ -12,8 +12,8 @@ public class FlightEntryServiceDelegate {
 	FlightEntryListGUI gui;
 
 
-	public void updateFlightEntry(final FlightEntry flightEntry) {
-		flightEntryService.updateFlightEntry(flightEntry, new AsyncCallback<FlightEntry>() {
+	public void createOrUpdateFlightEntry(final FlightEntry flightEntry) {
+		flightEntryService.createOrUpdateFlightEntry(flightEntry, new AsyncCallback<FlightEntry>() {
 			public void onFailure(Throwable caught) {
 				gui.service_eventUpdateFlightEntryFailed(caught);
 			}

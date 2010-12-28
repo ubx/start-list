@@ -7,11 +7,9 @@ import ch.ubx.startlist.client.FlightEntry;
 
 public interface FlightEntryDAO {
 
-	public FlightEntry addFlightEntry(FlightEntry flightEntry);
-
 	public FlightEntry removeFlightEntry(FlightEntry flightEntry);
 
-	public FlightEntry updateFlightEntry(FlightEntry flightEntry);
+	public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry);
 
 	public List<FlightEntry> listflightEntry(String place, long dateTimeInMillis, int startIndex, int maxCount);
 

@@ -20,11 +20,8 @@ public interface FlightEntryService extends RemoteService {
 
 	public Set<String> listPlaces(int year);
 
-	// TODO - unused, same as updateFlightEntry. Remove?
-	public FlightEntry addFlightEntry(FlightEntry flightEntry); 
-
 	public FlightEntry removeFlightEntry(FlightEntry flightEntry);
 
-	public FlightEntry updateFlightEntry(FlightEntry flightEntry);
+	public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry);
 
 }
