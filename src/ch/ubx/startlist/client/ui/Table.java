@@ -5,7 +5,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Grid;
 
-class Table extends Grid {
+public class Table extends Grid {
 
 	private static final String TXT_BACKGROUND_COLOR = "backgroundColor";
 	// TODO - replace with css styles?

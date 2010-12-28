@@ -121,12 +121,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	 * @wbp.parser.entryPoint
 	 */
 	public void init() {
-
-		buildForm();
 		placeWidgets();
-	}
-
-	private void buildForm() {
 	}
 
 	private void placeWidgets() {
