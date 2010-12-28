@@ -33,23 +33,17 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
- * A composite Widget that implements the main interface for the dynamic table,
- * including the data table, status indicators, and paging buttons.
+ * A composite Widget that implements the main interface for the dynamic table, including the data table, status indicators, and paging buttons.
  */
 @SuppressWarnings("deprecation")
 public class DynaTableWidget extends Composite {
 
 	private static final String NO_CONNECTION_MESSAGE = "<p>The DynaTable example uses a <a href=\"http://code.google.com/"
-			+ "webtoolkit/documentation/com.google.gwt.doc.DeveloperGuide."
-			+ "RemoteProcedureCalls.html\" target=\"_blank\">Remote Procedure Call</a> "
-			+ "(RPC) to request data from the server.  In order for the RPC to "
-			+ "successfully return data, the server component must be available.</p>"
-			+ "<p>If you are running this demo from compiled code, the server "
-			+ "component may not be available to respond to the RPC requests from "
-			+ "DynaTable.  Try running DynaTable in development mode to see the demo "
-			+ "in action.</p> "
-			+ "<p>Click on the Remote Procedure Call link above for more information "
-			+ "on GWT's RPC infrastructure.";
+			+ "webtoolkit/documentation/com.google.gwt.doc.DeveloperGuide." + "RemoteProcedureCalls.html\" target=\"_blank\">Remote Procedure Call</a> "
+			+ "(RPC) to request data from the server.  In order for the RPC to " + "successfully return data, the server component must be available.</p>"
+			+ "<p>If you are running this demo from compiled code, the server " + "component may not be available to respond to the RPC requests from "
+			+ "DynaTable.  Try running DynaTable in development mode to see the demo " + "in action.</p> "
+			+ "<p>Click on the Remote Procedure Call link above for more information " + "on GWT's RPC infrastructure.";
 
 	private final RowDataAcceptor acceptor = new RowDataAcceptorImpl();
 
@@ -65,17 +59,14 @@ public class DynaTableWidget extends Composite {
 
 	private int startRow = 0;
 
-	public DynaTableWidget(DynaTableDataProvider provider, String[] columns,
-			String[] columnStyles, int rowCount) {
+	public DynaTableWidget(DynaTableDataProvider provider, String[] columns, String[] columnStyles, int rowCount) {
 
 		if (columns.length == 0) {
-			throw new IllegalArgumentException(
-					"expecting a positive number of columns");
+			throw new IllegalArgumentException("expecting a positive number of columns");
 		}
 
 		if (columnStyles != null && columns.length != columnStyles.length) {
-			throw new IllegalArgumentException(
-					"expecting as many styles as columns");
+			throw new IllegalArgumentException("expecting as many styles as columns");
 		}
 
 		this.provider = provider;
@@ -100,8 +91,7 @@ public class DynaTableWidget extends Composite {
 			panel.setSpacing(4);
 			panel.add(body);
 			panel.add(closeButton);
-			panel.setCellHorizontalAlignment(closeButton,
-					VerticalPanel.ALIGN_RIGHT);
+			panel.setCellHorizontalAlignment(closeButton, VerticalPanel.ALIGN_RIGHT);
 			setWidget(panel);
 		}
 
@@ -278,8 +268,7 @@ public class DynaTableWidget extends Composite {
 		for (int i = 0, n = columns.length; i < n; i++) {
 			table.setText(0, i, columns[i]);
 			if (columnStyles != null) {
-				table.getCellFormatter().setStyleName(0, i,
-						columnStyles[i] + " header");
+				table.getCellFormatter().setStyleName(0, i, columnStyles[i] + " header");
 			}
 		}
 	}
