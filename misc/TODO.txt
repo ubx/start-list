@@ -46,15 +46,17 @@ o Adlocal datastore stub. min panel: use a TabPanel?
 o Admin panel: manage user properties
 
 o Import from Olc on daily base (Cron Job)
+
 o FlightEntry history.
 
 o Slow Startup
 	Add:
 	  <precompilation-enabled>true</precompilation-enabled>
 	in appengine-web.xml
+	OK
 
 o Reorganize Year -> Place -> Date -> FlightEntry selection
-	Obsolete
+	OK, Obsolete
 	
 o Import OLC, problem with BEX
 	OK Fixed also OLC year wrap in October!
@@ -64,16 +66,16 @@ Anmerkungen:
 - Falls ich bei der Zeit was falsch mache(Zukunft, Landezeit vor Startzeit, zu langes landefeld) und "save" drï¿½cke sollte es zurï¿½ckspringen, nicht einfach alles lï¿½schen.
 	FIXED
 	
-- Wie wirds mit den Berechtigungen von vom olc importierten Flï¿½ge gemacht?
+- Wie wirds mit den Berechtigungen von vom olc importierten Flüge gemacht?
 	WORKAROUND: canModFlightEntry=True (for LoginInfo: sg-solothurn@gmx.ch, mazzicom@gmail.com )
 	
-- wenn ich in der startliste herumfahre und mir Flï¿½ge ansehe, und dann am Datum dass gerade angezeigt wird einen Flug hinzufï¿½gen will, sollte das Datum im new-Feld genau dem angezeigeten entsprechen(jetzt:das heutige)
+- wenn ich in der startliste herumfahre und mir Flüge ansehe, und dann am Datum dass gerade angezeigt wird einen Flug hinzufügen will, sollte das Datum im new-Feld genau dem angezeigeten entsprechen(jetzt:das heutige)
 	CORRECTED
 	
-- Vorschlag(nicht so wichtig): Wenn ich ein Eintrag selektiere und auf "new" drï¿½cke, dann ï¿½bernimmt es die Eintrï¿½ge des selektierten Eintrags, die ich dann nur noch anpassen muss.
+- Vorschlag(nicht so wichtig): Wenn ich ein Eintrag selektiere und auf "new" drücke, dann übernimmt es die Eintrage des selektierten Eintrags, die ich dann nur noch anpassen muss.
 	NOT PRACTICABLE
 
-- Oder einfacher: Auch mit einem selektierten Flug kann man "new" drï¿½cken
+- Oder einfacher: Auch mit einem selektierten Flug kann man "new" drücken
 	NOT PRACTICABLE
 
 - Angeben: Zeiten UTC oder lokal
