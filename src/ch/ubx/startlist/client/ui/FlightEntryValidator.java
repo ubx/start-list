@@ -83,9 +83,9 @@ public class FlightEntryValidator {
 
 		// Pilot Name
 		{
-			String pilot = gui.pilotField.getValue();
+			String pilot = gui.pilotNameBox.getValue();
 			if (pilot.length() > 32) {
-				showMessage(gui.pilotField, "Piloten Name zu lang, maximum 32 Zeichen!");
+				showMessage(gui.pilotNameBox, "Piloten Name zu lang, maximum 32 Zeichen!");
 				return false;
 			}
 		}
