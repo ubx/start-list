@@ -23,13 +23,11 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 	private String modifier;
 	private String pilot;
 	private String passengerOrInstructor;
-	// @Indexed
 	private long startTimeInMillis;
 	private long endTimeGliderInMillis;
 	private long endTimeTowplaneInMillis;
 	private boolean training;
 	private String remarks;
-	// @Indexed
 	private String place;
 	private String LandingPlace;
 	private String registrationGlider;
