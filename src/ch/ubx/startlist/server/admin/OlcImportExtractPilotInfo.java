@@ -162,7 +162,7 @@ public class OlcImportExtractPilotInfo {
 						break;
 
 					case 4:
-						flightEntry.setPlane(titleOrText(tdElements.get(idx[j])));
+						flightEntry.setRegistrationGlider(titleOrText(tdElements.get(idx[j])));
 						break;
 
 					case 5: {
@@ -174,8 +174,8 @@ public class OlcImportExtractPilotInfo {
 
 					case 6: {
 						Date endDate = timeFormat.parse(dateStr + " " + titleOrText(tdElements.get(idx[j])));
-						flightEntry.setEndTimeInMillis(endDate.getTime());
-						flightEntry.setEndTimeValid(true);
+						flightEntry.setEndTimeGliderInMillis(endDate.getTime());
+						flightEntry.setEndTimeGliderValid(true);
 					}
 						break;
 
@@ -187,12 +187,12 @@ public class OlcImportExtractPilotInfo {
 					Element aElement = tdElements.get(idx[idx.length - 1]).getFirstElement(HTMLElementName.A);
 					String href = aElement.getAttributeValue("href");
 					if (href == null) {
-						flightEntry.setPlane("");
+						flightEntry.setRegistrationGlider("");
 						flightEntry.setCompetitionID("");
 					} else {
 						String[] t = href.split("=");
 						OlcImportExtractAircraftinfo aircraftinfo = new OlcImportExtractAircraftinfo(urlStr0 + t[t.length - 1]);
-						flightEntry.setPlane(aircraftinfo.getCallsign());
+						flightEntry.setRegistrationGlider(aircraftinfo.getCallsign());
 						flightEntry.setCompetitionID(aircraftinfo.getCompetitionID());
 					}
 					flightEntries.add(flightEntry);

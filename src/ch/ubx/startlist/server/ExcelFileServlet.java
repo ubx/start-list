@@ -126,7 +126,7 @@ public class ExcelFileServlet extends HttpServlet implements TextConstants {
 
 				sheet.addCell(new Label(col++, row, flightEntry.getPilot()));
 
-				sheet.addCell(new Label(col++, row, flightEntry.getPlane()));
+				sheet.addCell(new Label(col++, row, flightEntry.getRegistrationGlider()));
 
 				sheet.addCell(new Label(col++, row, flightEntry.getPlace()));
 
@@ -137,8 +137,8 @@ public class ExcelFileServlet extends HttpServlet implements TextConstants {
 
 				sheet.addCell(new Label(col++, row, flightEntry.getLandingPlace()));
 
-				if (flightEntry.isEndTimeValid()) {
-					time.setTime(flightEntry.getEndTimeInMillis());
+				if (flightEntry.isEndTimeGliderValid()) {
+					time.setTime(flightEntry.getEndTimeGliderInMillis());
 				} else {
 					time.setTime(0);
 				}

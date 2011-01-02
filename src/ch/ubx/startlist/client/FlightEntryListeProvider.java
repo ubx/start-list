@@ -86,20 +86,20 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
 				rows[i][COL_TO_TIME] = TIME_FORMAT.format(date);
 			}
 
-			if (flightEntry.isEndTimeValid()) {
-				date.setTime(flightEntry.getEndTimeInMillis());
+			if (flightEntry.isEndTimeGliderValid()) {
+				date.setTime(flightEntry.getEndTimeGliderInMillis());
 				rows[i][COL_LDG_TIME] = TIME_FORMAT.format(date);
 			}
 
-			if (flightEntry.isStartTimeValid() && flightEntry.isEndTimeValid()) {
-				long mins = (flightEntry.getEndTimeInMillis() - flightEntry.getStartTimeInMillis()) / 60000;
+			if (flightEntry.isStartTimeValid() && flightEntry.isEndTimeGliderValid()) {
+				long mins = (flightEntry.getEndTimeGliderInMillis() - flightEntry.getStartTimeInMillis()) / 60000;
 				String minsStr = String.valueOf(mins % 60);
 				String minsStrx = minsStr.length() == 1 ? "0" + minsStr : minsStr;
 				rows[i][COL_DURATION] = String.valueOf(mins / 60) + ":" + minsStrx;
 			}
 			rows[i][COL_TRAINING] = flightEntry.isTraining() ? "J" : "N";
 			rows[i][COL_REMARKS] = flightEntry.getRemarks();
-			rows[i][COL_AIRCRAFT] = flightEntry.getPlane();
+			rows[i][COL_AIRCRAFT] = flightEntry.getRegistrationGlider();
 			rows[i][COL_DEP] = flightEntry.getPlace();
 			rows[i][COL_DST] = flightEntry.getLandingPlace();
 		}

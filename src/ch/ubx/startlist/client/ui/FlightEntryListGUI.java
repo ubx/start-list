@@ -442,8 +442,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		} else {
 			startDateBox.setValue(null);
 		}
-		if (flightEntry.isEndTimeValid()) {
-			date.setTime(flightEntry.getEndTimeInMillis());
+		if (flightEntry.isEndTimeGliderValid()) {
+			date.setTime(flightEntry.getEndTimeGliderInMillis());
 			endDateBox.setValue(date);
 		} else {
 			endDateBox.setValue(null);
@@ -465,7 +465,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			}
 		}
 		allPlacesSuggestBox.setValue(flightEntry.getLandingPlace());
-		registrationBox.setValue(flightEntry.getPlane());
+		registrationBox.setValue(flightEntry.getRegistrationGlider());
 	}
 
 	private void saveForm(FlightEntry flightEntry) {
@@ -501,19 +501,19 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		flightEntry.setEndTimeValid(date != null);
-		if (flightEntry.isEndTimeValid()) {
+		flightEntry.setEndTimeGliderValid(date != null);
+		if (flightEntry.isEndTimeGliderValid()) {
 			toYMD(dateBox.getValue(), date);
-			flightEntry.setEndTimeInMillis(date.getTime());
+			flightEntry.setEndTimeGliderInMillis(date.getTime());
 		} else {
-			flightEntry.setEndTimeInMillis(0);
+			flightEntry.setEndTimeGliderInMillis(0);
 		}
 
 		flightEntry.setTraining(trainingCheckBox.getValue());
 		flightEntry.setRemarks(remarksTextBox.getValue());
 		flightEntry.setPlace(allPlacesListBox.getValue(allPlacesListBox.getSelectedIndex()));
 		flightEntry.setLandingPlace(allPlacesSuggestBox.getValue());
-		flightEntry.setPlane(registrationBox.getValue());
+		flightEntry.setRegistrationGlider(registrationBox.getValue());
 	}
 
 	@SuppressWarnings("deprecation")

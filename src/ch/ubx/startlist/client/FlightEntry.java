@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+
 public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 
 	public static final int SRC_MANUEL = 0;
@@ -21,17 +22,21 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 	private String creator;
 	private String modifier;
 	private String pilot;
+	private String passengerOrInstructor;
 	// @Indexed
 	private long startTimeInMillis;
-	private long endTimeInMillis;
+	private long endTimeGliderInMillis;
+	private long endTimeTowplaneInMillis;
 	private boolean training;
 	private String remarks;
 	// @Indexed
 	private String place;
 	private String LandingPlace;
-	private String plane;
+	private String registrationGlider;
+	private String registrationTowplane;
 	private boolean startTimeValid = false;
-	private boolean endTimeValid = false;
+	private boolean endTimeGliderValid = false;
+	private boolean endTimeTowplaneValid = false;
 	private String club;
 	private String competitionID;
 	private int source = SRC_MANUEL;
@@ -40,10 +45,10 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 	@Transient
 	private boolean deletable;
 
-	public FlightEntry(String pilot, long startTimeInMillis, long endTimeInMillis, boolean training, String remarks, String place) {
+	public FlightEntry(String pilot, long startTimeInMillis, long endTimeGliderInMillis, boolean training, String remarks, String place) {
 		this.pilot = pilot;
 		this.startTimeInMillis = startTimeInMillis;
-		this.endTimeInMillis = endTimeInMillis;
+		this.endTimeGliderInMillis = endTimeGliderInMillis;
 		this.training = training;
 		this.remarks = remarks;
 		this.place = place;
@@ -104,6 +109,14 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 	public void setPilot(String pilot) {
 		this.pilot = pilot;
 	}
+	
+	public String getPassengerOrInstructor() {
+		return passengerOrInstructor;
+	}
+
+	public void setPassengerOrInstructor(String passengerOrInstructor) {
+		this.passengerOrInstructor = passengerOrInstructor;
+	}
 
 	public long getStartTimeInMillis() {
 		return startTimeInMillis;
@@ -113,14 +126,22 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 		this.startTimeInMillis = startTimeInMillis;
 	}
 
-	public long getEndTimeInMillis() {
-		return endTimeInMillis;
+	public long getEndTimeGliderInMillis() {
+		return endTimeGliderInMillis;
 	}
 
-	public void setEndTimeInMillis(long endTimeInMillis) {
-		this.endTimeInMillis = endTimeInMillis;
+	public void setEndTimeGliderInMillis(long endTimeGliderInMillis) {
+		this.endTimeGliderInMillis = endTimeGliderInMillis;
 	}
 
+	public long getEndTimeTowplaneInMillis() {
+		return endTimeTowplaneInMillis;
+	}
+
+	public void setEndTimeTowplaneInMillis(long endTimeTowplaneInMillis) {
+		this.endTimeTowplaneInMillis = endTimeTowplaneInMillis;
+	}
+	
 	public boolean isTraining() {
 		return training;
 	}
@@ -145,22 +166,38 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 		this.startTimeValid = startTimeValid;
 	}
 
-	public boolean isEndTimeValid() {
-		return endTimeValid;
+	public boolean isEndTimeGliderValid() {
+		return endTimeGliderValid;
 	}
 
-	public void setEndTimeValid(boolean endTimeValid) {
-		this.endTimeValid = endTimeValid;
+	public void setEndTimeGliderValid(boolean endTimeGliderValid) {
+		this.endTimeGliderValid = endTimeGliderValid;
 	}
 
-	public String getPlane() {
-		return plane;
+	public boolean isEndTimeTowplaneValid() {
+		return endTimeTowplaneValid;
 	}
 
-	public void setPlane(String plane) {
-		this.plane = plane;
+	public void setEndTimeTowplaneValid(boolean endTimeTowplaneValid) {
+		this.endTimeTowplaneValid = endTimeTowplaneValid;
+	}
+	
+	public String getRegistrationGlider() {
+		return registrationGlider;
 	}
 
+	public void setRegistrationGlider(String registrationGlider) {
+		this.registrationGlider = registrationGlider;
+	}
+
+	public String getRegistrationTowplane() {
+		return registrationTowplane;
+	}
+
+	public void setRegistrationTowplane(String registrationTowplane) {
+		this.registrationTowplane = registrationTowplane;
+	}
+	
 	public String getLandingPlace() {
 		return LandingPlace;
 	}
@@ -219,6 +256,8 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 	}
 
 	@Override
+	//Compares everything except created, modified, creator, modifier, club, competitionID, source, modifiable, deletable
+	//returns 0 if equal, 1 if not equal
 	public int compareTo(FlightEntry other) {
 		if (getStartTimeInMillis() != other.getStartTimeInMillis()) {
 			return 1;
@@ -227,11 +266,20 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 			return 1;
 		}
 
-		if (isEndTimeValid() != other.isEndTimeValid()) {
+		if (isEndTimeGliderValid() != other.isEndTimeGliderValid()) {
 			return 1;
 		}
-		if (isEndTimeValid() & other.isEndTimeValid()) {
-			if (getEndTimeInMillis() != other.getEndTimeInMillis()) {
+		if (isEndTimeGliderValid() & other.isEndTimeGliderValid()) {
+			if (getEndTimeGliderInMillis() != other.getEndTimeGliderInMillis()) {
+				return 1;
+			}
+		}
+		
+		if (isEndTimeTowplaneValid() != other.isEndTimeTowplaneValid()) {
+			return 1;
+		}
+		if (isEndTimeTowplaneValid() & other.isEndTimeTowplaneValid()) {
+			if (getEndTimeTowplaneInMillis() != other.getEndTimeTowplaneInMillis()) {
 				return 1;
 			}
 		}
@@ -242,6 +290,16 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 			}
 		} else {
 			if (getPilot() != other.getPilot()) {
+				return 1;
+			}
+		}
+		
+		if (getPassengerOrInstructor() != null & other.getPassengerOrInstructor() != null) {
+			if (!getPassengerOrInstructor().equals(other.getPassengerOrInstructor())) {
+				return 1;
+			}
+		} else {
+			if (getPassengerOrInstructor() != other.getPassengerOrInstructor()) {
 				return 1;
 			}
 		}
@@ -266,12 +324,22 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 			}
 		}
 
-		if (getPlane() != null & other.getPlane() != null) {
-			if (!getPlane().equalsIgnoreCase(other.getPlane())) {
+		if (getRegistrationGlider() != null & other.getRegistrationGlider() != null) {
+			if (!getRegistrationGlider().equalsIgnoreCase(other.getRegistrationGlider())) {
 				return 1;
 			}
 		} else {
-			if (getPlane() != other.getPlane()) {
+			if (getRegistrationGlider() != other.getRegistrationGlider()) {
+				return 1;
+			}
+		}
+		
+		if (getRegistrationTowplane() != null & other.getRegistrationTowplane() != null) {
+			if (!getRegistrationTowplane().equalsIgnoreCase(other.getRegistrationTowplane())) {
+				return 1;
+			}
+		} else {
+			if (getRegistrationTowplane() != other.getRegistrationTowplane()) {
 				return 1;
 			}
 		}
@@ -294,6 +362,7 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 		return 0;
 	}
 
+	// used to compare FlightEntrys which are not complete (OLC import)
 	public int compareToMajor(FlightEntry other) {
 		boolean samePilot = false;
 		boolean samePlane = false;
@@ -304,8 +373,8 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 		} else {
 			return 1;
 		}
-		if (isEndTimeValid() && other.isEndTimeValid()) {
-			if (getEndTimeInMillis() != other.getEndTimeInMillis()) {
+		if (isEndTimeGliderValid() && other.isEndTimeGliderValid()) {
+			if (getEndTimeGliderInMillis() != other.getEndTimeGliderInMillis()) {
 				return 1;
 			}
 		} else {
@@ -323,28 +392,34 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 		} else {
 			return 1;
 		}
-		if (getPlane() != null & other.getPlane() != null) {
-			samePlane = getPlane().equalsIgnoreCase(other.getPlane());
+		if (getRegistrationGlider() != null & other.getRegistrationGlider() != null) {
+			samePlane = getRegistrationGlider().equalsIgnoreCase(other.getRegistrationGlider());
 		} else {
 			return 1;
 		}
 		return samePilot | samePlane ? 0 : 1;
 	}
 
+	// copies all propertys of the instance into a new instance
 	public FlightEntry copy() {
 		FlightEntry copy = new FlightEntry();
 		copy.setId(getId());
 		copy.setStartTimeValid(isStartTimeValid());
 		copy.setStartTimeInMillis(getStartTimeInMillis());
-		copy.setEndTimeValid(isEndTimeValid());
-		copy.setEndTimeInMillis(getEndTimeInMillis());
+		copy.setEndTimeGliderValid(isEndTimeGliderValid());
+		copy.setEndTimeTowplaneValid(isEndTimeTowplaneValid());
+		copy.setEndTimeGliderInMillis(getEndTimeGliderInMillis());
+		copy.setEndTimeTowplaneInMillis(getEndTimeTowplaneInMillis());
 		copy.setPilot(getPilot());
+		copy.setPassengerOrInstructor(getPassengerOrInstructor());
 		copy.setPlace(getPlace());
 		copy.setLandingPlace(getLandingPlace());
-		copy.setPlane(getPlane());
+		copy.setRegistrationGlider(getRegistrationGlider());
+		copy.setRegistrationTowplane(getRegistrationGlider());
 		copy.setTraining(isTraining());
 		copy.setRemarks(getRemarks());
 		copy.setModifiable(isModifiable());
+		copy.setDeletable(isDeletable());
 		copy.setCreated(getCreated());
 		copy.setCreator(getCreator());
 		copy.setModified(getModified());

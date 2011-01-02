@@ -76,20 +76,20 @@ public class OlcImportImpl extends RemoteServiceServlet implements OlcImportServ
 						boolean samePlane = samePlane(newFlightEntry, storedFlightEntry);
 						boolean sameStart = sameStartTime(newFlightEntry, storedFlightEntry);
 						boolean sameEnd = sameEndTime(newFlightEntry, storedFlightEntry);
-						if (samePilot & samePlane & !storedFlightEntry.isStartTimeValid() & !storedFlightEntry.isEndTimeValid()) {
-							storedFlightEntry.setEndTimeInMillis(newFlightEntry.getEndTimeInMillis());
-							storedFlightEntry.setEndTimeValid(true);
+						if (samePilot & samePlane & !storedFlightEntry.isStartTimeValid() & !storedFlightEntry.isEndTimeGliderValid()) {
+							storedFlightEntry.setEndTimeGliderInMillis(newFlightEntry.getEndTimeGliderInMillis());
+							storedFlightEntry.setEndTimeGliderValid(true);
 							modifiedFlightEntries.add(storedFlightEntry);
 						} else if (samePilot & samePlane & sameStart & !sameEnd) {
-							storedFlightEntry.setEndTimeInMillis(newFlightEntry.getEndTimeInMillis());
-							storedFlightEntry.setEndTimeValid(true);
+							storedFlightEntry.setEndTimeGliderInMillis(newFlightEntry.getEndTimeGliderInMillis());
+							storedFlightEntry.setEndTimeGliderValid(true);
 							modifiedFlightEntries.add(storedFlightEntry);
 						} else if (samePilot & samePlane & !sameStart & sameEnd) {
 							storedFlightEntry.setStartTimeInMillis(newFlightEntry.getStartTimeInMillis());
 							storedFlightEntry.setStartTimeValid(true);
 							modifiedFlightEntries.add(storedFlightEntry);
 						} else if (samePilot & !samePlane & sameStart & sameEnd) {
-							storedFlightEntry.setPlane(newFlightEntry.getPlane());
+							storedFlightEntry.setRegistrationGlider(newFlightEntry.getRegistrationGlider());
 							modifiedFlightEntries.add(storedFlightEntry);
 						} else if (!samePilot & samePlane & sameStart & sameEnd) {
 							storedFlightEntry.setPilot(newFlightEntry.getPilot());
@@ -131,8 +131,8 @@ public class OlcImportImpl extends RemoteServiceServlet implements OlcImportServ
 	}
 
 	private boolean samePlane(FlightEntry fe0, FlightEntry fe1) {
-		String name0 = fe0.getPlane();
-		String name1 = fe1.getPlane();
+		String name0 = fe0.getRegistrationGlider();
+		String name1 = fe1.getRegistrationGlider();
 		if (name0 != null && name1 != null) {
 			if (name0.equalsIgnoreCase(name1)) {
 				return true;
@@ -149,8 +149,8 @@ public class OlcImportImpl extends RemoteServiceServlet implements OlcImportServ
 	}
 
 	private boolean sameEndTime(FlightEntry fe0, FlightEntry fe1) {
-		if (fe0.isEndTimeValid() && fe1.isEndTimeValid()) {
-			return fe0.getEndTimeInMillis() == fe1.getEndTimeInMillis();
+		if (fe0.isEndTimeGliderValid() && fe1.isEndTimeGliderValid()) {
+			return fe0.getEndTimeGliderInMillis() == fe1.getEndTimeGliderInMillis();
 		}
 		return false;
 	}
