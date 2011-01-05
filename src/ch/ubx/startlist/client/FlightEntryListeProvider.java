@@ -11,16 +11,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public class FlightEntryListeProvider implements DynaTableDataProvider, TimeFormat {
 
-	private final static int COL_PILOT = 0;
-	private final static int COL_AIRCRAFT = 1;
-	private final static int COL_DEP = 2;
-	private final static int COL_TO_TIME = 3;
-	private final static int COL_DST = 4;
-	private final static int COL_LDG_TIME = 5;
-	private final static int COL_DURATION = 6;
-	private final static int COL_TRAINING = 7;
-	private final static int COL_REMARKS = 8;
-	private final static int COLS = 9;
+	private final static int COL_START_TIME = 0;
+	private final static int COL_LDG_TIME_TOWPLANE = 1;
+	private final static int COL_DURATION_TOWPLANE = 2;
+	private final static int COL_REGISTRATION_TOWPLANE = 3;
+	private final static int COL_LDG_TIME_GLIDER = 4;	
+	private final static int COL_DURATION_GLIDER = 5;	
+	private final static int COL_REGISTRATION_GLIDER = 6;
+	private final static int COL_PILOT = 7;
+	private final static int COL_PASSENGER_OR_INSTRUCTOR = 8;
+	private final static int COL_TRAINING = 9;
+	private final static int COL_REMARKS = 10;
+	private final static int COLS = 11;
 
 	private FlightEntryServiceAsync flightEntryService;
 
@@ -74,34 +76,56 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
 	private void pushResults(RowDataAcceptor acceptor, int startRow, List<FlightEntry> flightEntryList) {
 		String[][] rows = new String[flightEntryList.size()][];
 		for (int i = 0; i < rows.length; i++) {
+            // init data structures
 			rows[i] = new String[COLS];
 			for (int j = 0; j < rows[i].length; j++) {
 				rows[i][j] = null;
 			}
 			FlightEntry flightEntry = flightEntryList.get(i);
-			rows[i][COL_PILOT] = flightEntry.getPilot();
+
+            // fill in data column per column
 			Date date = new Date();
 			if (flightEntry.isStartTimeValid()) {
 				date.setTime(flightEntry.getStartTimeInMillis());
-				rows[i][COL_TO_TIME] = TIME_FORMAT.format(date);
+				rows[i][COL_START_TIME] = TIME_FORMAT.format(date);
 			}
-
+			
+			if (flightEntry.isEndTimeTowplaneValid()) {
+				date.setTime(flightEntry.getEndTimeTowplaneInMillis());
+				rows[i][COL_LDG_TIME_TOWPLANE] = TIME_FORMAT.format(date);
+			}
+			
+			if (flightEntry.isStartTimeValid() && flightEntry.isEndTimeTowplaneValid()) {
+				long mins = (flightEntry.getEndTimeTowplaneInMillis() - flightEntry.getStartTimeInMillis()) / 60000;
+				String minsStr = String.valueOf(mins % 60);
+				String minsStrx = minsStr.length() == 1 ? "0" + minsStr : minsStr;
+				rows[i][COL_DURATION_TOWPLANE] = String.valueOf(mins / 60) + ":" + minsStrx;
+			}
+			
+			rows[i][COL_REGISTRATION_TOWPLANE] = flightEntry.getRegistrationTowplane();
+			
 			if (flightEntry.isEndTimeGliderValid()) {
 				date.setTime(flightEntry.getEndTimeGliderInMillis());
-				rows[i][COL_LDG_TIME] = TIME_FORMAT.format(date);
+				rows[i][COL_LDG_TIME_GLIDER] = TIME_FORMAT.format(date);
 			}
-
+			
 			if (flightEntry.isStartTimeValid() && flightEntry.isEndTimeGliderValid()) {
 				long mins = (flightEntry.getEndTimeGliderInMillis() - flightEntry.getStartTimeInMillis()) / 60000;
 				String minsStr = String.valueOf(mins % 60);
 				String minsStrx = minsStr.length() == 1 ? "0" + minsStr : minsStr;
-				rows[i][COL_DURATION] = String.valueOf(mins / 60) + ":" + minsStrx;
+				rows[i][COL_DURATION_GLIDER] = String.valueOf(mins / 60) + ":" + minsStrx;
 			}
+			
+			rows[i][COL_REGISTRATION_GLIDER] = flightEntry.getRegistrationGlider();
+			
+			rows[i][COL_PILOT] = flightEntry.getPilot();
+			
+			rows[i][COL_PASSENGER_OR_INSTRUCTOR] = flightEntry.getPassengerOrInstructor();
+			
 			rows[i][COL_TRAINING] = flightEntry.isTraining() ? "J" : "N";
+			
 			rows[i][COL_REMARKS] = flightEntry.getRemarks();
-			rows[i][COL_AIRCRAFT] = flightEntry.getRegistrationGlider();
-			rows[i][COL_DEP] = flightEntry.getPlace();
-			rows[i][COL_DST] = flightEntry.getLandingPlace();
+
 		}
 		acceptor.accept(startRow, rows);
 	}

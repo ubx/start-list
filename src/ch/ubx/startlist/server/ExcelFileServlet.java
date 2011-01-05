@@ -27,12 +27,14 @@ public class ExcelFileServlet extends HttpServlet implements TextConstants {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String[] columns = new String[] { TXT_DATE, TXT_PILOT, TXT_SHORT_REGISTRATION, TXT_START_PLACE, TXT_START_TIME + "[UTC]",
-			TXT_LANDING_PLACE, TXT_LANDING_TIME + "[UTC]", TXT_DURATION, TXT_SHORT_TRAINING, TXT_REMARKS };
-	private static final int[] columnswidth = new int[] { 10, 20, 10, 20, 18, 20, 18, 10, 6, 60 };
+	private static final String[] columns = new String[] { TXT_DATE, TXT_START_PLACE, TXT_START_TIME + "[UTC]", TXT_LANDING_TIME_TOWPLANE + "[UTC]", TXT_DURATION_TOWPLANE, TXT_SHORT_REGISTRATION_TOWPLANE, 
+		                                                   TXT_LANDING_PLACE, TXT_LANDING_TIME_GLIDER + "[UTC]", TXT_DURATION_GLIDER, TXT_SHORT_REGISTRATION_GLIDER, TXT_PILOT, TXT_PASSENGER_OR_INSTRUCTOR, TXT_TRAINING, TXT_REMARKS };
 
-	private static final String TXT_COLUMN_LANDING_TIME = "G";
-	private static final String TXT_COLUMN_START_TIME = "E";
+	private static final int[] columnswidth = new int[] { 10, 18, 18, 18, 10, 18, 18, 18, 10, 18, 20, 20, 6, 60 };
+
+	private static final String TXT_COLUMN_LANDING_TIME_GLIDER = "H";
+	private static final String TXT_COLUMN_LANDING_TIME_TOWPLANE = "D";
+	private static final String TXT_COLUMN_START_TIME = "C";
 
 	// TODO - the commented code below seem not to work here as expected, therefore it is put into doGet
 
@@ -55,7 +57,7 @@ public class ExcelFileServlet extends HttpServlet implements TextConstants {
 	public ExcelFileServlet() {
 		super();
 		if (columns.length != columnswidth.length) {
-			throw new RuntimeException("columns text and widthdifferent length");
+			throw new RuntimeException("columns text array and width array have a different length");
 		}
 	}
 
@@ -119,37 +121,65 @@ public class ExcelFileServlet extends HttpServlet implements TextConstants {
 
 			// write rows
 			for (FlightEntry flightEntry : flightEnties) {
+				
 				col = 0;
 
+				// column A: date
 				Date time = new Date(flightEntry.getStartTimeInMillis());
 				sheet.addCell(new DateTime(col++, row, time, cellDateFormat));
-
-				sheet.addCell(new Label(col++, row, flightEntry.getPilot()));
-
-				sheet.addCell(new Label(col++, row, flightEntry.getRegistrationGlider()));
-
+				
+				// column B: start place
 				sheet.addCell(new Label(col++, row, flightEntry.getPlace()));
-
+				
+				// column C: start time
 				if (!flightEntry.isStartTimeValid()) {
 					time.setTime(0);
 				}
-				sheet.addCell(new DateTime(col++, row, time, cellTimeFormat, true));
-
+				sheet.addCell(new DateTime(col++, row, time, cellTimeFormat));
+				
+				// column D: end time towplane
+				if (flightEntry.isEndTimeTowplaneValid()) {
+					time.setTime(flightEntry.getEndTimeTowplaneInMillis());
+				} else {
+					time.setTime(0);
+				}
+				sheet.addCell(new DateTime(col++, row, time, cellTimeFormat));
+				
+				// column E: tow duration: let excel calculate it
+				String durationFormulaTowplane = TXT_COLUMN_LANDING_TIME_TOWPLANE + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
+				sheet.addCell(new Formula(col++, row, durationFormulaTowplane, cellTimeFormat));
+				
+				// column F: registration towplane
+				sheet.addCell(new Label(col++, row, flightEntry.getRegistrationTowplane()));
+				
+				// column G: landing place
 				sheet.addCell(new Label(col++, row, flightEntry.getLandingPlace()));
-
+				
+				// column H: end time glider
 				if (flightEntry.isEndTimeGliderValid()) {
 					time.setTime(flightEntry.getEndTimeGliderInMillis());
 				} else {
 					time.setTime(0);
 				}
-				sheet.addCell(new DateTime(col++, row, time, cellTimeFormat, true));
+				sheet.addCell(new DateTime(col++, row, time, cellTimeFormat));
+				
+				// column I: glider duration: let excel calculate it
+				String durationFormulaGlider = TXT_COLUMN_LANDING_TIME_GLIDER + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
+				sheet.addCell(new Formula(col++, row, durationFormulaGlider, cellTimeFormat));
+				
+				// column J: registration glider
+				sheet.addCell(new Label(col++, row, flightEntry.getRegistrationGlider()));
+				
+				// column K: name of pilot
+				sheet.addCell(new Label(col++, row, flightEntry.getPilot()));
+				
+				// column L: name of passenger or instructor
+				sheet.addCell(new Label(col++, row, flightEntry.getPassengerOrInstructor()));
 
-				// lat excel calculate the duration
-				String durationFormula = TXT_COLUMN_LANDING_TIME + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
-				sheet.addCell(new Formula(col++, row, durationFormula, cellTimeFormat));
-
+				// column M: training or not?
 				sheet.addCell(new Label(col++, row, flightEntry.isTraining() ? TXT_Y : TXT_N));
 
+				// column N: remarks
 				sheet.addCell(new Label(col++, row, flightEntry.getRemarks()));
 
 				row++;

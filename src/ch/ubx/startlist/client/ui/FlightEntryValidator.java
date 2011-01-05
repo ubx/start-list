@@ -45,7 +45,7 @@ public class FlightEntryValidator {
 			}
 		}
 
-		// Start Time
+		// Start time
 		{
 			TextBox tb = gui.startDateBox.getTextBox();
 			if (tb != null) {
@@ -57,31 +57,55 @@ public class FlightEntryValidator {
 
 		}
 
-		// Landing Time
+		// Landing time glider
 		{
-			TextBox tb = gui.endDateBox.getTextBox();
+			TextBox tb = gui.endGliderDateBox.getTextBox();
 			if (tb != null) {
 				if (!checkTime(tb.getValue())) {
-					showMessage(gui.endDateBox, "Landezeit format mm:ss sein!");
+					showMessage(gui.endGliderDateBox, "Landezeit Segelflugzeug format mm:ss sein!");
+					return false;
+				}
+
+			}
+		}
+		
+		// Landing time towplane
+		{
+			TextBox tb = gui.endTowplaneDateBox.getTextBox();
+			if (tb != null) {
+				if (!checkTime(tb.getValue())) {
+					showMessage(gui.endTowplaneDateBox, "Landezeit Schleppflugzeug format mm:ss sein!");
 					return false;
 				}
 
 			}
 		}
 
-		// Duration
+		// Duration glider
 		{
 			startTime = gui.startDateBox.getValue();
-			landingTime = gui.endDateBox.getValue();
+			landingTime = gui.endGliderDateBox.getValue();
 			if (startTime != null && landingTime != null) {
 				if (!landingTime.after(startTime)) {
-					showMessage(gui.startDateBox, "Startzeit vor oder gleich Landezeit!");
+					showMessage(gui.startDateBox, "Startzeit SF vor oder gleich Landezeit!");
+					return false;
+				}
+			}
+		}
+		
+		// Duration towplane
+		{
+			startTime = gui.startDateBox.getValue();
+			landingTime = gui.endTowplaneDateBox.getValue();
+			if (startTime != null && landingTime != null) {
+				if (!landingTime.after(startTime)) {
+					showMessage(gui.startDateBox, "Startzeit Schlepper vor oder gleich Landezeit!");
 					return false;
 				}
 			}
 		}
 
-		// Pilot Name
+		// Name of pilot
 		{
 			String pilot = gui.pilotNameBox.getValue();
 			if (pilot.length() > 32) {
@@ -89,21 +113,38 @@ public class FlightEntryValidator {
 				return false;
 			}
 		}
+		
+		// Name of passenger or instructor
+		{
+			String pilot = gui.passengerOrInstructorNameBox.getValue();
+			if (pilot.length() > 32) {
+				showMessage(gui.passengerOrInstructorNameBox, "Pax/FL Name zu lang, maximum 32 Zeichen!");
+				return false;
+			}
+		}
 
 		// Landing Place
 		String lp = gui.allPlacesSuggestBox.getValue();
 		if (lp.length() > 20) {
-			showMessage(gui.registrationBox, "Landeort zu lang, maximum 20 Zeichen!");
+			showMessage(gui.registrationGliderBox, "Landeort zu lang, maximum 20 Zeichen!");
 			return false;
 		}
+ 
 
-		// 
-
-		// Registration
+		// Registration glider
 		{
-			String reg = gui.registrationBox.getValue();
+			String reg = gui.registrationGliderBox.getValue();
 			if (reg.length() > 7) {
-				showMessage(gui.registrationBox, "Immatrikulation zu lang, maximum 7 Zeichen!");
+				showMessage(gui.registrationGliderBox, "Immatrikulation SF zu lang, maximum 7 Zeichen!");
+				return false;
+			}
+		}
+		
+		// Registration towplane
+		{
+			String reg = gui.registrationTowplaneBox.getValue();
+			if (reg.length() > 7) {
+				showMessage(gui.registrationTowplaneBox, "Immatrikulation Schlepper zu lang, maximum 7 Zeichen!");
 				return false;
 			}
 		}
