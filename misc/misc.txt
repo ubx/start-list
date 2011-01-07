@@ -129,4 +129,12 @@ CubicTest - http://boss.bekk.no/cubictest/update/
 Delete index
 http://groups.google.com/group/google-appengine-java/browse_thread/thread/c8a7888438efeb9/cdbaeb27befcfd75
 
+====================
+Start cron job in devel mode:
+curl http://localhost:8888/startlist/lszg
+
+====================
+If a the application is deployed the first time, it may not work immediately. Wait
+until the datastore indexes are build. This may take some time, be patient!
+(com.google.appengine.api.datastore.DatastoreNeedIndexException: The index for this query is not ready to serve. See the Datastore Indexes page )
 
