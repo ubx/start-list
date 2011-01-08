@@ -131,7 +131,7 @@ http://groups.google.com/group/google-appengine-java/browse_thread/thread/c8a788
 
 ====================
 Start cron job in devel mode:
-curl http://localhost:8888/startlist/lszg
+curl http://localhost:8888/cronjobs
 
 ====================
 If a the application is deployed the first time, it may not work immediately. Wait
