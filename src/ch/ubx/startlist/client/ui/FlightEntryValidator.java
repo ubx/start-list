@@ -133,20 +133,37 @@ public class FlightEntryValidator {
 
 		// Registration glider
 		{
-			String reg = gui.registrationGliderBox.getValue();
-			if (reg.length() > 7) {
+			String regGlider = gui.registrationGliderBox.getValue();
+			if (regGlider.length() > 7) {
 				showMessage(gui.registrationGliderBox, "Immatrikulation SF zu lang, maximum 7 Zeichen!");
 				return false;
 			}
+			if (regGlider.length() > 0)
+			{
+				if (!regGlider.matches("[A-Z]{1,2}-[A-Z0-9]{4}")) {
+					showMessage(gui.registrationGliderBox, "Immatrikulation SF muss in der Form HB-1234 sein!");
+					return false;	
+				}	
+			}
+
+				
 		}
 		
 		// Registration towplane
 		{
-			String reg = gui.registrationTowplaneBox.getValue();
-			if (reg.length() > 7) {
+			String regTowplane = gui.registrationTowplaneBox.getValue();
+			if (regTowplane.length() > 7) {
 				showMessage(gui.registrationTowplaneBox, "Immatrikulation Schlepper zu lang, maximum 7 Zeichen!");
 				return false;
 			}
+			if (regTowplane.length() > 0)
+			{
+				if (!regTowplane.matches("[A-Z]{1,2}-[A-Z0-9]{3,4}")) {
+					showMessage(gui.registrationTowplaneBox, "Immatrikulation Schlepper muss in der Form HB-WAR oder D-EFGH sein!");
+					return false;	
+				}			
+			}
+			
 		}
 
 		// Remarks
