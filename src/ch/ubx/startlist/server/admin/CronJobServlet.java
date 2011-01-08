@@ -60,8 +60,8 @@ public class CronJobServlet extends HttpServlet {
 			importOLCDAO.createOrUpdateImportOLC(importOLCTest);
 		}
 
+		importFromOLC();
 		sendMail();
-		//importFromOLC();
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class CronJobServlet extends HttpServlet {
 			Session session = Session.getDefaultInstance(props, null);
 			try {
 				Message msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("xxx.yyy@zzz.com")); // TODO - what e-mail should go here?
+				msg.setFrom(new InternetAddress("andreas.ubx.luethi@gmail.com")); // TODO - what e-mail should go here?
 				for (String recipient : sendExcel.getRecipientsList()) {
 					msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 				}
