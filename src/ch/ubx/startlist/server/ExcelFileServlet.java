@@ -34,7 +34,6 @@ public class ExcelFileServlet extends HttpServlet {
 			year = Integer.parseInt(params[1]);
 			flightEnties = flightEntryDAO.listflightEntry(year);
 		} else if (params.length == 3) {
-
 			// flightEnties = flightEntryDAO.listflightEntry(Integer.parseInt(params[1]), Integer.parseInt(params[2])); // TODO - month
 		} else if (params.length == 5) {
 			year = Integer.parseInt(params[1]);

@@ -23,7 +23,7 @@
 
 
 	<servlet>
-		<servlet-name>ExcelFileServlet</servlet-name>
+		<servlet-name>excelFileServlet</servlet-name>
 		<servlet-class>ch.ubx.startlist.server.ExcelFileServlet
 		</servlet-class>
 	</servlet>
@@ -57,6 +57,12 @@
 		</servlet-class>
 	</servlet>
 
+	<servlet>
+		<servlet-name>cronjobs</servlet-name>
+		<servlet-class>ch.ubx.startlist.server.admin.CronJobServlet
+		</servlet-class>
+	</servlet>
+
 
 
 	<servlet-mapping>
@@ -70,7 +76,7 @@
 	</servlet-mapping>
 
 	<servlet-mapping>
-		<servlet-name>ExcelFileServlet</servlet-name>
+		<servlet-name>excelFileServlet</servlet-name>
 		<url-pattern>/startlist/excelfile/*</url-pattern>
 	</servlet-mapping>
 
@@ -92,6 +98,11 @@
 	<servlet-mapping>
 		<servlet-name>appstats</servlet-name>
 		<url-pattern>/appstats/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>cronjobs</servlet-name>
+		<url-pattern>/cronjobs</url-pattern>
 	</servlet-mapping>
 
 
