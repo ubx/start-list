@@ -119,10 +119,26 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return query.list();
 	}
 
+	public List<FlightEntry> listflightEntry(Calendar date, String place) {
+		Objectify ofy = ObjectifyService.begin();
+
+		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateStart.setTimeInMillis(date.getTimeInMillis());
+		dateStart.set(Calendar.HOUR_OF_DAY, 0);
+		dateStart.set(Calendar.MINUTE, 0);
+		dateStart.set(Calendar.SECOND, 0);
+		dateStart.set(Calendar.MILLISECOND, 0);
+		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateEnd.setTimeInMillis(dateStart.getTimeInMillis());
+		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
+
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter(
+				"startTimeInMillis <", dateEnd.getTimeInMillis()).order("startTimeInMillis");
+		return query.list();
+	}
+
 	public List<FlightEntry> listflightEntry(int year, int month, int day, String place) {
 		Objectify ofy = ObjectifyService.begin();
-		List<FlightEntry> list = new ArrayList<FlightEntry>();
-
 		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
 		dateStart.setTimeInMillis(0);
 		dateStart.set(Calendar.YEAR, year);
@@ -135,14 +151,10 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		dateEnd.set(Calendar.MONTH, month);
 		dateEnd.set(Calendar.DAY_OF_MONTH, day);
 		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
-
 		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <",
 				dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
+		return query.list();
 
-		for (FlightEntry flightEntry : query) {
-			list.add(flightEntry);
-		}
-		return list;
 	}
 
 	public List<FlightEntry> listflightEntry(int year, String place) {
@@ -164,25 +176,6 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		dateEnd.add(Calendar.YEAR, 1);
 		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <",
 				dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
-
-		return query.list();
-	}
-
-	public List<FlightEntry> listflightEntry(Calendar date, String place) {
-		Objectify ofy = ObjectifyService.begin();
-
-		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateStart.setTimeInMillis(date.getTimeInMillis());
-		dateStart.set(Calendar.HOUR_OF_DAY, 0);
-		dateStart.set(Calendar.MINUTE, 0);
-		dateStart.set(Calendar.SECOND, 0);
-		dateStart.set(Calendar.MILLISECOND, 0);
-		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateEnd.setTimeInMillis(dateStart.getTimeInMillis());
-		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
-
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter(
-				"startTimeInMillis <", dateEnd.getTimeInMillis()).order("startTimeInMillis");
 		return query.list();
 	}
 
