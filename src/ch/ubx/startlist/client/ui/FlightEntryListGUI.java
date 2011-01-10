@@ -46,7 +46,6 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	private static final String STATUS_ROOT_PANEL = "flightEntryStatus";
 	private static final String STACK_ROOT_PANEL = "flightEntryToolBar";
 	private static final String LOGIN_ROOT_PANEL = "loginrootpanel";
-	private static final String TXT_CLOSE = "Close";
 
 	/* GUI Widgets */
 	//protected Button addButton, updateButton; @@unused??
@@ -620,14 +619,36 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 					- flightEntryDialogBox.getOffsetHeight() - 20);
 			flightEntryDialogBox.setWidth("800px");
 			flightEntryDialogBox.show();
-			endTowplaneDateBox.setFocus(true); // TODO set focus dynamically depending on content of flightEntry?
+			
+			// set focus depending on content of current flight entry, optimized for live entry throught "Flugdienstleiter"
+			if (!currentFlightEntry.isStartTimeValid()) {
+				startDateBox.setFocus(true);  // no start time yet, FDL will want to enter it first
+			} else if (!currentFlightEntry.isEndTimeTowplaneValid()) {
+				endTowplaneDateBox.setFocus(true);  // usecase: towplane landed, FDL wants to enter landing time of towplane
+			} else if (!currentFlightEntry.isEndTimeGliderValid()) {
+				endGliderDateBox.setFocus(true);  // usecase: glider landed, FDL wants to enter landing time of glider
+			} else if (currentFlightEntry.getRegistrationTowplane().length() == 0) {
+				registrationTowplaneBox.setFocus(true);
+			} else if (currentFlightEntry.getRegistrationGlider().length() == 0) {
+				registrationGliderBox.setFocus(true);
+			} else if (currentFlightEntry.getPilot().length() == 0) {
+				pilotNameBox.setFocus(true);
+			} else if (currentFlightEntry.getPassengerOrInstructor().length()== 0) {
+				passengerOrInstructorNameBox.setFocus(true);
+			} else if (currentFlightEntry.getRemarks().length() == 0){
+				remarksTextBox.setFocus(true);
+			} else if (currentFlightEntry.getLandingPlace().length() == 0) {
+				allPlacesSuggestBox.setFocus(true);
+			} else {
+				remarksTextBox.setFocus(true);		
+			}
 
 			disableCUDButtons();
 			saveButton.setEnabled(false);
 			discardButton.setEnabled(false);
 			btnClose.setEnabled(true);
 		} else {// Not the owner and not Admin
-			showMidifiableDialog(currentFlightEntry, "You can not modify this element, the owner is");
+			showMidifiableDialog(currentFlightEntry, TXT_ERROR_FLIGHTENTRY_MODIFY_OWNER_MISMATCH);
 		}
 	}
 
@@ -728,7 +749,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			deleteDialogBox.setWidget(hp);
 			deleteDialogBox.show();
 		} else { // Not the owner and not Admin
-			showMidifiableDialog(currentFlightEntry, "You can not delete this elemen, the owner is");
+			showMidifiableDialog(currentFlightEntry, TXT_ERROR_FLIGHTENTRY_DELETE_OWNER_MISMATCH);
 		}
 	}
 
@@ -771,7 +792,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 	@SuppressWarnings("deprecation")
 	public void service_eventUpdateSuccessful(FlightEntry flightEntry) {
-		status.setText("FlightEntry was successfully added");
+		status.setText(TXT_SUCCESS_ADD_FLIGHTENTRY);
 		if (placeListBox.getItemCount() == 0) {
 			placeListBox.addItem(flightEntry.getPlace());
 		}
@@ -797,25 +818,25 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	}
 
 	public void service_eventRemoveFlightEntrySuccessful(FlightEntry flightEntry) {
-		status.setText("FlightEntry was removed");
+		status.setText(TXT_SUCCESS_REMOVE_FLIGHTENTRY);
 		reload();
 
 	}
 
 	public void service_eventUpdateFlightEntryFailed(Throwable caught) {
-		status.setText("Update flightEntry failed");
+		status.setText(TXT_ERROR_FLIGHTENTRY_UPDATE);
 	}
 
 	public void service_eventAddFlightEntryFailed(Throwable caught) {
-		status.setText("Unable to update flightEntry");
+		status.setText(TXT_ERROR_FLIGHTENTRY_ADD);
 	}
 
 	public void service_eventRemoveFlightEntryFailed(Throwable caught) {
-		status.setText("Remove flightEntry failed");
+		status.setText(TXT_ERROR_FLIGHTENTRY_DELETE);
 	}
 
 	public void service_eventListFlightEntrysFailed(Throwable caught) {
-		status.setText("Unable to get flightEntry list");
+		status.setText(TXT_ERROR_LIST_LOAD);
 
 	}
 
@@ -983,9 +1004,9 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	public void service_eventLoginSuccessful(LoginInfo loginInfo) {
 		if (loginInfo.isLoggedIn()) {
 			currentLoginInfo = loginInfo;
-			signInLink.setText("Logout");
+			signInLink.setText(TXT_LOGOUT);
 			signInLink.setHref(loginInfo.getLogoutUrl());
-			loggedInAs.setText("(logged in as " + loginInfo.getEmail() + ")");
+			loggedInAs.setText(TXT_LOGGED_IN_AS + loginInfo.getEmail() + ")");
 			operationNewModDel.setVisible(true);
 
 			if (loginInfo.isAdmin()) {
@@ -993,11 +1014,11 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 					adminGUI = new AdminGUI(this);
 					RootPanel.get().add(adminGUI);
 				}
-				stackPanel.add(adminGUI, "Admin", false);
+				stackPanel.add(adminGUI, TXT_ADMIN, false);
 			}
 		} else {
 			currentLoginInfo = null;
-			signInLink.setText("Login");
+			signInLink.setText(TXT_LOGIN);
 			signInLink.setHref(loginInfo.getLoginUrl());
 			loggedInAs.setText("");
 			operationNewModDel.setVisible(false);
@@ -1009,7 +1030,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	}
 
 	public void service_eventLoginFailed(Throwable caught) {
-		status.setText("LOGIN ERROR " + caught.getMessage());
+		status.setText(TXT_ERROR_LOGIN + caught.getMessage());
 	}
 
 	public ListBox getYearListBox() {

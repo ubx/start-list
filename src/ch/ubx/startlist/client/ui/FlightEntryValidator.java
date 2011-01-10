@@ -2,8 +2,6 @@ package ch.ubx.startlist.client.ui;
 
 import java.util.Date;
 
-
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -11,7 +9,9 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FlightEntryValidator {
+import ch.ubx.startlist.client.TextConstants;
+
+public class FlightEntryValidator implements TextConstants{
 
 	private FlightEntryListGUI gui = null;
 	private DialogBox dialogBox;
@@ -22,7 +22,7 @@ public class FlightEntryValidator {
 		dialogBox = new DialogBox();
 		dialogBox.setAutoHideEnabled(true);
 		dialogBox.setModal(false);
-		Button closeButton = new Button("Close");
+		Button closeButton = new Button(TXT_VALIDATOR_OKBUTTON);
 		closeButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -40,7 +40,7 @@ public class FlightEntryValidator {
 		{
 			Date date = gui.dateBox.getValue();
 			if (date.compareTo(new Date()) > 0) {
-				showMessage(gui.dateBox, "Datum in der Zukunft!");
+				showMessage(gui.dateBox, TXT_VALIDATOR_ERROR_DATE_IN_FUTURE);
 				return false;
 			}
 		}
@@ -50,7 +50,7 @@ public class FlightEntryValidator {
 			TextBox tb = gui.startDateBox.getTextBox();
 			if (tb != null) {
 				if (!checkTime(tb.getValue())) {
-					showMessage(gui.startDateBox, "Startzeit format mm:ss sein!");
+					showMessage(gui.startDateBox, TXT_VALIDATOR_ERROR_STARTTIME_FORMAT);
 					return false;
 				}
 			}
@@ -62,7 +62,7 @@ public class FlightEntryValidator {
 			TextBox tb = gui.endGliderDateBox.getTextBox();
 			if (tb != null) {
 				if (!checkTime(tb.getValue())) {
-					showMessage(gui.endGliderDateBox, "Landezeit Segelflugzeug format mm:ss sein!");
+					showMessage(gui.endGliderDateBox, TXT_VALIDATOR_ERROR_ENDTIME_GLIDER_FORMAT);
 					return false;
 				}
 
@@ -74,7 +74,7 @@ public class FlightEntryValidator {
 			TextBox tb = gui.endTowplaneDateBox.getTextBox();
 			if (tb != null) {
 				if (!checkTime(tb.getValue())) {
-					showMessage(gui.endTowplaneDateBox, "Landezeit Schleppflugzeug format mm:ss sein!");
+					showMessage(gui.endTowplaneDateBox, TXT_VALIDATOR_ERROR_ENDTIME_TOWPLANE_FORMAT);
 					return false;
 				}
 
@@ -87,7 +87,7 @@ public class FlightEntryValidator {
 			landingTime = gui.endGliderDateBox.getValue();
 			if (startTime != null && landingTime != null) {
 				if (!landingTime.after(startTime)) {
-					showMessage(gui.startDateBox, "Startzeit SF vor oder gleich Landezeit!");
+					showMessage(gui.startDateBox, TXT_VALIDATOR_ERROR_ENDTIME_GLIDER_BEFORE_STARTTIME);
 					return false;
 				}
 			}
@@ -99,7 +99,7 @@ public class FlightEntryValidator {
 			landingTime = gui.endTowplaneDateBox.getValue();
 			if (startTime != null && landingTime != null) {
 				if (!landingTime.after(startTime)) {
-					showMessage(gui.startDateBox, "Startzeit Schlepper vor oder gleich Landezeit!");
+					showMessage(gui.startDateBox, TXT_VALIDATOR_ERROR_ENDTIME_TOWPLANE_BEFORE_STARTTIME);
 					return false;
 				}
 			}
@@ -109,7 +109,7 @@ public class FlightEntryValidator {
 		{
 			String pilot = gui.pilotNameBox.getValue();
 			if (pilot.length() > 32) {
-				showMessage(gui.pilotNameBox, "Piloten Name zu lang, maximum 32 Zeichen!");
+				showMessage(gui.pilotNameBox, TXT_VALIDATOR_ERROR_PILOT_LENGTH);
 				return false;
 			}
 		}
@@ -118,7 +118,7 @@ public class FlightEntryValidator {
 		{
 			String pilot = gui.passengerOrInstructorNameBox.getValue();
 			if (pilot.length() > 32) {
-				showMessage(gui.passengerOrInstructorNameBox, "Pax/FL Name zu lang, maximum 32 Zeichen!");
+				showMessage(gui.passengerOrInstructorNameBox, TXT_VALIDATOR_ERROR_PASSENGERORINSTRUCTOR_LENGTH);
 				return false;
 			}
 		}
@@ -126,7 +126,7 @@ public class FlightEntryValidator {
 		// Landing Place
 		String lp = gui.allPlacesSuggestBox.getValue();
 		if (lp.length() > 20) {
-			showMessage(gui.registrationGliderBox, "Landeort zu lang, maximum 20 Zeichen!");
+			showMessage(gui.registrationGliderBox, TXT_VALIDATOR_ERROR_LANDINGPLACE_LENGTH);
 			return false;
 		}
  
@@ -135,13 +135,13 @@ public class FlightEntryValidator {
 		{
 			String regGlider = gui.registrationGliderBox.getValue();
 			if (regGlider.length() > 7) {
-				showMessage(gui.registrationGliderBox, "Immatrikulation SF zu lang, maximum 7 Zeichen!");
+				showMessage(gui.registrationGliderBox, TXT_VALIDATOR_ERROR_REGISTRATION_GLIDER_LENGTH);
 				return false;
 			}
 			if (regGlider.length() > 0)
 			{
 				if (!regGlider.matches("[A-Z]{1,2}-[A-Z0-9]{4}")) {
-					showMessage(gui.registrationGliderBox, "Immatrikulation SF muss in der Form HB-1234 sein!");
+					showMessage(gui.registrationGliderBox, TXT_VALIDATOR_ERROR_REGISTRATION_GLIDER_FORMAT);
 					return false;	
 				}	
 			}
@@ -153,13 +153,13 @@ public class FlightEntryValidator {
 		{
 			String regTowplane = gui.registrationTowplaneBox.getValue();
 			if (regTowplane.length() > 7) {
-				showMessage(gui.registrationTowplaneBox, "Immatrikulation Schlepper zu lang, maximum 7 Zeichen!");
+				showMessage(gui.registrationTowplaneBox, TXT_VALIDATOR_ERROR_REGISTRATION_TOWPLANE_LENGTH);
 				return false;
 			}
 			if (regTowplane.length() > 0)
 			{
 				if (!regTowplane.matches("[A-Z]{1,2}-[A-Z0-9]{3,4}")) {
-					showMessage(gui.registrationTowplaneBox, "Immatrikulation Schlepper muss in der Form HB-WAR oder D-EFGH sein!");
+					showMessage(gui.registrationTowplaneBox, TXT_VALIDATOR_ERROR_REGISTRATION_TOWPLANE_FORMAT);
 					return false;	
 				}			
 			}
@@ -170,7 +170,7 @@ public class FlightEntryValidator {
 		{
 			String rmk = gui.remarksTextBox.getValue();
 			if (rmk.length() > 80) {
-				showMessage(gui.remarksTextBox, "Text zu lang, maximum 80 Zeichen!");
+				showMessage(gui.remarksTextBox, TXT_VALIDATOR_ERROR_REMARKS_LENGTH);
 				return false;
 			}
 		}
