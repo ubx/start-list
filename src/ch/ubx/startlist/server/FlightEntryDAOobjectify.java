@@ -1,6 +1,5 @@
 package ch.ubx.startlist.server;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +11,7 @@ import ch.ubx.startlist.client.LoginInfo;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
@@ -24,6 +24,18 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	}
 
 	private LoginInfo loginInfo = null;
+	private UserService userService;
+	private User currentUser;
+
+	public FlightEntryDAOobjectify() {
+		userService = UserServiceFactory.getUserService();
+		currentUser = userService.getCurrentUser();
+		// If we are called from a cron job, we need to create one!
+		if (currentUser == null) {
+			currentUser = new User("admin@" + SystemProperty.applicationId.get() + ".appspotmail.com", "gmail.com");
+		}
+
+	}
 
 	@Override
 	public List<FlightEntry> listflightEntry(String place, long dateTimeInMillis, int startIndex, int maxCount) {
@@ -113,8 +125,8 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		yearEnd.setTimeInMillis(0);
 		yearEnd.set(Calendar.YEAR, year + 1);
 
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", yearStart.getTimeInMillis()).filter("startTimeInMillis <",
-				yearEnd.getTimeInMillis()).order("startTimeInMillis");
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", yearStart.getTimeInMillis())
+				.filter("startTimeInMillis <", yearEnd.getTimeInMillis()).order("startTimeInMillis");
 
 		return query.list();
 	}
@@ -132,8 +144,8 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		dateEnd.setTimeInMillis(dateStart.getTimeInMillis());
 		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
 
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter(
-				"startTimeInMillis <", dateEnd.getTimeInMillis()).order("startTimeInMillis");
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+				.filter("startTimeInMillis <", dateEnd.getTimeInMillis()).order("startTimeInMillis");
 		return query.list();
 	}
 
@@ -151,8 +163,8 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		dateEnd.set(Calendar.MONTH, month);
 		dateEnd.set(Calendar.DAY_OF_MONTH, day);
 		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <",
-				dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+				.filter("startTimeInMillis <", dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
 		return query.list();
 
 	}
@@ -174,8 +186,8 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		dateEnd.set(Calendar.YEAR, yearEnd);
 		dateEnd.set(Calendar.DAY_OF_YEAR, 1);
 		dateEnd.add(Calendar.YEAR, 1);
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <",
-				dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+				.filter("startTimeInMillis <", dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
 		return query.list();
 	}
 
@@ -199,7 +211,6 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	// private methods
 
 	private void doPostLoad(FlightEntry flightEntry) {
-		UserService userService = UserServiceFactory.getUserService();
 		if (userService.isUserLoggedIn()) {
 			boolean deletable = false;
 			boolean modifiable = false;
@@ -214,7 +225,6 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 				if (loginInfo != null) {
 					modifiable = loginInfo.isCanModFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
 					deletable = loginInfo.isCanDelFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
-					;
 				}
 			}
 			flightEntry.setModifiable(modifiable);
@@ -223,12 +233,11 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	}
 
 	private void doPrePersist(FlightEntry flightEntry) {
-		User user = UserServiceFactory.getUserService().getCurrentUser();
-		flightEntry.setModifier(user.getEmail());
+		flightEntry.setModifier(currentUser.getEmail());
 		flightEntry.setModified(System.currentTimeMillis());
 		if (flightEntry.getId() == null) {
-			flightEntry.setCreator(user.getEmail());
-			flightEntry.setCreated(System.currentTimeMillis());
+			flightEntry.setCreator(flightEntry.getModifier());
+			flightEntry.setCreated(flightEntry.getModified());
 		}
 	}
 

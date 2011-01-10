@@ -2,7 +2,7 @@
 <cronentries>
   <cron>
     <url>/cronjobs</url>
-    <description>For Hendrik Gariep D, every 40 minutes, import from OLC and sent an excel</description>
-    <schedule>every 40 minutes</schedule>
+    <description>For Hendrik Gariep D, import from OLC and sent an excel</description>
+    <schedule>every day 19:00</schedule>
   </cron>
 </cronentries>

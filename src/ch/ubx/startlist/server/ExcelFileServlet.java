@@ -34,7 +34,8 @@ public class ExcelFileServlet extends HttpServlet {
 			year = Integer.parseInt(params[1]);
 			flightEnties = flightEntryDAO.listflightEntry(year);
 		} else if (params.length == 3) {
-			// flightEnties = flightEntryDAO.listflightEntry(Integer.parseInt(params[1]), Integer.parseInt(params[2])); // TODO - month
+			// flightEnties = flightEntryDAO.listflightEntry(Integer.parseInt(params[1]), Integer.parseInt(params[2])); // TODO - what for is this?
+			// month
 		} else if (params.length == 5) {
 			year = Integer.parseInt(params[1]);
 			month = Integer.parseInt(params[2]);
@@ -44,13 +45,14 @@ public class ExcelFileServlet extends HttpServlet {
 		} else {
 			return;
 		}
-		
+
 		if (flightEnties != null) {
-			String filename = String.valueOf(year) + (month == -1 ? "" : String.valueOf(month + 1)) + (day == -1 ? "" : String.valueOf(day))
-					+ place.replace(" ", "_") + ".xls";
+			String sheetname = String.valueOf(year) + (month == -1 ? "" : String.format("%02d", month + 1)) + (day == -1 ? "" : String.format("%02d", day))
+					+ "-" + place.replace(" ", "_");
+			String filename = sheetname + ".xls";
 			resp.setContentType("application/ms-excel");
 			resp.setHeader("Content-Disposition", "attachment; filename=" + filename);
-			ExcelSheet.createExcel(flightEnties, resp.getOutputStream(), String.valueOf(year));
+			ExcelSheet.createExcel(flightEnties, resp.getOutputStream(), sheetname);
 		}
 	}
 

@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.utils.SystemProperty;
+
 import ch.ubx.startlist.client.FlightEntry;
 import ch.ubx.startlist.client.ImportOLC;
 import ch.ubx.startlist.client.SendExcel;
@@ -78,19 +80,20 @@ public class CronJobServlet extends HttpServlet {
 	 */
 	private void sendMail() throws IOException {
 		Calendar now = Calendar.getInstance();
-		String label = "today"; // TODO - what should be here?
-
+		String applicationId = SystemProperty.applicationId.get();
 		List<SendExcel> sendExcels = sendExcelDAO.listAllSendExcel();
 		for (SendExcel sendExcel : sendExcels) {
+			String sheetname = String.format("%1$tY%1$tm%1$te", now) + "-" + sendExcel.getPlace().replace(" ", "_");
 			List<FlightEntry> flightEntries = flightEntryDAO.listflightEntry(now, sendExcel.getPlace());
+			log.log(Level.INFO, "Create excel for FlighEnties: " + flightEntries.size());
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			ExcelSheet.createExcel(flightEntries, outputStream, label);
+			ExcelSheet.createExcel(flightEntries, outputStream, sheetname);
 
 			Properties props = new Properties();
 			Session session = Session.getDefaultInstance(props, null);
 			try {
 				Message msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("andreas.ubx.luethi@gmail.com")); // TODO - what e-mail should go here?
+				msg.setFrom(new InternetAddress("admin@" + applicationId + ".appspotmail.com"));
 				for (String recipient : sendExcel.getRecipientsList()) {
 					msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 				}
@@ -99,7 +102,7 @@ public class CronJobServlet extends HttpServlet {
 				// Excel attachment
 				Multipart mp = new MimeMultipart();
 				MimeBodyPart attachmentBP = new MimeBodyPart();
-				attachmentBP.setFileName(URLEncoder.encode(label + ".xls", "UTF-8"));
+				attachmentBP.setFileName(URLEncoder.encode(sheetname + ".xls", "UTF-8"));
 				attachmentBP.setDisposition(Part.ATTACHMENT);
 				DataSource src = new ByteArrayDataSource(outputStream.toByteArray(), "application/x-ms-excel");
 				DataHandler handler = new DataHandler(src);
@@ -109,7 +112,7 @@ public class CronJobServlet extends HttpServlet {
 				// Message body
 				MimeBodyPart plainBody = new MimeBodyPart();
 				plainBody.setContent(sendExcel.getSubject(), "text/plain");
-				plainBody.setFileName("plainbody.txt");
+				plainBody.setFileName("body.txt");
 				mp.addBodyPart(plainBody);
 				msg.setText(sendExcel.getSubject());
 				msg.setContent(mp);
@@ -133,10 +136,7 @@ public class CronJobServlet extends HttpServlet {
 		for (ImportOLC importOLC : importOLCs) {
 			List<String> places = importOLC.getPlacesList();
 			for (String place : places) {
-				int max = OlcImportMain.getMaxImportatOnce() * 200;
-				while (max > 0 & OlcImportMain.importFromOLC(place, year).size() > 0) {
-					max = max - 1;
-				}
+				OlcImportMain.importFromOLC(place, year, 50); // TODO - should this be done in a task queue, or import less (actual day)?
 			}
 		}
 	}

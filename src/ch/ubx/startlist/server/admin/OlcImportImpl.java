@@ -13,7 +13,7 @@ public class OlcImportImpl extends RemoteServiceServlet implements OlcImportServ
 
 	@Override
 	public List<FlightEntry> importFromPlace(String place, int year) {
-		return OlcImportMain.importFromOLC(place, year);
+		return OlcImportMain.importFromOLC(place, year, 5);
 	}
 
 }

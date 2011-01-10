@@ -26,14 +26,14 @@ public class OlcImportMain {
 	 * @param year
 	 * @return
 	 */
-	public static List<FlightEntry> importFromOLC(String place, int year) {
+	public static List<FlightEntry> importFromOLC(String place, int year, int maxImportAtOnce) {
 		List<FlightEntry> flightEntries = new ArrayList<FlightEntry>();
 		try {
 			Airfield airfield = airfieldDAO.getAirfield(place);
 			if (airfield != null) {
 				List<FlightEntry> storedFlightEntries = flightEntryDAO.listflightEntry(year - 1, year + 1, place);
 				OlcImportExtractPilotInfo olcImportExtractPilotInfo = new OlcImportExtractPilotInfo(storedFlightEntries);
-				olcImportExtractPilotInfo.setMaxImport(getMaxImportatOnce()); // avoid DeadlineExceededException, set amount per RPC call!
+				olcImportExtractPilotInfo.setMaxImport(maxImportAtOnce); // avoid DeadlineExceededException, set amount per RPC call!
 				flightEntries = olcImportExtractPilotInfo.olcImportFromPlace(airfield.getId(), place, year, airfield.getCountry());
 				flightEntries = mergeAddFlightEntries(flightEntries);
 				return flightEntries;
@@ -43,10 +43,6 @@ public class OlcImportMain {
 			e.printStackTrace();
 		}
 		return flightEntries; // an empty list!
-	}
-
-	public static int getMaxImportatOnce() {
-		return 5;
 	}
 
 	/**
