@@ -3,7 +3,7 @@ package ch.ubx.startlist.server;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.ubx.startlist.client.Airfield;
+import ch.ubx.startlist.shared.Airfield;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;

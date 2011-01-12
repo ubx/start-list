@@ -2,7 +2,7 @@ package ch.ubx.startlist.server;
 
 import java.util.List;
 
-import ch.ubx.startlist.client.SendExcel;
+import ch.ubx.startlist.shared.SendExcel;
 
 public interface SendExcelDAO {
 

@@ -2,8 +2,8 @@ package ch.ubx.startlist.server.admin;
 
 import java.util.List;
 
-import ch.ubx.startlist.client.FlightEntry;
 import ch.ubx.startlist.client.admin.OlcImportService;
+import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

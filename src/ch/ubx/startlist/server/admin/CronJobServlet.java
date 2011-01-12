@@ -31,13 +31,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.utils.SystemProperty;
 
-import ch.ubx.startlist.client.FlightEntry;
-import ch.ubx.startlist.client.ImportOLC;
-import ch.ubx.startlist.client.SendExcel;
 import ch.ubx.startlist.server.ExcelSheet;
 import ch.ubx.startlist.server.FlightEntryDAOobjectify;
 import ch.ubx.startlist.server.ImportOLCDAOobjectify;
 import ch.ubx.startlist.server.SendExcelDAOobjectify;
+import ch.ubx.startlist.shared.FlightEntry;
+import ch.ubx.startlist.shared.ImportOLC;
+import ch.ubx.startlist.shared.SendExcel;
 
 public class CronJobServlet extends HttpServlet {
 

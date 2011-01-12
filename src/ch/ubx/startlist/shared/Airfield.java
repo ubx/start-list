@@ -1,4 +1,4 @@
-package ch.ubx.startlist.client;
+package ch.ubx.startlist.shared;
 
 import java.io.Serializable;
 import javax.persistence.Id;

@@ -3,7 +3,7 @@ package ch.ubx.startlist.server;
 import java.util.List;
 import java.util.Set;
 
-import ch.ubx.startlist.client.FlightEntry;
+import ch.ubx.startlist.shared.FlightEntry;
 
 public interface FlightEntryDAO {
 

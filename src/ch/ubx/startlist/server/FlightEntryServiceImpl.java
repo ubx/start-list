@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import ch.ubx.startlist.client.FlightEntry;
 import ch.ubx.startlist.client.FlightEntryService;
+import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

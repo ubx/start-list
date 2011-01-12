@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import ch.ubx.startlist.client.FlightEntry;
-import ch.ubx.startlist.client.LoginInfo;
+import ch.ubx.startlist.shared.FlightEntry;
+import ch.ubx.startlist.shared.LoginInfo;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;

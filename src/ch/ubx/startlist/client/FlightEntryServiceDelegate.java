@@ -3,6 +3,7 @@ package ch.ubx.startlist.client;
 import java.util.Set;
 
 import ch.ubx.startlist.client.ui.FlightEntryListGUI;
+import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;

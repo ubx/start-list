@@ -6,7 +6,7 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 
-import ch.ubx.startlist.client.ImportOLC;
+import ch.ubx.startlist.shared.ImportOLC;
 
 public class ImportOLCDAOobjectify implements ImportOLCDAO {
 

@@ -2,7 +2,7 @@ package ch.ubx.startlist.server;
 
 import java.util.Set;
 
-import ch.ubx.startlist.client.Airfield;
+import ch.ubx.startlist.shared.Airfield;
 
 public interface AirfieldDAO {
 

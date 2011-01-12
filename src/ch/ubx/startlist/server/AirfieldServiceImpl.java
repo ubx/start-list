@@ -2,8 +2,8 @@ package ch.ubx.startlist.server;
 
 import java.util.Set;
 
-import ch.ubx.startlist.client.Airfield;
 import ch.ubx.startlist.client.AirfieldService;
+import ch.ubx.startlist.shared.Airfield;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

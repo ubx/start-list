@@ -1,7 +1,7 @@
 package ch.ubx.startlist.server;
 
-import ch.ubx.startlist.client.LoginInfo;
 import ch.ubx.startlist.client.LoginService;
+import ch.ubx.startlist.shared.LoginInfo;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;

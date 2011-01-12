@@ -10,10 +10,10 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ch.ubx.startlist.client.Airfield;
-import ch.ubx.startlist.client.FlightEntry;
 import ch.ubx.startlist.server.AirfieldDAOobjectify;
 import ch.ubx.startlist.server.FlightEntryDAOobjectify;
+import ch.ubx.startlist.shared.Airfield;
+import ch.ubx.startlist.shared.FlightEntry;
 
 public class OlcImportMain {
 

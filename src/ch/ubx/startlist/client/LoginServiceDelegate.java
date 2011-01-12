@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import ch.ubx.startlist.client.ui.FlightEntryListGUI;
+import ch.ubx.startlist.shared.LoginInfo;
 
 public class LoginServiceDelegate {
 	private LoginServiceAsync loginService = GWT.create(LoginService.class);

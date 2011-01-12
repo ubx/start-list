@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ch.ubx.startlist.client.FlightEntry;
+import ch.ubx.startlist.shared.FlightEntry;
 
 public class ExcelFileServlet extends HttpServlet {
 

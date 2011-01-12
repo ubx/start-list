@@ -3,6 +3,8 @@ package ch.ubx.startlist.client;
 import java.util.Set;
 import java.util.TreeSet;
 
+import ch.ubx.startlist.shared.Airfield;
+
 import com.google.gwt.user.client.ui.ListBox;
 
 public class GwtUtil {

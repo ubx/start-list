@@ -19,7 +19,7 @@ import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheFactory;
 import net.sf.jsr107cache.CacheManager;
-import ch.ubx.startlist.client.FlightEntry;
+import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
 

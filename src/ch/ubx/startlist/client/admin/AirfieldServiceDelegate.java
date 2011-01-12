@@ -2,10 +2,10 @@ package ch.ubx.startlist.client.admin;
 
 import java.util.Set;
 
-import ch.ubx.startlist.client.Airfield;
 import ch.ubx.startlist.client.AirfieldService;
 import ch.ubx.startlist.client.AirfieldServiceAsync;
 import ch.ubx.startlist.client.admin.ui.AdminGUI;
+import ch.ubx.startlist.shared.Airfield;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;

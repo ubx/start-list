@@ -3,6 +3,8 @@ package ch.ubx.startlist.client;
 import java.util.List;
 import java.util.Set;
 
+import ch.ubx.startlist.shared.FlightEntry;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 

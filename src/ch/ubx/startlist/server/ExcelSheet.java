@@ -16,8 +16,8 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import ch.ubx.startlist.client.FlightEntry;
 import ch.ubx.startlist.client.TextConstants;
+import ch.ubx.startlist.shared.FlightEntry;
 
 public class ExcelSheet implements TextConstants {
 

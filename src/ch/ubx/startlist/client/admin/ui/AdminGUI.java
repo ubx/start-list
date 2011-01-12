@@ -3,12 +3,12 @@ package ch.ubx.startlist.client.admin.ui;
 import java.util.List;
 import java.util.Set;
 
-import ch.ubx.startlist.client.Airfield;
-import ch.ubx.startlist.client.FlightEntry;
 import ch.ubx.startlist.client.GwtUtil;
 import ch.ubx.startlist.client.admin.AdminGUIevents;
 import ch.ubx.startlist.client.admin.OlcImportServiceDelegate;
 import ch.ubx.startlist.client.ui.FlightEntryListGUI;
+import ch.ubx.startlist.shared.Airfield;
+import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;

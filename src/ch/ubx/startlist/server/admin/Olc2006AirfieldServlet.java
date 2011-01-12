@@ -20,8 +20,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-import ch.ubx.startlist.client.Airfield;
 import ch.ubx.startlist.server.AirfieldDAOobjectify;
+import ch.ubx.startlist.shared.Airfield;
 
 public class Olc2006AirfieldServlet extends HttpServlet {
 
