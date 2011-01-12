@@ -3,7 +3,8 @@ package ch.ubx.startlist.shared;
 import java.io.Serializable;
 
 import javax.persistence.Id;
-import javax.persistence.Transient;
+
+import com.googlecode.objectify.annotation.NotSaved;
 
 
 public class FlightEntry implements Serializable, Comparable<FlightEntry> {
@@ -38,9 +39,9 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 	private String club;
 	private String competitionID;
 	private int source = SRC_MANUEL;
-	@Transient
+	@NotSaved
 	private boolean modifiable;
-	@Transient
+	@NotSaved
 	private boolean deletable;
 
 	public FlightEntry(String pilot, long startTimeInMillis, long endTimeGliderInMillis, boolean training, String remarks, String place) {
