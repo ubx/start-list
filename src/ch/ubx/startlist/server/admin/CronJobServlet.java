@@ -136,7 +136,11 @@ public class CronJobServlet extends HttpServlet {
 		for (ImportOLC importOLC : importOLCs) {
 			List<String> places = importOLC.getPlacesList();
 			for (String place : places) {
-				OlcImportMain.importFromOLC(place, year, 50); // TODO - should this be done in a task queue, or import less (actual day)?
+				// Split requests into small pieces to avoid DeadlineExceededException for the whole request.
+				int maxImport = 50;
+				while (OlcImportMain.importFromOLC(place, year, 20).size() > 0 & maxImport > 0) {
+					--maxImport;
+				}
 			}
 		}
 	}
