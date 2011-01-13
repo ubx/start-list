@@ -20,6 +20,7 @@ public class Table extends Grid {
 	private Element selElem = null;
 	private Element selElem2 = null;
 	private RowSelectionHandler rowSelectionHandler = null;
+	private RowDoubleclickHandler rowDoubleclickHandler = null;
 
 	private boolean ignoreMouseEvents = false;
 
@@ -89,7 +90,8 @@ public class Table extends Grid {
 			break;
 		}
 		case Event.ONDBLCLICK: {
-			break; // TODO - consume this event?
+			handleRowDoubleclick(row);
+			break;
 		}
 
 		}
@@ -100,6 +102,12 @@ public class Table extends Grid {
 	private void handleRowSelection(int row, boolean selected) {
 		if (rowSelectionHandler != null) {
 			rowSelectionHandler.rowSelected(row, selected);
+		}
+	}
+	
+	private void handleRowDoubleclick(int row) {
+		if (rowDoubleclickHandler != null) {
+			rowDoubleclickHandler.rowDoubleclicked(row);
 		}
 	}
 
@@ -120,9 +128,18 @@ public class Table extends Grid {
 		public void rowSelected(int row, boolean selected);
 
 	}
+	
+	public interface RowDoubleclickHandler {
+		public void rowDoubleclicked(int row);
 
+	}
+	
 	public void addRowSelectionHandler(RowSelectionHandler handler) {
 		this.rowSelectionHandler = handler;
+	}
+	
+	public void addRowDoubleclickHandler(RowDoubleclickHandler handler) {
+		this.rowDoubleclickHandler = handler;
 	}
 
 	public void setIgnoreMouseEvents(boolean ignoreMouseEvents) {

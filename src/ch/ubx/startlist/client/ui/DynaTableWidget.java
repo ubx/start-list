@@ -18,6 +18,7 @@ package ch.ubx.startlist.client.ui;
 
 import ch.ubx.startlist.client.DynaTableDataProvider;
 import ch.ubx.startlist.client.RowSelectionHandler;
+import ch.ubx.startlist.client.RowDoubleclickHandler;
 import ch.ubx.startlist.client.DynaTableDataProvider.RowDataAcceptor;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -252,6 +253,15 @@ public class DynaTableWidget extends Composite {
 			@Override
 			public void rowSelected(int row, boolean selected) {
 				handler.rowSelected(row - 1, selected);
+			}
+		});
+	}
+	
+	public void addRowDoubleclickHandler(final RowDoubleclickHandler handler) {
+		table.addRowDoubleclickHandler(new Table.RowDoubleclickHandler() {
+			@Override
+			public void rowDoubleclicked(int row) {
+				handler.rowDoubleclicked(row - 1);
 			}
 		});
 	}

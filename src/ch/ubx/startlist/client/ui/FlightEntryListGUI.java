@@ -12,6 +12,7 @@ import ch.ubx.startlist.client.FlightEntryServiceDelegate;
 import ch.ubx.startlist.client.GwtUtil;
 import ch.ubx.startlist.client.LoginServiceDelegate;
 import ch.ubx.startlist.client.RowSelectionHandler;
+import ch.ubx.startlist.client.RowDoubleclickHandler;
 import ch.ubx.startlist.client.TimeFormat;
 import ch.ubx.startlist.client.admin.ui.AdminGUI;
 import ch.ubx.startlist.shared.Airfield;
@@ -103,6 +104,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 	private VerticalPanel verticaPanel_2;
 	private RowSelectionHandler rowSelectionHandler = null;
+	private RowDoubleclickHandler rowDoubleclickHandler = null;
 	private Map<String, Long> strToDate = new LinkedHashMap<String, Long>();
 	private ListBox allPlacesListBox;
 	private MultiWordSuggestOracle allPlacesSuggest = new MultiWordSuggestOracle();
@@ -390,22 +392,44 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 				@Override
 				public void rowSelected(int row, boolean selected) {
 					enablePilotFields(false);
-					newButton.setEnabled(!selected);
 					if (selected) {
 						FlightEntry flightEntry = provider.getFlightEntry(row);
 						if (flightEntry == null) {
 							clearForm();
+							newButton.setEnabled(true);
 						} else {
-							enablePilotFields(false);
 							loadForm(flightEntry);
+							newButton.setEnabled(false);
 							enableCUDButtons();
 						}
+						
 					} else {
+						newButton.setEnabled(true);
 						clearForm();
 					}
 				}
 			};
 			dynaTableWidget.addRowSelectionHandler(rowSelectionHandler);
+		}
+		
+		if (rowDoubleclickHandler == null) {
+			rowDoubleclickHandler = new RowDoubleclickHandler() {
+				@Override
+				public void rowDoubleclicked(int row) {
+					enablePilotFields(false);
+					FlightEntry flightEntry = provider.getFlightEntry(row);
+					if (flightEntry == null) {
+						clearForm();
+					} else {
+						// open modify dialog
+						loadForm(flightEntry);
+						newButton.setEnabled(false);
+						modifyFlightEntry();
+					}
+					
+				}
+			};
+			dynaTableWidget.addRowDoubleclickHandler(rowDoubleclickHandler);
 		}
 	}
 
@@ -477,7 +501,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			date.setTime(flightEntry.getStartTimeInMillis());
 			startDateBox.setValue(date);
 		} else {
-			startDateBox.setValue(null);
+			Date dateNow = new Date();
+			startDateBox.setValue(dateNow);
 		}
 		if (flightEntry.isEndTimeGliderValid()) {
 			date.setTime(flightEntry.getEndTimeGliderInMillis());
@@ -498,7 +523,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		if (newEntry) {
 			String pl = placeListBox.getItemCount() > 0 ? placeListBox.getValue(placeListBox.getSelectedIndex()) : "";
 			flightEntry.setPlace(pl);
-			pilotNameBox.setValue(currentLoginInfo.getLastName() + " " + currentLoginInfo.getFirstName());
+			pilotNameBox.setValue(""); // don't set pilot name from login info at the moment
+			//pilotNameBox.setValue(currentLoginInfo.getLastName() + " " + currentLoginInfo.getFirstName());
 		}
 		GwtUtil.setItems(allPlacesListBox, GwtUtil.toAirfieldNames(allAirfields));
 		// TODO - it may be slow if lots of airfields -> optimize!
@@ -582,34 +608,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		flightEntry.setRegistrationTowplane(registrationTowplaneBox.getValue());
 		flightEntry.setPassengerOrInstructor(passengerOrInstructorNameBox.getValue());
 	}
-
-	@SuppressWarnings("deprecation")
-	private void toYMD(Date srcDate, Date dstDate) {
-		dstDate.setDate(srcDate.getDate());
-		dstDate.setMonth(srcDate.getMonth());
-		dstDate.setYear(srcDate.getYear());
-	}
-
-	public void gui_eventNewButtonClicked() {
-		disableCUDButtons();
-		enablePilotFields(true);
-		FlightEntry flightEntry = new FlightEntry();
-		loadForm(flightEntry);
-		flightEntryDialogBox.setTitle(TXT_TITLE_CREATE_NEW_FLIGHT);
-		flightEntryDialogBox.setText(TXT_CREATE_NEW_FLIGHT);
-		flightEntryDialogBox.setPopupPosition(newButton.getAbsoluteLeft() + newButton.getOffsetWidth(),
-				newButton.getAbsoluteTop() - flightEntryDialogBox.getOffsetHeight() - 20);
-		flightEntryDialogBox.setWidth("800px");
-		flightEntryDialogBox.show();
-		startDateBox.setFocus(true);
-
-		newButton.setEnabled(false);
-		saveButton.setEnabled(true);
-		discardButton.setEnabled(true);
-		btnClose.setEnabled(false);
-	}
-
-	public void gui_eventModifyButtonClicked() {
+	
+	private void modifyFlightEntry () {
 		if (currentFlightEntry.isModifiable()) {
 			enablePilotFields(true);
 			flightEntryDialogBox.setTitle(TXT_TITLE_MODIFY_FLIGHT);
@@ -649,6 +649,36 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		} else {// Not the owner and not Admin
 			showMidifiableDialog(currentFlightEntry, TXT_ERROR_FLIGHTENTRY_MODIFY_OWNER_MISMATCH);
 		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private void toYMD(Date srcDate, Date dstDate) {
+		dstDate.setDate(srcDate.getDate());
+		dstDate.setMonth(srcDate.getMonth());
+		dstDate.setYear(srcDate.getYear());
+	}
+
+	public void gui_eventNewButtonClicked() {
+		disableCUDButtons();
+		enablePilotFields(true);
+		FlightEntry flightEntry = new FlightEntry();
+		loadForm(flightEntry);
+		flightEntryDialogBox.setTitle(TXT_TITLE_CREATE_NEW_FLIGHT);
+		flightEntryDialogBox.setText(TXT_CREATE_NEW_FLIGHT);
+		flightEntryDialogBox.setPopupPosition(newButton.getAbsoluteLeft() + newButton.getOffsetWidth(),
+				newButton.getAbsoluteTop() - flightEntryDialogBox.getOffsetHeight() - 20);
+		flightEntryDialogBox.setWidth("800px");
+		flightEntryDialogBox.show();
+		startDateBox.setFocus(true);
+
+		newButton.setEnabled(false);
+		saveButton.setEnabled(true);
+		discardButton.setEnabled(true);
+		btnClose.setEnabled(false);
+	}
+
+	public void gui_eventModifyButtonClicked() {
+		modifyFlightEntry();
 	}
 
 	public void gui_eventSaveButtonClicked() {
