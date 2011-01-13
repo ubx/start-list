@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import ch.ubx.startlist.client.TextConstants;
+import ch.ubx.startlist.shared.TextConstants;
 
 public class FlightEntryValidator implements TextConstants{
 

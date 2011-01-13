@@ -1,4 +1,4 @@
-package ch.ubx.startlist.client;
+package ch.ubx.startlist.shared;
 
 // File must be stored in UTF-8 encoding to allow umlauts, see:
 // http://groups.google.com/group/Google-Web-Toolkit/browse_frm/thread/be54849d20dafa9a/a094ddc8b018a971?lnk=gst&q=special&rnum=10#a094ddc8b018a971
@@ -72,5 +72,7 @@ public interface TextConstants {
 	public static final String TXT_Y = "J";
 	public static final String TXT_YEAR = "Jahr";
 	public static final String TXT_YES = "Ja";
+	public static final String TXT_FLIGHT_FOR_TODY_IN_EXCEL_FILE = "Flüge in Excel Datei";
+	public static final String TXT_NO_FLIGHT_TODAY = "Heute keine Flüge";
 
 }

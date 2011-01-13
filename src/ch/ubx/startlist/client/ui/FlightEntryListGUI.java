@@ -12,12 +12,12 @@ import ch.ubx.startlist.client.FlightEntryServiceDelegate;
 import ch.ubx.startlist.client.GwtUtil;
 import ch.ubx.startlist.client.LoginServiceDelegate;
 import ch.ubx.startlist.client.RowSelectionHandler;
-import ch.ubx.startlist.client.TextConstants;
 import ch.ubx.startlist.client.TimeFormat;
 import ch.ubx.startlist.client.admin.ui.AdminGUI;
 import ch.ubx.startlist.shared.Airfield;
 import ch.ubx.startlist.shared.FlightEntry;
 import ch.ubx.startlist.shared.LoginInfo;
+import ch.ubx.startlist.shared.TextConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
