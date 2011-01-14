@@ -138,3 +138,7 @@ If a the application is deployed the first time, it may not work immediately. Wa
 until the datastore indexes are build. This may take some time, be patient!
 (com.google.appengine.api.datastore.DatastoreNeedIndexException: The index for this query is not ready to serve. See the Datastore Indexes page )
 
+=====================
+Drag and Drop, for scheduler UI?
+http://code.google.com/p/gwt-dnd/
+
