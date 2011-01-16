@@ -140,7 +140,7 @@ public class FlightEntryValidator implements TextConstants{
 			}
 			if (regGlider.length() > 0)
 			{
-				if (!regGlider.matches("[A-Z]{1,2}-[A-Z0-9]{4}")) {
+				if (!regGlider.matches("[A-Z]{1,2}-[A-Z0-9]{3,4}")) {
 					showMessage(gui.registrationGliderBox, TXT_VALIDATOR_ERROR_REGISTRATION_GLIDER_FORMAT);
 					return false;	
 				}	

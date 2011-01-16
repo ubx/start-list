@@ -91,8 +91,13 @@ public class ExcelSheet implements TextConstants {
 				sheet.addCell(new DateTime(col++, row, time, cellTimeFormat));
 
 				// column E: tow duration: let excel calculate it
-				String durationFormulaTowplane = TXT_COLUMN_LANDING_TIME_TOWPLANE + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
-				sheet.addCell(new Formula(col++, row, durationFormulaTowplane, cellTimeFormat));
+				if (flightEntry.isEndTimeTowplaneValid()) {
+					String durationFormulaTowplane = TXT_COLUMN_LANDING_TIME_TOWPLANE + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
+					sheet.addCell(new Formula(col++, row, durationFormulaTowplane, cellTimeFormat));
+				} else {
+					// no tow duration because of unknown endTime of towplane
+					col++; 
+				}
 
 				// column F: registration towplane
 				sheet.addCell(new Label(col++, row, flightEntry.getRegistrationTowplane()));
@@ -109,8 +114,13 @@ public class ExcelSheet implements TextConstants {
 				sheet.addCell(new DateTime(col++, row, time, cellTimeFormat));
 
 				// column I: glider duration: let excel calculate it
-				String durationFormulaGlider = TXT_COLUMN_LANDING_TIME_GLIDER + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
-				sheet.addCell(new Formula(col++, row, durationFormulaGlider, cellTimeFormat));
+				if (flightEntry.isEndTimeGliderValid()) {
+					String durationFormulaGlider = TXT_COLUMN_LANDING_TIME_GLIDER + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
+					sheet.addCell(new Formula(col++, row, durationFormulaGlider, cellTimeFormat));
+				} else {
+					// no glider duration because of unknown endTime of glider
+					col++;	
+				}
 
 				// column J: registration glider
 				sheet.addCell(new Label(col++, row, flightEntry.getRegistrationGlider()));
