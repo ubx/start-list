@@ -1,6 +1,7 @@
 package ch.ubx.startlist.server;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.ubx.startlist.shared.SendExcel;
 
@@ -11,5 +12,7 @@ public interface SendExcelDAO {
 	public void createOrUpdateSendExcel(SendExcel sendExcel);
 
 	public List<SendExcel> listAllSendExcel();
+	
+	public Map<String, SendExcel> listSendExcel(List<String> names);
 
 }

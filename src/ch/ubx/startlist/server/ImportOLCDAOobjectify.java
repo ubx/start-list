@@ -1,6 +1,7 @@
 package ch.ubx.startlist.server;
 
 import java.util.List;
+import java.util.Map;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -32,6 +33,12 @@ public class ImportOLCDAOobjectify implements ImportOLCDAO {
 		Objectify ofy = ObjectifyService.begin();
 		Query<ImportOLC> query = ofy.query(ImportOLC.class);
 		return query.list();
+	}
+
+	@Override
+	public Map<String, ImportOLC> listImportOLC(List<String> names) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

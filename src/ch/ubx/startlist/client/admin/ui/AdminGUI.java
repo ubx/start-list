@@ -93,6 +93,7 @@ public class AdminGUI extends FormPanel {
 		mainPanel.setWidget(5, 0, excelYearListBox);
 		excelLinkHTML = new HTML();
 		mainPanel.setWidget(5, 1, excelLinkHTML);
+		
 		// ----------------------------------------------------------
 		// OLC import stuff
 		mainPanel.getFlexCellFormatter().setColSpan(6, 0, 4);
@@ -112,6 +113,12 @@ public class AdminGUI extends FormPanel {
 		mainPanel.setWidget(9, 1, new Label("Status: "));
 		olcImportFligtEntryStatus = new Label();
 		mainPanel.setWidget(9, 2, olcImportFligtEntryStatus);
+		
+		// ----------------------------------------------------------
+		// Send excel mail job
+		
+		// ----------------------------------------------------------
+		// Import OLC job
 
 		new AdminGUIevents(this);
 	}

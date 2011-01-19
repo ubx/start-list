@@ -48,17 +48,17 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	private static final String LOGIN_ROOT_PANEL = "loginrootpanel";
 
 	/* GUI Widgets */
-	//protected Button addButton, updateButton; @@unused??
+	// protected Button addButton, updateButton; @@unused??
 	public Button newButton;
 	public Button modifyButton;
 	public Button deleteButton;
 	public Button discardButton;
 	public Button saveButton;
 
-	//protected TextBox dateField; @@unused??
-	//protected TextBox pilotField;   @@unused??
-	//protected TextBox startField; @@unused??
-	//protected TextBox endField; @@unused??
+	// protected TextBox dateField; @@unused??
+	// protected TextBox pilotField; @@unused??
+	// protected TextBox startField; @@unused??
+	// protected TextBox endField; @@unused??
 	protected TextBox registrationGliderBox;
 	protected TextBox registrationTowplaneBox;
 
@@ -86,9 +86,9 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	protected TextBox remarksTextBox;
 	protected SuggestBox2 allPlacesSuggestBox;
 
-	//protected TextBox userTextBox;  @@unused??
-	//protected PasswordTextBox passwordTextBox;  @@unused??
-	//protected Button btnLoginOkButton;  @@unused??
+	// protected TextBox userTextBox; @@unused??
+	// protected PasswordTextBox passwordTextBox; @@unused??
+	// protected Button btnLoginOkButton; @@unused??
 	public Button btnClose;
 
 	public FlightEntryServiceDelegate flightEntryService;
@@ -148,7 +148,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		// main panel
 		mainPanel = new VerticalPanel();
 		stackPanel.add(mainPanel, TXT_STARTLIST, false);
-		
+
 		HorizontalPanel selectionPanel = new HorizontalPanel();
 		selectionPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		selectionPanel.addStyleName("selectionPanel");
@@ -194,10 +194,11 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		selectionPanel.add(excelLinkHTML);
 
 		// flight entry table starts here
-		String[] columns = new String[] { TXT_START_TIME, TXT_LANDING_TIME_TOWPLANE, TXT_DURATION_TOWPLANE, TXT_SHORT_REGISTRATION_TOWPLANE, 
-				                          TXT_LANDING_TIME_GLIDER, TXT_DURATION_GLIDER, TXT_SHORT_REGISTRATION_GLIDER, TXT_PILOT, TXT_PASSENGER_OR_INSTRUCTOR, TXT_TRAINING, TXT_REMARKS };
-		
-		String[] styles = new String[] { "starttime", "endtimetowplane", "dauertowplane", "registrationtowplane", "endtimeglider", "dauerglider", "registrationglider", "pilot", "passengerorinstructor", "schulung", "bemerkungen"};
+		String[] columns = new String[] { TXT_START_TIME, TXT_LANDING_TIME_TOWPLANE, TXT_DURATION_TOWPLANE, TXT_SHORT_REGISTRATION_TOWPLANE,
+				TXT_LANDING_TIME_GLIDER, TXT_DURATION_GLIDER, TXT_SHORT_REGISTRATION_GLIDER, TXT_PILOT, TXT_PASSENGER_OR_INSTRUCTOR, TXT_TRAINING, TXT_REMARKS };
+
+		String[] styles = new String[] { "starttime", "endtimetowplane", "dauertowplane", "registrationtowplane", "endtimeglider", "dauerglider",
+				"registrationglider", "pilot", "passengerorinstructor", "schulung", "bemerkungen" };
 
 		verticaPanel_2 = new VerticalPanel();
 		mainPanel.add(verticaPanel_2);
@@ -235,11 +236,11 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		// row 0: basic information, date and place
 		Label lblDatum2 = new Label(TXT_FLIGHT_DATUM);
 		flightEntryFlexTable.setWidget(0, 0, lblDatum2);
-		
+
 		dateBox = new DateBox2();
 		dateBox.setFormat(DD_MMM_YYYY_FORMAT);
 		flightEntryFlexTable.setWidget(0, 1, dateBox);
-		
+
 		Label lblAllPlaces = new Label(TXT_START_PLACE);
 		flightEntryFlexTable.setWidget(0, 2, lblAllPlaces);
 
@@ -251,7 +252,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 		allPlacesSuggestBox = new SuggestBox2(allPlacesSuggest);
 		flightEntryFlexTable.setWidget(0, 5, allPlacesSuggestBox);
-		
+
 		// row 1: time information
 		Label lblStart = new Label(TXT_START_TIME);
 		flightEntryFlexTable.setWidget(1, 0, lblStart);
@@ -268,7 +269,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		endTowplaneDateBox.setFormat(MM_HH_FORMAT);
 		endTowplaneDateBox.getDatePicker().setVisible(false);
 		flightEntryFlexTable.setWidget(1, 3, endTowplaneDateBox);
-		
+
 		Label lblEndeGlider = new Label(TXT_LANDING_TIME_GLIDER);
 		flightEntryFlexTable.setWidget(1, 4, lblEndeGlider);
 
@@ -276,33 +277,33 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		endGliderDateBox.setFormat(MM_HH_FORMAT);
 		endGliderDateBox.getDatePicker().setVisible(false);
 		flightEntryFlexTable.setWidget(1, 5, endGliderDateBox);
-		
+
 		// row 2: registration of involved planes
 		Label lblTowplane = new Label(TXT_REGISTRATION_TOWPLANE);
 		flightEntryFlexTable.setWidget(2, 0, lblTowplane);
 
 		registrationTowplaneBox = new TextBox();
 		flightEntryFlexTable.setWidget(2, 1, registrationTowplaneBox);
-		
+
 		Label lblGlider = new Label(TXT_REGISTRATION_GLIDER);
 		flightEntryFlexTable.setWidget(2, 2, lblGlider);
 
 		registrationGliderBox = new TextBox();
 		flightEntryFlexTable.setWidget(2, 3, registrationGliderBox);
-		
+
 		// row 3: pilot information
 		Label lblPilot = new Label(TXT_PILOT);
 		flightEntryFlexTable.setWidget(3, 0, lblPilot);
 
 		pilotNameBox = new TextBox();
 		flightEntryFlexTable.setWidget(3, 1, pilotNameBox);
-		
+
 		Label lblPassengerOrInstructor = new Label(TXT_PASSENGER_OR_INSTRUCTOR);
 		flightEntryFlexTable.setWidget(3, 2, lblPassengerOrInstructor);
 
 		passengerOrInstructorNameBox = new TextBox();
 		flightEntryFlexTable.setWidget(3, 3, passengerOrInstructorNameBox);
-		
+
 		Label lblTraining = new Label(TXT_TRAINING);
 		flightEntryFlexTable.setWidget(3, 4, lblTraining);
 
@@ -315,16 +316,11 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		remarksTextBox = new TextBox();
 		remarksTextBox.setVisibleLength(80);
 		flightEntryFlexTable.setWidget(4, 1, remarksTextBox);
-		flightEntryFlexTable.getFlexCellFormatter().setColSpan(4, 1, 5);// TODO
-																		// --
-																		// does
-																		// not
-																		// work?
-
+		flightEntryFlexTable.getFlexCellFormatter().setColSpan(4, 1, 5);// TODO - does not work?
 
 		// Set tab order
-		setTabOrder(dateBox, allPlacesListBox, allPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox, registrationGliderBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox);
-
+		setTabOrder(dateBox, allPlacesListBox, allPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox,
+				registrationGliderBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox);
 
 		HorizontalPanel operationsPanel;
 		operationsPanel = new HorizontalPanel();
@@ -343,9 +339,9 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		btnClose.setEnabled(true);
 		operationsPanel.add(btnClose);
 
-		//dateField = new TextBox();  @@unused??
-		//pilotField = new TextBox();  @@unused??
-		//startField = new TextBox();  @@unused??
+		// dateField = new TextBox(); @@unused??
+		// pilotField = new TextBox(); @@unused??
+		// startField = new TextBox(); @@unused??
 
 		loadYears();
 
@@ -402,7 +398,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 							newButton.setEnabled(false);
 							enableCUDButtons();
 						}
-						
+
 					} else {
 						newButton.setEnabled(true);
 						clearForm();
@@ -411,7 +407,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			};
 			dynaTableWidget.addRowSelectionHandler(rowSelectionHandler);
 		}
-		
+
 		if (rowDoubleclickHandler == null) {
 			rowDoubleclickHandler = new RowDoubleclickHandler() {
 				@Override
@@ -426,7 +422,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 						newButton.setEnabled(false);
 						modifyFlightEntry();
 					}
-					
+
 				}
 			};
 			dynaTableWidget.addRowDoubleclickHandler(rowDoubleclickHandler);
@@ -524,7 +520,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			String pl = placeListBox.getItemCount() > 0 ? placeListBox.getValue(placeListBox.getSelectedIndex()) : "";
 			flightEntry.setPlace(pl);
 			pilotNameBox.setValue(""); // don't set pilot name from login info at the moment
-			//pilotNameBox.setValue(currentLoginInfo.getLastName() + " " + currentLoginInfo.getFirstName());
+			// pilotNameBox.setValue(currentLoginInfo.getLastName() + " " + currentLoginInfo.getFirstName());
 		}
 		GwtUtil.setItems(allPlacesListBox, GwtUtil.toAirfieldNames(allAirfields));
 		// TODO - it may be slow if lots of airfields -> optimize!
@@ -546,7 +542,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			pilot = "<Unknown>";
 		}
 		flightEntry.setPilot(pilot);
-		
+
 		// set start time
 		Date date = null;
 		// TODO - find a better way to check
@@ -582,7 +578,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		} else {
 			flightEntry.setEndTimeGliderInMillis(0);
 		}
-		
+
 		// set landing time towplane
 		date = null;
 		// TODO - find a better way to check
@@ -608,8 +604,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		flightEntry.setRegistrationTowplane(registrationTowplaneBox.getValue());
 		flightEntry.setPassengerOrInstructor(passengerOrInstructorNameBox.getValue());
 	}
-	
-	private void modifyFlightEntry () {
+
+	private void modifyFlightEntry() {
 		if (currentFlightEntry.isModifiable()) {
 			enablePilotFields(true);
 			flightEntryDialogBox.setTitle(TXT_TITLE_MODIFY_FLIGHT);
@@ -618,28 +614,28 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 					- flightEntryDialogBox.getOffsetHeight() - 20);
 			flightEntryDialogBox.setWidth("800px");
 			flightEntryDialogBox.show();
-			
+
 			// set focus depending on content of current flight entry, optimized for live entry throught "Flugdienstleiter"
 			if (!currentFlightEntry.isStartTimeValid()) {
-				startDateBox.setFocus(true);  // no start time yet, FDL will want to enter it first
+				startDateBox.setFocus(true); // no start time yet, FDL will want to enter it first
 			} else if (!currentFlightEntry.isEndTimeTowplaneValid()) {
-				endTowplaneDateBox.setFocus(true);  // usecase: towplane landed, FDL wants to enter landing time of towplane
+				endTowplaneDateBox.setFocus(true); // usecase: towplane landed, FDL wants to enter landing time of towplane
 			} else if (!currentFlightEntry.isEndTimeGliderValid()) {
-				endGliderDateBox.setFocus(true);  // usecase: glider landed, FDL wants to enter landing time of glider
+				endGliderDateBox.setFocus(true); // usecase: glider landed, FDL wants to enter landing time of glider
 			} else if (currentFlightEntry.getRegistrationTowplane().length() == 0) {
 				registrationTowplaneBox.setFocus(true);
 			} else if (currentFlightEntry.getRegistrationGlider().length() == 0) {
 				registrationGliderBox.setFocus(true);
 			} else if (currentFlightEntry.getPilot().length() == 0) {
 				pilotNameBox.setFocus(true);
-			} else if (currentFlightEntry.getPassengerOrInstructor().length()== 0) {
+			} else if (currentFlightEntry.getPassengerOrInstructor().length() == 0) {
 				passengerOrInstructorNameBox.setFocus(true);
-			} else if (currentFlightEntry.getRemarks().length() == 0){
+			} else if (currentFlightEntry.getRemarks().length() == 0) {
 				remarksTextBox.setFocus(true);
 			} else if (currentFlightEntry.getLandingPlace().length() == 0) {
 				allPlacesSuggestBox.setFocus(true);
 			} else {
-				remarksTextBox.setFocus(true);		
+				remarksTextBox.setFocus(true);
 			}
 
 			disableCUDButtons();

@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ch.ubx.startlist.server.AirfieldDAOobjectify;
+import ch.ubx.startlist.server.FlightEntryDAO;
 import ch.ubx.startlist.server.FlightEntryDAOobjectify;
 import ch.ubx.startlist.shared.Airfield;
 import ch.ubx.startlist.shared.FlightEntry;
@@ -18,7 +19,7 @@ import ch.ubx.startlist.shared.FlightEntry;
 public class OlcImportMain {
 
 	private static AirfieldDAOobjectify airfieldDAO = new AirfieldDAOobjectify();
-	private static FlightEntryDAOobjectify flightEntryDAO = new FlightEntryDAOobjectify();
+	private static FlightEntryDAO flightEntryDAO = new FlightEntryDAOobjectify();
 	private static final Logger log = Logger.getLogger(Olc2006AirfieldServlet.class.getName());
 
 	/**

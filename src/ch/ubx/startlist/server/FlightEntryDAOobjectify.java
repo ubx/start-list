@@ -34,9 +34,11 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		if (currentUser == null) {
 			currentUser = new User("admin@" + SystemProperty.applicationId.get() + ".appspotmail.com", "gmail.com");
 		}
-
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#listflightEntry(java.lang.String, long, int, int)
+	 */
 	@Override
 	public List<FlightEntry> listflightEntry(String place, long dateTimeInMillis, int startIndex, int maxCount) {
 		Calendar date = Calendar.getInstance();
@@ -50,6 +52,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return list;
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#removeFlightEntry(ch.ubx.startlist.shared.FlightEntry)
+	 */
 	@Override
 	public FlightEntry removeFlightEntry(FlightEntry flightEntry) {
 		Objectify ofy = ObjectifyService.begin();
@@ -57,6 +62,10 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return flightEntry;
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#createOrUpdateFlightEntry(ch.ubx.startlist.shared.FlightEntry)
+	 */
+	
 	@Override
 	public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry) {
 		Objectify ofy = ObjectifyService.begin();
@@ -65,6 +74,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return flightEntry;
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#listDates(java.lang.String, int)
+	 */
 	@Override
 	public Set<Long> listDates(String place, int year) {
 		List<FlightEntry> list = listflightEntry(year, place);
@@ -84,6 +96,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return dateList;
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#listAirfields(int)
+	 */
 	@Override
 	public Set<String> listAirfields(int year) {
 		List<FlightEntry> list = listflightEntry(year);
@@ -94,6 +109,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return places;
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#listYears()
+	 */
 	@Override
 	public Set<Integer> listYears() {
 		Objectify ofy = ObjectifyService.begin();
@@ -114,6 +132,10 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	// --------------------------------------------------------------------------------------
 	// server internal access methods
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#listflightEntry(int)
+	 */
+	@Override
 	public List<FlightEntry> listflightEntry(int year) {
 		Objectify ofy = ObjectifyService.begin();
 
@@ -131,6 +153,10 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return query.list();
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#listflightEntry(java.util.Calendar, java.lang.String)
+	 */
+	@Override
 	public List<FlightEntry> listflightEntry(Calendar date, String place) {
 		Objectify ofy = ObjectifyService.begin();
 
@@ -149,6 +175,10 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return query.list();
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#listflightEntry(int, int, int, java.lang.String)
+	 */
+	@Override
 	public List<FlightEntry> listflightEntry(int year, int month, int day, String place) {
 		Objectify ofy = ObjectifyService.begin();
 		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
@@ -169,10 +199,18 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#listflightEntry(int, java.lang.String)
+	 */
+	@Override
 	public List<FlightEntry> listflightEntry(int year, String place) {
 		return listflightEntry(year, year, place);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#listflightEntry(int, int, java.lang.String)
+	 */
+	@Override
 	public List<FlightEntry> listflightEntry(int yearStart, int yearEnd, String place) {
 		Objectify ofy = ObjectifyService.begin();
 
@@ -191,12 +229,20 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return query.list();
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#removeFlightEntries(java.lang.String, int)
+	 */
+	@Override
 	public void removeFlightEntries(String place, int source) {
 		Objectify ofy = ObjectifyService.begin();
 		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("source ==", source);
 		ofy.delete(query);
 	}
 
+	/* (non-Javadoc)
+	 * @see ch.ubx.startlist.server.X#addFlightEntries(java.util.List)
+	 */
+	@Override
 	public void addFlightEntries(List<FlightEntry> flightEntries) {
 		if (flightEntries.size() > 0) {
 			Objectify ofy = ObjectifyService.begin();

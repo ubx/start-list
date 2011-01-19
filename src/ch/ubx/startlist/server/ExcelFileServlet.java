@@ -14,7 +14,7 @@ public class ExcelFileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private FlightEntryDAOobjectify flightEntryDAO = new FlightEntryDAOobjectify();
+	private FlightEntryDAO flightEntryDAO = new FlightEntryDAOobjectify();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
