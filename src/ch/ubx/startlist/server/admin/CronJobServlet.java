@@ -26,13 +26,25 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 
 	private static final long serialVersionUID = 1L;
 
-	private PeriodicJobDAO periodicJobDAO = new PeriodicJobDAOobjectify();
+	private static PeriodicJobDAO periodicJobDAO = new PeriodicJobDAOobjectify();
 	private static SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
+	private static SimpleDateFormat nowTimeFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm z");
+
 	private static final Logger log = Logger.getLogger(CronJobServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		log.log(Level.INFO, req.getRequestURI());
+
+		Calendar now = Calendar.getInstance();
+		String nowStr = req.getParameter("now");
+		if (nowStr != null) {
+			try {
+				now.setTimeInMillis(nowTimeFormat.parse(nowStr).getTime());
+			} catch (ParseException e) {
+				log.log(Level.SEVERE, "Could not parse test time=" + nowStr);
+			}
+		}
 
 		// FOR TEST ONLY
 		if (periodicJobDAO.listAllPeriodicJob().size() == 0) {
@@ -40,8 +52,6 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 			periodicJob.setName("Test-Job");
 			periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
 		}
-
-		Calendar now = Calendar.getInstance();
 
 		// Get all expired (or not yet initialized, i.e. timeInMillis == 0).
 		List<PeriodicJob> periodicJobs = periodicJobDAO.listExpiredPeriodicJob(now.getTimeInMillis());
@@ -91,7 +101,6 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 		nextTime.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE));
 
 		int curDayOfWeek = nextTime.get(Calendar.DAY_OF_WEEK) - 1; // Start with 0
-		curDayOfWeek = curDayOfWeek + (periodicJob.getNextTimeInMillis() == 0 ? 0 : +1);
 		boolean days[] = periodicJob.getDays();
 		for (int i = curDayOfWeek; i < days.length * 2; i++) {
 			int daysToAdd = i - curDayOfWeek;
@@ -107,7 +116,6 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 				log.log(Level.WARNING, "Could not set next day");
 				return;
 			}
-
 		}
 	}
 

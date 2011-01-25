@@ -28,21 +28,30 @@ public class PeriodicJobDAOobjectify implements PeriodicJobDAO {
 
 	@Override
 	public void updatePeriodicJobs(List<PeriodicJob> periodicJobs) {
-		// TODO Auto-generated method stub
-
+		if (periodicJobs.size() > 0) {
+			Objectify ofy = ObjectifyService.begin();
+			ofy.put(periodicJobs);
+		}
 	}
 
 	@Override
 	public List<PeriodicJob> listAllPeriodicJob() {
-		// TODO Auto-generated method stub
-		return null;
+		Objectify ofy = ObjectifyService.begin();
+		Query<PeriodicJob> query = ofy.query(PeriodicJob.class);
+		return query.list();
 	}
 
 	@Override
 	public List<PeriodicJob> listExpiredPeriodicJob(long timeInMillis) {
 		Objectify ofy = ObjectifyService.begin();
-		Query<PeriodicJob> query = ofy.query(PeriodicJob.class).filter("nextTimeInMillis <=", timeInMillis);
+		Query<PeriodicJob> query = ofy.query(PeriodicJob.class).filter("nextTimeInMillis <=", timeInMillis).filter("enabled ==", true);
 		return query.list();
+	}
+
+	@Override
+	public PeriodicJob getPeriodicJob(String name) {
+		Objectify ofy = ObjectifyService.begin();
+		return ofy.get(PeriodicJob.class, name);
 	}
 
 }

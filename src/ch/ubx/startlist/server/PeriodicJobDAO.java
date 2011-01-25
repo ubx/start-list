@@ -12,6 +12,8 @@ public interface PeriodicJobDAO {
 
 	public void updatePeriodicJobs(List<PeriodicJob> periodicJobs);
 
+	public PeriodicJob getPeriodicJob(String name);
+
 	public List<PeriodicJob> listAllPeriodicJob();
 
 	public List<PeriodicJob> listExpiredPeriodicJob(long timeInMillis);

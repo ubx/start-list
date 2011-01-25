@@ -1,6 +1,7 @@
 package ch.ubx.startlist.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class PeriodicJob implements Serializable {
 	@Id
 	private String name;
 	private long nextTimeInMillis = 0; // in milisec
-	private boolean enable = false;
+	private boolean enabled = true;
 	private String sendExcels;
 	private String importOLCJobs;
 	private boolean[] days = new boolean[7]; // MO..SO
@@ -24,6 +25,12 @@ public class PeriodicJob implements Serializable {
 		for (boolean day : days) {
 			day = false;
 		}
+	}
+
+	public PeriodicJob(String name) {
+		this();
+		this.name = name;
+
 	}
 
 	public String getName() {
@@ -42,12 +49,15 @@ public class PeriodicJob implements Serializable {
 		this.nextTimeInMillis = nextTimeInMillis;
 	}
 
-	public boolean isEnable() {
-		return enable;
+	public boolean isEnabled() {
+		return enabled;
 	}
 
-	public void setEnable(boolean enable) {
-		this.enable = enable;
+	public void setEnabled(boolean enabled) {
+		if (this.enabled != enabled) {
+			nextTimeInMillis = 0;
+			this.enabled = enabled;
+		}
 	}
 
 	public String getSendExcels() {
@@ -55,7 +65,7 @@ public class PeriodicJob implements Serializable {
 	}
 
 	public List<String> getSendExcelJobList() {
-		return Arrays.asList(sendExcels.split(";"));
+		return sendExcels == null ? new ArrayList<String>() : Arrays.asList(sendExcels.split(";"));
 	}
 
 	public void setSendExcels(String sendExcels) {
@@ -67,7 +77,7 @@ public class PeriodicJob implements Serializable {
 	}
 
 	public List<String> getImportOLCJobList() {
-		return Arrays.asList(importOLCJobs.split(";"));
+		return importOLCJobs == null ? new ArrayList<String>() : Arrays.asList(importOLCJobs.split(";"));
 	}
 
 	public void setImportOLCJobs(String importOLCJobs) {
@@ -81,6 +91,9 @@ public class PeriodicJob implements Serializable {
 	public void setDays(boolean[] days) {
 		if (days.length != 7) {
 			throw new RuntimeException("Array length must be 7");
+		}
+		for (int i = 0; i < days.length; i++) {
+			this.days[i] = days[i];
 		}
 		this.days = days;
 	}

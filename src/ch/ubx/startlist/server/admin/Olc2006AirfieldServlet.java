@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +29,7 @@ public class Olc2006AirfieldServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	// private static final Logger log = Logger.getLogger(Olc2006AirfieldServlet.class.getName());
+	private static final Logger log = Logger.getLogger(Olc2006AirfieldServlet.class.getName());
 	private AirfieldDAOobjectify airfieldDAO = new AirfieldDAOobjectify();
 
 	@Override
@@ -38,6 +40,8 @@ public class Olc2006AirfieldServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+		log.log(Level.INFO, "req.getQueryString()=" + req.getQueryString());
+		
 		if (ServletFileUpload.isMultipartContent(req)) {
 			try {
 

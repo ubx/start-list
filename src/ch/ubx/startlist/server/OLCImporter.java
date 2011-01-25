@@ -21,18 +21,20 @@ public class OLCImporter {
 	 * Import for all ImportOLC from OLC web page;
 	 */
 	public static void doImport(List<String> names) {
-		int year = Calendar.getInstance().get(Calendar.YEAR);
-		Set<Entry<String, ImportOLC>> entrySet = importOLCDAO.listImportOLC(names).entrySet();
-		for (Entry<String, ImportOLC> entry : entrySet) {
-			log.log(Level.INFO, "Import for job=" + entry.getKey());
-			List<String> places = entry.getValue().getPlacesList();
-			for (String place : places) {
-				log.log(Level.INFO, "Import from place=" + place + ", year=" + year);
-				// Split requests into small pieces to avoid DeadlineExceededException for the whole request.
-				int maxImport = 50;
-				while (OlcImportMain.importFromOLC(place, year, 20).size() > 0 & maxImport > 0) {
-					log.log(Level.INFO, "Imported ...");
-					--maxImport;
+		if (names.size() > 0) {
+			int year = Calendar.getInstance().get(Calendar.YEAR);
+			Set<Entry<String, ImportOLC>> entrySet = importOLCDAO.listImportOLC(names).entrySet();
+			for (Entry<String, ImportOLC> entry : entrySet) {
+				log.log(Level.INFO, "Import for job=" + entry.getKey());
+				List<String> places = entry.getValue().getPlacesList();
+				for (String place : places) {
+					log.log(Level.INFO, "Import from place=" + place + ", year=" + year);
+					// Split requests into small pieces to avoid DeadlineExceededException for the whole request.
+					int maxImport = 50;
+					while (OlcImportMain.importFromOLC(place, year, 20).size() > 0 & maxImport > 0) {
+						log.log(Level.INFO, "Imported ...");
+						--maxImport;
+					}
 				}
 			}
 		}
