@@ -22,10 +22,10 @@ import ch.ubx.startlist.shared.TextConstants;
 public class ExcelSheet implements TextConstants {
 
 	private static final String[] columns = new String[] { TXT_DATE, TXT_START_PLACE, TXT_START_TIME + "[UTC]", TXT_LANDING_TIME_TOWPLANE + "[UTC]",
-			TXT_DURATION_TOWPLANE, TXT_SHORT_REGISTRATION_TOWPLANE, TXT_LANDING_PLACE, TXT_LANDING_TIME_GLIDER + "[UTC]", TXT_DURATION_GLIDER,
+			TXT_DURATION_TOWPLANE + "[Min.]", TXT_SHORT_REGISTRATION_TOWPLANE, TXT_LANDING_PLACE, TXT_LANDING_TIME_GLIDER + "[UTC]", TXT_DURATION_GLIDER + "[Min.]",
 			TXT_SHORT_REGISTRATION_GLIDER, TXT_PILOT, TXT_PASSENGER_OR_INSTRUCTOR, TXT_TRAINING, TXT_REMARKS };
 
-	private static final int[] columnswidth = new int[] { 10, 18, 18, 18, 10, 18, 18, 18, 10, 18, 20, 20, 6, 60 };
+	private static final int[] columnswidth = new int[] { 10, 18, 18, 18, 15, 18, 18, 18, 15, 18, 20, 20, 6, 60 };
 
 	private static final String TXT_COLUMN_LANDING_TIME_GLIDER = "H";
 	private static final String TXT_COLUMN_LANDING_TIME_TOWPLANE = "D";
@@ -92,8 +92,10 @@ public class ExcelSheet implements TextConstants {
 
 				// column E: tow duration: let excel calculate it
 				if (flightEntry.isEndTimeTowplaneValid()) {
-					String durationFormulaTowplane = TXT_COLUMN_LANDING_TIME_TOWPLANE + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
-					sheet.addCell(new Formula(col++, row, durationFormulaTowplane, cellTimeFormat));
+					// formula: duration in minutes = STUNDE(Startzeit-Landezeit) * 60 + MINUTE(Startzeit-Landezeit)
+					String durationBasicValueTowplane = TXT_COLUMN_LANDING_TIME_TOWPLANE + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
+					String durationFormulaTowplane = "STUNDE(" + durationBasicValueTowplane + ")*60+MINUTE(" + durationBasicValueTowplane + ")";
+					sheet.addCell(new Formula(col++, row, durationFormulaTowplane));
 				} else {
 					// no tow duration because of unknown endTime of towplane
 					col++; 
@@ -115,8 +117,9 @@ public class ExcelSheet implements TextConstants {
 
 				// column I: glider duration: let excel calculate it
 				if (flightEntry.isEndTimeGliderValid()) {
-					String durationFormulaGlider = TXT_COLUMN_LANDING_TIME_GLIDER + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
-					sheet.addCell(new Formula(col++, row, durationFormulaGlider, cellTimeFormat));
+					String durationBasicValueGlider = TXT_COLUMN_LANDING_TIME_GLIDER + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
+					String durationFormulaGlider = "STUNDE(" + durationBasicValueGlider + ")*60+MINUTE(" + durationBasicValueGlider + ")";
+					sheet.addCell(new Formula(col++, row, durationFormulaGlider));
 				} else {
 					// no glider duration because of unknown endTime of glider
 					col++;	
