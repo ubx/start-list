@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
@@ -11,5 +12,15 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jxl.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jericho-html-3.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-2.2.3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/auth.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/baseViewerImpl.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/httpunit.jar" sourcepath="/home/andreas/.m2/repository/httpunit/httpunit/1.7/httpunit-1.7-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO"/>
+	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api-stubs.jar"/>
+	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api.jar"/>
+	<classpathentry kind="var" path="GAE_SDK/lib/testing/appengine-testing.jar"/>
+	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api-labs.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
