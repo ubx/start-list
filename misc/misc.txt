@@ -128,10 +128,14 @@ CubicTest - http://boss.bekk.no/cubictest/update/
 ====================
 Delete index
 http://groups.google.com/group/google-appengine-java/browse_thread/thread/c8a7888438efeb9/cdbaeb27befcfd75
+(andreas@andreas@HPE-340ch:~/workspaces/ws3/start-list$  ~/google_appengine/appcfg.py vacuum_indexes .)
 
 ====================
 Start cron job in devel mode:
 curl http://localhost:8888/cronjobs
+
+=====================
+Caution: Cron requests are always sent to the default version of the application.
 
 ====================
 If a the application is deployed the first time, it may not work immediately. Wait
