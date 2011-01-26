@@ -300,7 +300,7 @@ public class CronJobServletTest {
 	@Test
 	public void testDoGetHttpServletRequestHttpServletResponseAllDayCombination() {
 
-		String[] serie = generateDateSerie("23.01.2011", 20); // SO
+		String[] dateSerie = generateDateSerie("23.01.2011", 200); // start on SO
 
 		for (int i = 0; i < Math.pow(2, 7) - 1; i++) {
 			PeriodicJob periodicJob = new PeriodicJob("Test-Job");
@@ -309,12 +309,12 @@ public class CronJobServletTest {
 			periodicJob.setDays(days);
 			periodicJob.setNextTimeInMillis(0);
 			periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
-			String[] expected = generateExpected(serie, days); // SO
+			String[] expectedDates = generateExpected(dateSerie, days);
 
-			for (int serieIdx = 0; serieIdx < serie.length - 7; serieIdx++) {
-				startCronJob(serie[serieIdx] + " 15:00 utc");
+			for (int serieIdx = 0; serieIdx < dateSerie.length - 7; serieIdx++) {
+				startCronJob(dateSerie[serieIdx] + " 15:00 utc");
 				periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-				String exp = expected[serieIdx] == null ? NULL_TIME_STR : expected[serieIdx] + " 13:00 utc";
+				String exp = expectedDates[serieIdx] == null ? NULL_TIME_STR : expectedDates[serieIdx] + " 13:00 utc";
 				//System.out.println("DEBUG NextTime=" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())));
 				//System.out.println("DEBUG Expected=" + exp);
 				assertEquals(parseTimeString(exp).getTime(), periodicJob.getNextTimeInMillis());
