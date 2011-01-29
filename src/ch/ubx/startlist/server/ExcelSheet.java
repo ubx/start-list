@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import jxl.Workbook;
+import jxl.WorkbookSettings;
 import jxl.format.Alignment;
 import jxl.write.DateFormat;
 import jxl.write.DateTime;
@@ -44,13 +46,15 @@ public class ExcelSheet implements TextConstants {
 	 * @throws IOException
 	 */
 	public static void createExcel(final List<FlightEntry> flightEnties, final OutputStream outputStream, final String sheetLabel) throws IOException {
-		final WritableWorkbook workbook = Workbook.createWorkbook(outputStream);
+		final WorkbookSettings ws = new WorkbookSettings();
+		ws.setLocale(Locale.GERMAN);
+		final WritableWorkbook workbook = Workbook.createWorkbook(outputStream, ws);
 		final WritableSheet sheet = workbook.createSheet(sheetLabel, 0);
 		final WritableFont times12font = new WritableFont(WritableFont.TIMES, 12, WritableFont.BOLD, false);
 		final WritableCellFormat cellHeaderFormat = new WritableCellFormat(times12font);
 		final WritableCellFormat cellDateFormat = new WritableCellFormat(new DateFormat("dd.MM"));
 		final WritableCellFormat cellTimeFormat = new WritableCellFormat(new DateFormat("hh:mm"));
-		try {
+		try {	
 			cellDateFormat.setAlignment(Alignment.LEFT);
 			cellTimeFormat.setAlignment(Alignment.LEFT);
 
