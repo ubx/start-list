@@ -8,6 +8,7 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 
 import ch.ubx.startlist.shared.ImportOLC;
+import ch.ubx.startlist.shared.SendExcel;
 
 public class ImportOLCDAOobjectify implements ImportOLCDAO {
 
@@ -37,8 +38,8 @@ public class ImportOLCDAOobjectify implements ImportOLCDAO {
 
 	@Override
 	public Map<String, ImportOLC> listImportOLC(List<String> names) {
-		// TODO Auto-generated method stub
-		return null;
+		Objectify ofy = ObjectifyService.begin();
+		return ofy.get(ImportOLC.class, names);
 	}
 
 }

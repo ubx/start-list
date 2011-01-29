@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-  <cron>
-    <url>/cronjobs</url>
-    <description>For Hendrik Gariep D, import from OLC and sent an excel</description>
-    <schedule>every day 19:00</schedule>
-  </cron>
+	<cron>
+		<url>/cronjobs</url>
+		<description>Periodic job scheduler</description>
+		<schedule>every 1 hours synchronized</schedule>
+	</cron>
 </cronentries>

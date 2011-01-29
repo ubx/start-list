@@ -17,14 +17,11 @@ public class PeriodicJob implements Serializable {
 	private boolean enabled = true;
 	private String sendExcels;
 	private String importOLCJobs;
-	private boolean[] days = new boolean[7]; // MO..SO
+	private boolean[] days = new boolean[] { true, true, true, true, true, true, true }; // SO..SA
 	private String time; // "hh:mm"
 	private String timeZone; // "UTC+0";
 
 	public PeriodicJob() {
-		for (boolean day : days) {
-			day = false;
-		}
 	}
 
 	public PeriodicJob(String name) {
