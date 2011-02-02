@@ -37,6 +37,8 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 		log.log(Level.INFO, req.getRequestURI());
 
 		Calendar now = Calendar.getInstance();
+		
+		// For testing, the now parameter sets the time!
 		String nowStr = req.getParameter("now");
 		if (nowStr != null) {
 			try {
