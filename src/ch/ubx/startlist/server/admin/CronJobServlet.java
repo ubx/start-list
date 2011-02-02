@@ -46,16 +46,6 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 			}
 		}
 
-		// FOR TEST ONLY
-		if (periodicJobDAO.listAllPeriodicJob().size() == 0) {
-			PeriodicJob periodicJob = new PeriodicJob();
-			periodicJob.setName("Test-Job");
-			periodicJob.setImportOLCJobs("Hendrik Gariep D Test");
-			periodicJob.setSendExcels("Hendrik Gariep D Test");
-			periodicJob.setTime("18:30");
-			periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
-		}
-
 		// Get all expired (or not yet initialized, i.e. timeInMillis == 0).
 		List<PeriodicJob> periodicJobs = periodicJobDAO.listExpiredPeriodicJob(now.getTimeInMillis());
 
