@@ -399,7 +399,7 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 		return samePilot | samePlane ? 0 : 1;
 	}
 
-	// copies all propertys of the instance into a new instance
+	// copies all property of the instance into a new instance
 	public FlightEntry copy() {
 		FlightEntry copy = new FlightEntry();
 		copy.setId(getId());
