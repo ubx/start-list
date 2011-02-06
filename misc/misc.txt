@@ -92,12 +92,12 @@ for (String key : keys)
 }
 
 ===================
-C:\google_appengine\bulkloader.py --dump --app_id=start-list-test --url=http://start-list-test.appspot.com/remote_api --filename=start-list-test.data
-andreas@andreas-HPE-340ch:~/scratch$ ~/google_appengine/bulkloader.py --dump --app_id=start-list-test --url=http://start-list-test.appspot.com/remote_api --filename=start-list-test.data
+C:\google_appengine\bulkloader.py --dump --app_id=start-list --url=http://start-list.appspot.com/remote_api --filename=start-list.data
+andreas@andreas-HPE-340ch:~/scratch$ ~/google_appengine/bulkloader.py --dump --app_id=start-list --url=http://start-list.appspot.com/remote_api --filename=start-list.data
 
-C:\google_appengine\bulkloader.py --restore --app_id=start-list-test --url=http://start-list-test.appspot.com/remote_api --filename=start-list-test.data
-C:\google_appengine\bulkloader.py --restore --app_id=start-list-test --url=http://127.0.0.1:8888/remote_api --filename=start-list-test.data
-andreas@andreas-HPE-340ch:~/scratch$ ~/google_appengine/bulkloader.py --restore --app_id=start-list-test --url=http://127.0.0.1:8888/remote_api --filename=start-list-test.data
+C:\google_appengine\bulkloader.py --restore --app_id=start-list --url=http://start-list.appspot.com/remote_api --filename=start-list.data
+C:\google_appengine\bulkloader.py --restore --app_id=start-list --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
+andreas@andreas-HPE-340ch:~/scratch$ ~/google_appengine/bulkloader.py --restore --app_id=start-list --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
 
 
 ===================
@@ -105,8 +105,8 @@ Local Datastore Viewer
 http://localhost:8888/_ah/admin
 
 ===================
-Application Stats for start-list-test
-http://start-list-test.appspot.com/appstats/stats
+Application Stats for start-list
+http://start-list.appspot.com/appstats/stats
 
 ===================
 Eclipse Plugin AppWrench
