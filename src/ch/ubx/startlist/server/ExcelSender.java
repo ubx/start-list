@@ -49,7 +49,7 @@ public class ExcelSender implements TextConstants {
 	/**
 	 * Send e-mail with an excel sheet for all SendExcel.
 	 * 
-	 * @param now2
+	 * @param currentTime
 	 * 
 	 * @throws IOException
 	 * @throws UnsupportedEncodingException
