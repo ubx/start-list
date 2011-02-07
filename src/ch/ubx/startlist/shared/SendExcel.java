@@ -17,6 +17,7 @@ public class SendExcel implements Serializable {
 	private String recipients;
 	private String filterGliders;
 	private String filterTowplanes;
+	private int daysBehind = 0;
 
 	public SendExcel(String name, String subject, String place, String recipients, String filterGliders, String filterTowplanes) {
 		this.name = name;
@@ -84,6 +85,14 @@ public class SendExcel implements Serializable {
 
 	public void setFilterTowplanes(String filterTowplanes) {
 		this.filterTowplanes = filterTowplanes;
+	}
+
+	public void setDaysBehind(int daysBehind) {
+		this.daysBehind = daysBehind;
+	}
+
+	public int getDaysBehind() {
+		return daysBehind;
 	}
 
 }

@@ -62,7 +62,7 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 		for (PeriodicJob periodicJob : periodicJobs) {
 			if (periodicJob.getNextTimeInMillis() <= now.getTimeInMillis()) {
 				OLCImporter.doImport(periodicJob.getImportOLCJobList());
-				ExcelSender.doSend(periodicJob.getSendExcelJobList());
+				ExcelSender.doSend(periodicJob.getSendExcelJobList(), now);
 			}
 		}
 

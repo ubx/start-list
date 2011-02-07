@@ -33,6 +33,7 @@ import javax.mail.util.ByteArrayDataSource;
 import ch.ubx.startlist.server.admin.CronJobServlet;
 import ch.ubx.startlist.shared.FlightEntry;
 import ch.ubx.startlist.shared.SendExcel;
+import ch.ubx.startlist.shared.SentFlightEntry;
 import ch.ubx.startlist.shared.TextConstants;
 
 import com.google.appengine.api.utils.SystemProperty;
@@ -41,28 +42,52 @@ public class ExcelSender implements TextConstants {
 
 	private static SendExcelDAO sendExcelDAO = new SendExcelDAOobjectify();
 	private static FlightEntryDAO flightEntryDAO = new FlightEntryDAOobjectify();
+	private static SentFlightEntryDAO sentFlightEntryDAO = new SentFlightEntryDAOobjectify();
 
 	private static final Logger log = Logger.getLogger(CronJobServlet.class.getName());
 
 	/**
 	 * Send e-mail with an excel sheet for all SendExcel.
 	 * 
+	 * @param now2
+	 * 
 	 * @throws IOException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static void doSend(List<String> names) throws IOException {
+	public static void doSend(List<String> names, Calendar currentTime) throws IOException {
 		Calendar now = Calendar.getInstance();
+		now.setTimeInMillis(currentTime.getTimeInMillis());
+		Calendar startDate = Calendar.getInstance();
 		String applicationId = SystemProperty.applicationId.get();
 		Map<String, SendExcel> sendExcelMap = sendExcelDAO.listSendExcel(names);
-		// List<SendExcel> sendExcels = sendExcelDAO.listAllSendExcel();
 		for (SendExcel sendExcel : sendExcelMap.values()) {
 			// TODO - use EntrySet to get job name
 			String sheetname = String.format("%1$tY%1$tm%1$te", now) + "-" + sendExcel.getPlace().replace(" ", "_");
 			List<FlightEntry> filteredFlightEntries = new ArrayList<FlightEntry>();
-			List<FlightEntry> flightEntries = flightEntryDAO.listflightEntry(now, sendExcel.getPlace());
+			List<FlightEntry> flightEntries;
+
+			// Handle already sent FlightEntries TODO - better comment!
+			if (sendExcel.getDaysBehind() > 0) {
+				startDate.setTimeInMillis(now.getTimeInMillis());
+				startDate.add(Calendar.DAY_OF_MONTH, sendExcel.getDaysBehind() * -1);
+				flightEntries = flightEntryDAO.listflightEntry(startDate, now, sendExcel.getPlace());
+				List<SentFlightEntry> sentFlightEntries = sentFlightEntryDAO.listFlightEntry(sendExcel.getName());
+				for (SentFlightEntry sentFlightEntry : sentFlightEntries) {
+					for (FlightEntry flightEntry : flightEntries) {
+						if (sentFlightEntry.getFlightEntry() == flightEntry.getId()) {
+							if (sentFlightEntry.getLastModified() == flightEntry.getModified() || flightEntry.getModified() < startDate.getTimeInMillis()) {
+								flightEntries.remove(flightEntry);
+								break;
+							}
+						}
+					}
+				}
+			} else {
+				flightEntries = flightEntryDAO.listflightEntry(now, sendExcel.getPlace());
+			}
 			if (!flightEntries.isEmpty()) {
 
-				// filter
+				// Filter Gliders and Towplanes
 				Set<String> filterGliders = new TreeSet<String>();
 				if (sendExcel.getFilterGliders() != null) {
 					filterGliders.addAll(Arrays.asList(sendExcel.getFilterGliders().split(";")));
@@ -115,6 +140,16 @@ public class ExcelSender implements TextConstants {
 				msg.setContent(mp);
 				msg.saveChanges();
 				Transport.send(msg);
+
+				// Update SentFlightEntry
+				if (sendExcel.getDaysBehind() > 0) {
+					sentFlightEntryDAO.purgeSentFlightEntry(sendExcel.getName(), startDate);
+					List<SentFlightEntry> sentFlightEntries = new ArrayList<SentFlightEntry>();
+					for (FlightEntry flightEntry : filteredFlightEntries) {
+						sentFlightEntries.add(new SentFlightEntry(flightEntry.getId(), sendExcel.getName(), flightEntry.getModified()));
+					}
+					sentFlightEntryDAO.addSentFlightEntries(sentFlightEntries);
+				}
 			} catch (AddressException e) {
 				// ...
 			} catch (MessagingException e) {

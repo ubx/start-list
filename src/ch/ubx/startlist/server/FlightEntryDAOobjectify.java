@@ -175,6 +175,29 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return query.list();
 	}
 
+
+	@Override
+	public List<FlightEntry> listflightEntry(Calendar startDate, Calendar endDate, String place) {
+		Objectify ofy = ObjectifyService.begin();
+
+		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateStart.setTimeInMillis(startDate.getTimeInMillis());
+		dateStart.set(Calendar.HOUR_OF_DAY, 0);
+		dateStart.set(Calendar.MINUTE, 0);
+		dateStart.set(Calendar.SECOND, 0);
+		dateStart.set(Calendar.MILLISECOND, 0);
+
+		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
+		dateEnd.setTimeInMillis(endDate.getTimeInMillis());
+		dateEnd.set(Calendar.HOUR_OF_DAY, 0);
+		dateEnd.set(Calendar.MINUTE, 0);
+		dateEnd.set(Calendar.SECOND, 0);
+		dateEnd.set(Calendar.MILLISECOND, 0);
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+				.filter("startTimeInMillis <=", dateEnd.getTimeInMillis()).order("startTimeInMillis");
+		return query.list();
+	}
+
 	/* (non-Javadoc)
 	 * @see ch.ubx.startlist.server.X#listflightEntry(int, int, int, java.lang.String)
 	 */

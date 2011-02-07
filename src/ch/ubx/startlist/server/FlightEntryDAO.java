@@ -23,6 +23,8 @@ public interface FlightEntryDAO {
 	public abstract List<FlightEntry> listflightEntry(int year);
 
 	public abstract List<FlightEntry> listflightEntry(Calendar date, String place);
+	
+	public abstract List<FlightEntry> listflightEntry(Calendar startDate, Calendar endDate, String place);
 
 	public abstract List<FlightEntry> listflightEntry(int year, int month, int day, String place);
 

@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 
 import ch.ubx.startlist.server.PeriodicJobDAO;
 import ch.ubx.startlist.server.PeriodicJobDAOobjectify;
+import ch.ubx.startlist.server.TestUtil;
 import ch.ubx.startlist.shared.PeriodicJob;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
@@ -50,7 +51,6 @@ public class CronJobServletTest {
 	@Before
 	public void setUp() throws Exception {
 		helper.setUp();
-		System.out.println("BackingStoreLocation=" + datastore.getBackingStoreLocation());
 		cronJobServlet = new CronJobServlet();
 		periodicJobDAO = new PeriodicJobDAOobjectify();
 		timeFormat.setTimeZone(TimeZone.getTimeZone("utc"));
@@ -199,15 +199,15 @@ public class CronJobServletTest {
 
 		startCronJob("19.01.2011 09:30 utc"); // MI
 		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-		assertEquals(parseTimeString("20.01.2011 09:00 utc").getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString("20.01.2011 09:00 utc").getTime(), periodicJob.getNextTimeInMillis());
 
 		startCronJob("20.01.2011 09:30 utc"); // DO
 		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-		assertEquals(parseTimeString("21.01.2011 09:00 utc").getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString("21.01.2011 09:00 utc").getTime(), periodicJob.getNextTimeInMillis());
 
 		startCronJob("21.01.2011 09:30 utc"); // FR
 		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-		assertEquals(parseTimeString("22.01.2011 09:00 utc").getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString("22.01.2011 09:00 utc").getTime(), periodicJob.getNextTimeInMillis());
 	}
 
 	@Test
@@ -219,15 +219,15 @@ public class CronJobServletTest {
 
 		startCronJob("19.01.2011 10:30 utc"); // MI
 		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-		assertEquals(parseTimeString("21.01.2011 08:00 utc").getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString("21.01.2011 08:00 utc").getTime(), periodicJob.getNextTimeInMillis());
 
 		startCronJob("20.01.2011 10:30 utc"); // DO
 		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-		assertEquals(parseTimeString("21.01.2011 08:00 utc").getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString("21.01.2011 08:00 utc").getTime(), periodicJob.getNextTimeInMillis());
 
 		startCronJob("21.01.2011 10:30 utc"); // FR
 		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-		assertEquals(parseTimeString("28.01.2011 08:00 utc").getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString("28.01.2011 08:00 utc").getTime(), periodicJob.getNextTimeInMillis());
 	}
 
 	@Test
@@ -257,7 +257,7 @@ public class CronJobServletTest {
 		for (String run : runs) {
 			startCronJob(run);
 			periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-			assertEquals(parseTimeString("21.01.2011 08:00 utc").getTime(), periodicJob.getNextTimeInMillis());
+			assertEquals(TestUtil.parseTimeString("21.01.2011 08:00 utc").getTime(), periodicJob.getNextTimeInMillis());
 		}
 	}
 
@@ -282,19 +282,19 @@ public class CronJobServletTest {
 
 		startCronJob("19.01.2011 09:30 utc"); // MI
 		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-		assertEquals(parseTimeString(NULL_TIME_STR).getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString(NULL_TIME_STR).getTime(), periodicJob.getNextTimeInMillis());
 
 		periodicJob.setEnabled(true);
 		periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
 		startCronJob("20.01.2011 09:30 utc"); // DO
 		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-		assertEquals(parseTimeString("21.01.2011 09:00 utc").getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString("21.01.2011 09:00 utc").getTime(), periodicJob.getNextTimeInMillis());
 
 		periodicJob.setEnabled(false);
 		periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
 		startCronJob("21.01.2011 09:30 utc"); // FR
 		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
-		assertEquals(parseTimeString(NULL_TIME_STR).getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString(NULL_TIME_STR).getTime(), periodicJob.getNextTimeInMillis());
 	}
 
 	@Test
@@ -317,7 +317,7 @@ public class CronJobServletTest {
 				String exp = expectedDates[serieIdx] == null ? NULL_TIME_STR : expectedDates[serieIdx] + " 13:00 utc";
 				//System.out.println("DEBUG NextTime=" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())));
 				//System.out.println("DEBUG Expected=" + exp);
-				assertEquals(parseTimeString(exp).getTime(), periodicJob.getNextTimeInMillis());
+				assertEquals(TestUtil.parseTimeString(exp).getTime(), periodicJob.getNextTimeInMillis());
 			}
 		}
 	}
@@ -359,18 +359,9 @@ public class CronJobServletTest {
 		cronJobServlet.adjustTimeInMillis(periodicJob, time);
 		//System.out.println("DEBUG ExpeTime=" + expectedTimeStr);
 		//System.out.println("DEBUG NextTime=" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())));
-		assertEquals(parseTimeString(expectedTimeStr).getTime(), periodicJob.getNextTimeInMillis());
+		assertEquals(TestUtil.parseTimeString(expectedTimeStr).getTime(), periodicJob.getNextTimeInMillis());
 	}
 
-	private static Date parseTimeString(String timeStr) {
-		Date nextTime = null;
-		try {
-			nextTime = timeFormat.parse(timeStr);
-		} catch (ParseException e) {
-			fail("Could not parse test time(nextTime)");
-		}
-		return nextTime;
-	}
 
 	private static String[] generateDateSerie(String startTimeStr, int weeks) {
 		String[] timeStrs = new String[weeks * 7];
