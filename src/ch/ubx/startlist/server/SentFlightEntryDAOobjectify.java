@@ -53,14 +53,4 @@ public class SentFlightEntryDAOobjectify implements SentFlightEntryDAO {
 		ofy.delete(query.fetchKeys());
 	}
 
-	private Long getDayInMillies(Calendar date) {
-		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateStart.setTimeInMillis(date.getTimeInMillis());
-		dateStart.set(Calendar.HOUR_OF_DAY, 0);
-		dateStart.set(Calendar.MINUTE, 0);
-		dateStart.set(Calendar.SECOND, 0);
-		dateStart.set(Calendar.MILLISECOND, 0);
-		return dateStart.getTimeInMillis();
-	}
-
 }
