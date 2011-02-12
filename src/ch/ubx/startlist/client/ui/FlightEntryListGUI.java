@@ -48,17 +48,12 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	private static final String LOGIN_ROOT_PANEL = "loginrootpanel";
 
 	/* GUI Widgets */
-	// protected Button addButton, updateButton; @@unused??
 	public Button newButton;
 	public Button modifyButton;
 	public Button deleteButton;
 	public Button discardButton;
 	public Button saveButton;
 
-	// protected TextBox dateField; @@unused??
-	// protected TextBox pilotField; @@unused??
-	// protected TextBox startField; @@unused??
-	// protected TextBox endField; @@unused??
 	protected TextBox registrationGliderBox;
 	protected TextBox registrationTowplaneBox;
 
@@ -86,9 +81,6 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	protected TextBox remarksTextBox;
 	protected SuggestBox2 allPlacesSuggestBox;
 
-	// protected TextBox userTextBox; @@unused??
-	// protected PasswordTextBox passwordTextBox; @@unused??
-	// protected Button btnLoginOkButton; @@unused??
 	public Button btnClose;
 
 	public FlightEntryServiceDelegate flightEntryService;
@@ -338,10 +330,6 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		btnClose = new Button(TXT_CLOSE);
 		btnClose.setEnabled(true);
 		operationsPanel.add(btnClose);
-
-		// dateField = new TextBox(); @@unused??
-		// pilotField = new TextBox(); @@unused??
-		// startField = new TextBox(); @@unused??
 
 		loadYears();
 
