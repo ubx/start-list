@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="true">
+
+	<datastore-index kind="FlightEntry" ancestor="false">
+		<property name="place" direction="asc" />
+		<property name="startTimeInMillis" direction="asc" />
+	</datastore-index>
+
+	<datastore-index kind="PeriodicJob" ancestor="false">
+		<property name="enabled" direction="asc" />
+		<property name="nextTimeInMillis" direction="asc" />
+	</datastore-index>
+
+	<datastore-index kind="SentFlightEntry" ancestor="false">
+		<property name="sendExcel" direction="asc" />
+		<property name="lastModified" direction="asc" />
+	</datastore-index>
+
+</datastore-indexes>
