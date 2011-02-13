@@ -143,7 +143,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-<!--OnPositive Tools-->
+	<!--OnPositive Tools -->
 
 
 
@@ -158,33 +158,33 @@
 
 
 
-<servlet>
+	<servlet>
 		<servlet-name>baseViewerServlet</servlet-name>
 		<servlet-class>com.onpositive.gae.tools.servlets.BaseViewerServlet
 		</servlet-class>
 	</servlet>
-<servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>baseViewerServlet</servlet-name>
 		<url-pattern>/appwrench/baseviewer</url-pattern>
 	</servlet-mapping>
-<servlet>
+	<servlet>
 		<servlet-name>SessionAuth</servlet-name>
 		<servlet-class>com.onpositive.auth.AuthServlet</servlet-class>
 	</servlet>
-<servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>SessionAuth</servlet-name>
 		<url-pattern>/appwrench/auth</url-pattern>
 	</servlet-mapping>
-<servlet>
+	<servlet>
 		<servlet-name>QueueHandler</servlet-name>
 		<servlet-class>com.onpositive.gae.tools.servlets.QueueHandlerServlet
 		</servlet-class>
 	</servlet>
-<servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>QueueHandler</servlet-name>
 		<url-pattern>/appwrench/queuehandler</url-pattern>
 	</servlet-mapping>
-<security-constraint>
+	<security-constraint>
 		<web-resource-collection>
 			<url-pattern>/appwrench/queuehandler</url-pattern>
 		</web-resource-collection>
@@ -192,4 +192,21 @@
 			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint>
+	<servlet>
+		<servlet-name>profilerConsoleServlet</servlet-name>
+		<servlet-class>com.onpositive.gae.tools.servlets.ConsoleServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>profilerConsoleServlet</servlet-name>
+		<url-pattern>/appwrench/console</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>SessionAuth</servlet-name>
+		<servlet-class>com.onpositive.auth.AuthServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SessionAuth</servlet-name>
+		<url-pattern>/appwrench/auth</url-pattern>
+	</servlet-mapping>
 </web-app>
