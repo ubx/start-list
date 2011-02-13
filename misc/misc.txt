@@ -92,12 +92,13 @@ for (String key : keys)
 }
 
 ===================
+Download/upload data
 C:\google_appengine\bulkloader.py --dump --app_id=start-list --url=http://start-list.appspot.com/remote_api --filename=start-list.data
-andreas@andreas-HPE-340ch:~/scratch$ ~/google_appengine/bulkloader.py --dump --app_id=start-list --url=http://start-list.appspot.com/remote_api --filename=start-list.data
+~/google_appengine/bulkloader.py --dump --app_id=start-list --url=http://start-list.appspot.com/remote_api --filename=start-list.data
 
 C:\google_appengine\bulkloader.py --restore --app_id=start-list --url=http://start-list.appspot.com/remote_api --filename=start-list.data
 C:\google_appengine\bulkloader.py --restore --app_id=start-list --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
-andreas@andreas-HPE-340ch:~/scratch$ ~/google_appengine/bulkloader.py --restore --app_id=start-list --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
+~/google_appengine/bulkloader.py --restore --app_id=start-list --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
 
 
 ===================
@@ -127,8 +128,10 @@ CubicTest - http://boss.bekk.no/cubictest/update/
 
 ====================
 Delete index
+make sure app.yaml ist there an correct!
 http://groups.google.com/group/google-appengine-java/browse_thread/thread/c8a7888438efeb9/cdbaeb27befcfd75
-(andreas@andreas@HPE-340ch:~/workspaces/ws3/start-list$  ~/google_appengine/appcfg.py vacuum_indexes .)
+~/google_appengine/appcfg.py vacuum_indexes ~/workspaces/ws3/start-list
+
 
 ====================
 Start cron job in devel mode:
