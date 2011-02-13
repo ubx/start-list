@@ -73,28 +73,21 @@ public class ExcelSenderTest {
 		SendExcel sendExcel = new SendExcel(NAME, "testtesttest", PLACE, "mr.mail@test.com");
 		sendExcel.setDaysBehind(daysBehind);
 		sendExcelDAO.createOrUpdateSendExcel(sendExcel);
-		assertEquals(sendExcelDAO.listAllSendExcel().size(), 1);
+		assertEquals(1, sendExcelDAO.listAllSendExcel().size());
 
 		// Sent all pending flights
 		List<String> names = new ArrayList<String>();
 		names.add(NAME);
-		try {
-			ExcelSender.doSend(names, now);
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail();
-		}
-		assertEquals(2 * daysBehind, sentFlightEntryDAO.listFlightEntry(NAME).size());
 
-		// Sent again, but nothing nothing pending
-		try {
-			ExcelSender.doSend(names, now);
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail();
+		for (int i = 0; i < 5; i++) {
+			try {
+				ExcelSender.doSend(names, now);
+			} catch (IOException e) {
+				e.printStackTrace();
+				fail();
+			}
+			assertEquals("Amount of SentFlightEnties should not change", 2 * daysBehind, sentFlightEntryDAO.listFlightEntry(NAME).size());
 		}
-		assertEquals(2 * daysBehind, sentFlightEntryDAO.listFlightEntry(NAME).size());
-
 	}
 
 	@Test
