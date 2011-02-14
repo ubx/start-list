@@ -18,6 +18,12 @@
 		<servlet-class>ch.ubx.startlist.server.AirfieldServiceImpl
 		</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>pilotServlet</servlet-name>
+		<servlet-class>ch.ubx.startlist.server.PilotServiceImpl
+		</servlet-class>
+	</servlet>
 
 
 	<servlet>
@@ -71,6 +77,11 @@
 	<servlet-mapping>
 		<servlet-name>airfieldServlet</servlet-name>
 		<url-pattern>/startlist/airfields</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>pilotServlet</servlet-name>
+		<url-pattern>/startlist/pilots</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>

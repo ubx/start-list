@@ -28,6 +28,7 @@ public class FlightEntryListEntryPoint implements EntryPoint {
 	private FlightEntryServiceDelegate flightEntryServiceDelegate;
 	private LoginServiceDelegate loginServiceDelegate;
 	private AirfieldServiceDelegate airfieldServiceDelegate;
+	private PilotServiceDelegate pilotServiceDelegate;
 
 	/**
 	 * This is the entry point method.
@@ -49,6 +50,9 @@ public class FlightEntryListEntryPoint implements EntryPoint {
 
 		airfieldServiceDelegate = new AirfieldServiceDelegate(gui);
 		gui.airfieldServiceDelegate = airfieldServiceDelegate;
+		
+		pilotServiceDelegate = new PilotServiceDelegate(gui);
+		gui.pilotServiceDelegate = pilotServiceDelegate;
 
 		gui.init();
 		wireGUIEvents();

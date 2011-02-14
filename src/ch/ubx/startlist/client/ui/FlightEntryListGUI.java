@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import ch.ubx.startlist.client.AirfieldServiceDelegate;
+import ch.ubx.startlist.client.PilotServiceDelegate;
 import ch.ubx.startlist.client.FlightEntryListeProvider;
 import ch.ubx.startlist.client.FlightEntryServiceDelegate;
 import ch.ubx.startlist.client.GwtUtil;
@@ -16,6 +17,7 @@ import ch.ubx.startlist.client.RowDoubleclickHandler;
 import ch.ubx.startlist.client.TimeFormat;
 import ch.ubx.startlist.client.admin.ui.AdminGUI;
 import ch.ubx.startlist.shared.Airfield;
+import ch.ubx.startlist.shared.Pilot;
 import ch.ubx.startlist.shared.FlightEntry;
 import ch.ubx.startlist.shared.LoginInfo;
 import ch.ubx.startlist.shared.TextConstants;
@@ -75,17 +77,18 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	public FlexTable flightEntryFlexTable;
 
 	protected DateBox2 dateBox;
-	protected TextBox pilotNameBox;
+	protected SuggestBox2 pilotNameBox;
 	protected TextBox passengerOrInstructorNameBox;
 	protected CheckBox trainingCheckBox;
 	protected TextBox remarksTextBox;
-	protected SuggestBox2 allPlacesSuggestBox;
+	protected SuggestBox2 landingPlacesSuggestBox;
 
 	public Button btnClose;
 
 	public FlightEntryServiceDelegate flightEntryService;
 	public LoginServiceDelegate loginServiceDelegate;
 	public AirfieldServiceDelegate airfieldServiceDelegate;
+	public PilotServiceDelegate pilotServiceDelegate;
 
 	/* Data model */
 	private FlightEntry currentFlightEntry;
@@ -99,7 +102,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	private RowDoubleclickHandler rowDoubleclickHandler = null;
 	private Map<String, Long> strToDate = new LinkedHashMap<String, Long>();
 	private ListBox allPlacesListBox;
-	private MultiWordSuggestOracle allPlacesSuggest = new MultiWordSuggestOracle();
+	private MultiWordSuggestOracle landingPlacesSuggest = new MultiWordSuggestOracle();
+	private MultiWordSuggestOracle pilotNamesSuggest = new MultiWordSuggestOracle();
 	private Set<Airfield> allAirfields;
 	private DialogBox flightEntryDialogBox;
 	private FlightEntryValidator validator;
@@ -242,8 +246,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		Label lblAllSuggestPlaces = new Label(TXT_LANDING_PLACE);
 		flightEntryFlexTable.setWidget(0, 4, lblAllSuggestPlaces);
 
-		allPlacesSuggestBox = new SuggestBox2(allPlacesSuggest);
-		flightEntryFlexTable.setWidget(0, 5, allPlacesSuggestBox);
+		landingPlacesSuggestBox = new SuggestBox2(landingPlacesSuggest);
+		flightEntryFlexTable.setWidget(0, 5, landingPlacesSuggestBox);
 
 		// row 1: time information
 		Label lblStart = new Label(TXT_START_TIME);
@@ -287,7 +291,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		Label lblPilot = new Label(TXT_PILOT);
 		flightEntryFlexTable.setWidget(3, 0, lblPilot);
 
-		pilotNameBox = new TextBox();
+		pilotNameBox = new SuggestBox2(pilotNamesSuggest);
 		flightEntryFlexTable.setWidget(3, 1, pilotNameBox);
 
 		Label lblPassengerOrInstructor = new Label(TXT_PASSENGER_OR_INSTRUCTOR);
@@ -311,7 +315,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		flightEntryFlexTable.getFlexCellFormatter().setColSpan(4, 1, 5);// TODO - does not work?
 
 		// Set tab order
-		setTabOrder(dateBox, allPlacesListBox, allPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox,
+		setTabOrder(dateBox, allPlacesListBox, landingPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox,
 				registrationGliderBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox);
 
 		HorizontalPanel operationsPanel;
@@ -334,6 +338,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		loadYears();
 
 		loadAllPlaces();
+		
+		loadAllPilots();	
 
 		enablePilotFields(false);
 
@@ -354,6 +360,10 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 	private void loadAllPlaces() {
 		airfieldServiceDelegate.listAirfields();
+	}
+	
+	private void loadAllPilots() {
+		pilotServiceDelegate.listPilots();
 	}
 
 	private void reload() {
@@ -427,7 +437,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		trainingCheckBox.setEnabled(enable);
 		remarksTextBox.setEnabled(enable);
 		allPlacesListBox.setEnabled(enable);
-		allPlacesSuggestBox.setEnabled(enable);
+		landingPlacesSuggestBox.setEnabled(enable);
 		registrationGliderBox.setEnabled(enable);
 		registrationTowplaneBox.setEnabled(enable);
 	}
@@ -444,7 +454,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		trainingCheckBox.setValue(false);
 		remarksTextBox.setValue(null);
 		allPlacesListBox.clear();
-		allPlacesSuggestBox.setValue(null);
+		landingPlacesSuggestBox.setValue(null);
 		registrationGliderBox.setValue(null);
 		registrationTowplaneBox.setValue(null);
 	}
@@ -518,7 +528,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 				break;
 			}
 		}
-		allPlacesSuggestBox.setValue(flightEntry.getLandingPlace());
+		landingPlacesSuggestBox.setValue(flightEntry.getLandingPlace());
 		registrationGliderBox.setValue(flightEntry.getRegistrationGlider());
 		registrationTowplaneBox.setValue(flightEntry.getRegistrationTowplane());
 	}
@@ -587,7 +597,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		flightEntry.setTraining(trainingCheckBox.getValue());
 		flightEntry.setRemarks(remarksTextBox.getValue());
 		flightEntry.setPlace(allPlacesListBox.getValue(allPlacesListBox.getSelectedIndex()));
-		flightEntry.setLandingPlace(allPlacesSuggestBox.getValue());
+		flightEntry.setLandingPlace(landingPlacesSuggestBox.getValue());
 		flightEntry.setRegistrationGlider(registrationGliderBox.getValue());
 		flightEntry.setRegistrationTowplane(registrationTowplaneBox.getValue());
 		flightEntry.setPassengerOrInstructor(passengerOrInstructorNameBox.getValue());
@@ -621,7 +631,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			} else if (currentFlightEntry.getRemarks().length() == 0) {
 				remarksTextBox.setFocus(true);
 			} else if (currentFlightEntry.getLandingPlace().length() == 0) {
-				allPlacesSuggestBox.setFocus(true);
+				landingPlacesSuggestBox.setFocus(true);
 			} else {
 				remarksTextBox.setFocus(true);
 			}
@@ -1000,7 +1010,13 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		allAirfields = airfields;
 		GwtUtil.setItems(allPlacesListBox, GwtUtil.toAirfieldNames(airfields));
 		for (String place : GwtUtil.toAirfieldNames(airfields)) {
-			allPlacesSuggest.add(place);
+			landingPlacesSuggest.add(place);
+		}
+	}
+	
+	public void service_eventAllListPilotsSuccessful(Set<Pilot> pilots) {
+		for (String pilot : GwtUtil.toPilotNames(pilots)) {
+			pilotNamesSuggest.add(pilot);
 		}
 	}
 

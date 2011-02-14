@@ -124,7 +124,7 @@ public class FlightEntryValidator implements TextConstants{
 		}
 
 		// Landing Place
-		String lp = gui.allPlacesSuggestBox.getValue();
+		String lp = gui.landingPlacesSuggestBox.getValue();
 		if (lp.length() > 20) {
 			showMessage(gui.registrationGliderBox, TXT_VALIDATOR_ERROR_LANDINGPLACE_LENGTH);
 			return false;
