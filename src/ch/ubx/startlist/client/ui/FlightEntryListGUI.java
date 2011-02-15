@@ -25,6 +25,7 @@ import ch.ubx.startlist.shared.TextConstants;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -115,6 +116,9 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 	private AdminGUI adminGUI;
 	private FlightEntry lastflightEntry;
+	
+	// Get prefered place from url. If not defined null
+	private String prefPlace = Window.Location.getParameter("place");
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -730,7 +734,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		return items;
 	}
 
-	private void setSetected(ListBox listBox, String item) {
+	private void setSelected(ListBox listBox, String item) {
 		for (int i = 0; i < listBox.getItemCount(); i++) {
 			if (item.equals(listBox.getValue(i))) {
 				listBox.setSelectedIndex(i);
@@ -823,17 +827,17 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			loadYears();
 		} else {
 			Date date = new Date(flightEntry.getStartTimeInMillis());
-			setSetected(yearListBox, String.valueOf(date.getYear() + 1900));
+			setSelected(yearListBox, String.valueOf(date.getYear() + 1900));
 			if (!hasPlace(flightEntry)) {
 				date = new Date(flightEntry.getStartTimeInMillis());
 				loadPlaces(date.getYear() + 1900);
 			} else {
-				setSetected(placeListBox, flightEntry.getPlace());
+				setSelected(placeListBox, flightEntry.getPlace());
 				if (!hasDate(flightEntry)) {
 					loadDates();
 				} else {
 					String dateStr = DATE_FORMAT.format(new Date(flightEntry.getStartTimeInMillis()));
-					setSetected(dateListBox, dateStr);
+					setSelected(dateListBox, dateStr);
 					reload(flightEntry);
 				}
 			}
@@ -887,7 +891,9 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 				newOldPlaceIdx = placeListBox.getItemCount() - 1;
 			}
 			if (currentLoginInfo != null && homePlaceIdx == -1 && currentLoginInfo.getHomeAirfield() != null
-					&& place.equals(currentLoginInfo.getHomeAirfield())) {
+					&& currentLoginInfo.getHomeAirfield().compareToIgnoreCase(place) == 0) {
+				homePlaceIdx = placeListBox.getItemCount() - 1;
+			} else if (prefPlace != null && (prefPlace.compareToIgnoreCase(place) == 0)) {
 				homePlaceIdx = placeListBox.getItemCount() - 1;
 			}
 		}
