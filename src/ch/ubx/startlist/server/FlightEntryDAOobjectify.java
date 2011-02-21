@@ -189,12 +189,8 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 
 		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
 		dateEnd.setTimeInMillis(endDate.getTimeInMillis());
-		dateEnd.set(Calendar.HOUR_OF_DAY, 0);
-		dateEnd.set(Calendar.MINUTE, 0);
-		dateEnd.set(Calendar.SECOND, 0);
-		dateEnd.set(Calendar.MILLISECOND, 0);
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
-				.filter("startTimeInMillis <=", dateEnd.getTimeInMillis()).order("startTimeInMillis");
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+				.filter("startTimeInMillis <=", dateEnd.getTimeInMillis());
 		return query.list();
 	}
 

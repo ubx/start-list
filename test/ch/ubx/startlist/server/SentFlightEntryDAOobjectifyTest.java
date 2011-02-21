@@ -111,7 +111,7 @@ public class SentFlightEntryDAOobjectifyTest {
 		}
 		assertEquals(0, awayCnt);
 		assertEquals(1, hereCnt);
-		
+
 		sentFlightEntryDAO.purgeSentFlightEntry("excel", purgeDay);
 		assertEquals(4, sentFlightEntryDAO.listFlightEntry("excel").size());
 	}
@@ -138,6 +138,21 @@ public class SentFlightEntryDAOobjectifyTest {
 		for (int i = 0; i < list.size(); i++) {
 			assertEquals(millies.get(8 + i).longValue(), list.get(i).getLastModified());
 		}
+	}
+
+	@Test
+	public void testGetFlightEntry() {
+		sentFlightEntryDAO.createOrUpdateSentFlightEntry(new SentFlightEntry(4711L, "excel", 1234L));
+		sentFlightEntryDAO.createOrUpdateSentFlightEntry(new SentFlightEntry(4712L, "excel1", 1235L));
+		sentFlightEntryDAO.createOrUpdateSentFlightEntry(new SentFlightEntry(4713L, "excel2", 1236L));
+		SentFlightEntry newSentFlightEntry = new SentFlightEntry(4713L, "excel2", 1236L);
+		sentFlightEntryDAO.createOrUpdateSentFlightEntry(newSentFlightEntry);
+		sentFlightEntryDAO.createOrUpdateSentFlightEntry(new SentFlightEntry(4714L, "excel3", 1237L));		
+		SentFlightEntry oldSentFlightEntry = sentFlightEntryDAO.getSentFlightEntry("excel2", 4713L);
+		assertFalse(oldSentFlightEntry.getId() == 0);
+		assertEquals(newSentFlightEntry.getFlightEntry(), oldSentFlightEntry.getFlightEntry());
+		assertEquals(newSentFlightEntry.getLastModified(), oldSentFlightEntry.getLastModified());
+		assertEquals(newSentFlightEntry.getSendExcel(), oldSentFlightEntry.getSendExcel());
 	}
 
 }

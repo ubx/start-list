@@ -3,6 +3,7 @@ package ch.ubx.startlist.server;
 import java.util.Calendar;
 import java.util.List;
 
+import ch.ubx.startlist.shared.PeriodicJob;
 import ch.ubx.startlist.shared.SentFlightEntry;
 
 import com.google.appengine.api.datastore.QueryResultIterable;
@@ -51,6 +52,13 @@ public class SentFlightEntryDAOobjectify implements SentFlightEntryDAO {
 		Objectify ofy = ObjectifyService.begin();
 		Query<SentFlightEntry> query = ofy.query(SentFlightEntry.class).filter("sendExcel", sendExcel).filter("lastModified <", date.getTimeInMillis());
 		ofy.delete(query.fetchKeys());
+	}
+
+	@Override
+	public SentFlightEntry getSentFlightEntry(String sendExcel, Long flightEntry) {
+		Objectify ofy = ObjectifyService.begin();
+		Query<SentFlightEntry> query = ofy.query(SentFlightEntry.class).filter("sendExcel", sendExcel).filter("flightEntry", flightEntry);
+		return query.get();
 	}
 
 }

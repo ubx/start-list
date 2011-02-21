@@ -52,19 +52,22 @@ public class ExcelSenderTest {
 
 	@Test
 	public void testDoSend() {
-		final String PLACE = "place";
-		final String NAME = "name";
+		final String PLACE = "placeName";
+		final String NAME = "sendExcelName";
 		final int daysBehind = 12;
 		final long oneDayMillies = 24 * 60 * 60 * 1000;
+		final long twoHours = 2 * 60 * 60 * 1000;
+		int filteredFlightEntriesCnt = 0;
 		// NOTE: period max. one year!
 		Calendar now = Calendar.getInstance();
+		now.setTimeInMillis(TestUtil.parseTimeString("20.02.2011 19:30 utc").getTime());
 		List<FlightEntry> flightEntries = new ArrayList<FlightEntry>();
 		for (long l = 0; l < 100; l++) {
 			long millies = now.getTimeInMillis() - (l * oneDayMillies);
-			FlightEntry fe = new FlightEntry("pilot", millies, millies + 360000, false, "blabla", PLACE);
+			FlightEntry fe = new FlightEntry("pilot1", millies, millies + 4711, false, "blablaX", PLACE);
 			flightEntries.add(fe);
-			millies = millies + (2 * 360000);
-			fe = new FlightEntry("pilot", millies, millies + 360000, false, "blabla", PLACE);
+			millies = millies - twoHours;
+			fe = new FlightEntry("pilot2", millies, millies + 4711, false, "blablaY", PLACE);
 			flightEntries.add(fe);
 		}
 		flightEntryDAO.addFlightEntries(flightEntries);
@@ -79,19 +82,48 @@ public class ExcelSenderTest {
 		List<String> names = new ArrayList<String>();
 		names.add(NAME);
 
+		// TODO -- alternatively be we could parse console output:
+		// ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		// System.setOut(new PrintStream(outContent));
+		// assertEquals("xxxx", outContent.toString());
+		// see: http://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
+		assertEquals("No SentFlightEnties should be pending", 0, sentFlightEntryDAO.listFlightEntry(NAME).size());
+		try {
+			filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertEquals("Flights should be sent", 26, filteredFlightEntriesCnt);
+
 		for (int i = 0; i < 5; i++) {
 			try {
-				ExcelSender.doSend(names, now);
+				filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
 			} catch (IOException e) {
 				e.printStackTrace();
 				fail();
 			}
-			assertEquals("Amount of SentFlightEnties should not change", 2 * daysBehind, sentFlightEntryDAO.listFlightEntry(NAME).size());
+			assertEquals("Amount of SentFlightEnties should not change", 26, sentFlightEntryDAO.listFlightEntry(NAME).size());
+			assertEquals("No flights should be sent", 0, filteredFlightEntriesCnt);
 		}
-	}
 
-	@Test
-	public void testDoSendModified() {
+		// Check if old SentFlightEnties are purged.
+		for (int i = 0; i < 100; i++) {
+			try {
+				now.setTimeInMillis(now.getTimeInMillis() + oneDayMillies);
+				filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
+			} catch (IOException e) {
+				e.printStackTrace();
+				fail();
+			}
+			assertEquals("SentFlightEnties should disappear after 12 days", i < 13 ? 26 : 0, sentFlightEntryDAO.listFlightEntry(NAME).size());
+			assertEquals("No flights should be sent", 0, filteredFlightEntriesCnt);
+
+			// System.out.println("filteredFlightEntriesCnt="+filteredFlightEntriesCnt);
+			// System.out.println("XXX-" + "i=" + i + "  sentFlightEntryDAO.listFlightEntry(NAME).size()=" + sentFlightEntryDAO.listFlightEntry(NAME).size());
+
+		}
+
 	}
 
 }
