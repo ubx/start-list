@@ -54,24 +54,27 @@ public class ExcelSender implements TextConstants {
 	 * @throws IOException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static void doSend(List<String> names, Calendar currentTime) throws IOException {
+	public static int doSend(List<String> names, Calendar currentTime) throws IOException {
+		int filteredFlightEntriesCnt = 0;
 		Calendar now = Calendar.getInstance();
 		now.setTimeInMillis(currentTime.getTimeInMillis());
 		Calendar startDate = Calendar.getInstance();
 		String applicationId = SystemProperty.applicationId.get();
 		Map<String, SendExcel> sendExcelMap = sendExcelDAO.listSendExcel(names);
+
 		for (SendExcel sendExcel : sendExcelMap.values()) {
 			// TODO - use EntrySet to get job name
 			String sheetname = String.format("%1$tY%1$tm%1$te", now) + "-" + sendExcel.getPlace().replace(" ", "_");
-			List<FlightEntry> filteredFlightEntries = new ArrayList<FlightEntry>();
 			List<FlightEntry> flightEntries;
+			List<SentFlightEntry> sentFlightEntries = null;
 
 			// Handle already sent FlightEntries TODO - better comment!
 			if (sendExcel.getDaysBehind() > 0) {
 				startDate.setTimeInMillis(now.getTimeInMillis());
-				startDate.add(Calendar.DAY_OF_MONTH, sendExcel.getDaysBehind() * -1);
+				startDate.add(Calendar.DAY_OF_YEAR, sendExcel.getDaysBehind() * -1);
 				flightEntries = flightEntryDAO.listflightEntry(startDate, now, sendExcel.getPlace());
-				List<SentFlightEntry> sentFlightEntries = sentFlightEntryDAO.listFlightEntry(sendExcel.getName());
+				sentFlightEntries = sentFlightEntryDAO.listFlightEntry(sendExcel.getName());
+
 				for (SentFlightEntry sentFlightEntry : sentFlightEntries) {
 					for (FlightEntry flightEntry : flightEntries) {
 						if (sentFlightEntry.getFlightEntry() == flightEntry.getId()) {
@@ -85,8 +88,9 @@ public class ExcelSender implements TextConstants {
 			} else {
 				flightEntries = flightEntryDAO.listflightEntry(now, sendExcel.getPlace());
 			}
-			if (!flightEntries.isEmpty()) {
 
+			List<FlightEntry> filteredFlightEntries = new ArrayList<FlightEntry>();
+			if (!flightEntries.isEmpty()) {
 				// Filter Gliders and Towplanes
 				Set<String> filterGliders = new TreeSet<String>();
 				if (sendExcel.getFilterGliders() != null) {
@@ -143,19 +147,25 @@ public class ExcelSender implements TextConstants {
 
 				// Update SentFlightEntry
 				if (sendExcel.getDaysBehind() > 0) {
-					sentFlightEntryDAO.purgeSentFlightEntry(sendExcel.getName(), startDate);
-					List<SentFlightEntry> sentFlightEntries = new ArrayList<SentFlightEntry>();
 					for (FlightEntry flightEntry : filteredFlightEntries) {
-						sentFlightEntries.add(new SentFlightEntry(flightEntry.getId(), sendExcel.getName(), flightEntry.getModified()));
+						SentFlightEntry sentFlightEntry = sentFlightEntryDAO.getSentFlightEntry(sendExcel.getName(), flightEntry.getId());
+						if (sentFlightEntry == null) {
+							sentFlightEntry = new SentFlightEntry(flightEntry.getId(), sendExcel.getName(), flightEntry.getModified());
+						} else {
+							sentFlightEntry.setLastModified(flightEntry.getModified());
+						}
+						sentFlightEntryDAO.createOrUpdateSentFlightEntry(sentFlightEntry);
 					}
-					sentFlightEntryDAO.addSentFlightEntries(sentFlightEntries);
+					sentFlightEntryDAO.purgeSentFlightEntry(sendExcel.getName(), startDate);
 				}
 			} catch (AddressException e) {
 				// ...
 			} catch (MessagingException e) {
 				// ...
 			}
+			filteredFlightEntriesCnt = filteredFlightEntriesCnt + filteredFlightEntries.size();
 		}
+		return filteredFlightEntriesCnt; // for unit test only!
 	}
 
 }

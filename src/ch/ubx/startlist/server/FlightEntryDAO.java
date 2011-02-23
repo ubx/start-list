@@ -35,5 +35,7 @@ public interface FlightEntryDAO {
 	public abstract void removeFlightEntries(String place, int source);
 
 	public abstract void addFlightEntries(List<FlightEntry> flightEntries);
+	
+	public abstract void addFlightEntries4Test(List<FlightEntry> flightEntries);
 
 }

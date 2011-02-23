@@ -36,7 +36,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#listflightEntry(java.lang.String, long, int, int)
 	 */
 	@Override
@@ -52,7 +54,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return list;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#removeFlightEntry(ch.ubx.startlist.shared.FlightEntry)
 	 */
 	@Override
@@ -62,10 +66,12 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return flightEntry;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#createOrUpdateFlightEntry(ch.ubx.startlist.shared.FlightEntry)
 	 */
-	
+
 	@Override
 	public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry) {
 		Objectify ofy = ObjectifyService.begin();
@@ -74,7 +80,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return flightEntry;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#listDates(java.lang.String, int)
 	 */
 	@Override
@@ -96,7 +104,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return dateList;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#listAirfields(int)
 	 */
 	@Override
@@ -109,7 +119,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return places;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#listYears()
 	 */
 	@Override
@@ -132,7 +144,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	// --------------------------------------------------------------------------------------
 	// server internal access methods
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#listflightEntry(int)
 	 */
 	@Override
@@ -153,7 +167,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return query.list();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#listflightEntry(java.util.Calendar, java.lang.String)
 	 */
 	@Override
@@ -175,7 +191,6 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return query.list();
 	}
 
-
 	@Override
 	public List<FlightEntry> listflightEntry(Calendar startDate, Calendar endDate, String place) {
 		Objectify ofy = ObjectifyService.begin();
@@ -189,16 +204,14 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 
 		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
 		dateEnd.setTimeInMillis(endDate.getTimeInMillis());
-		dateEnd.set(Calendar.HOUR_OF_DAY, 0);
-		dateEnd.set(Calendar.MINUTE, 0);
-		dateEnd.set(Calendar.SECOND, 0);
-		dateEnd.set(Calendar.MILLISECOND, 0);
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
-				.filter("startTimeInMillis <=", dateEnd.getTimeInMillis()).order("startTimeInMillis");
+		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+				.filter("startTimeInMillis <=", dateEnd.getTimeInMillis());
 		return query.list();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#listflightEntry(int, int, int, java.lang.String)
 	 */
 	@Override
@@ -222,7 +235,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#listflightEntry(int, java.lang.String)
 	 */
 	@Override
@@ -230,7 +245,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return listflightEntry(year, year, place);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#listflightEntry(int, int, java.lang.String)
 	 */
 	@Override
@@ -252,7 +269,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		return query.list();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#removeFlightEntries(java.lang.String, int)
 	 */
 	@Override
@@ -262,7 +281,9 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		ofy.delete(query);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.ubx.startlist.server.X#addFlightEntries(java.util.List)
 	 */
 	@Override
@@ -274,6 +295,19 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 			}
 			ofy.put(flightEntries);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.ubx.startlist.server.FlightEntryDAO#addFlightEntries4Test(java.util.List)
+	 * 
+	 * NOTE: this method should be used only for testing!
+	 */
+	@Override
+	public void addFlightEntries4Test(List<FlightEntry> flightEntries) {
+		Objectify ofy = ObjectifyService.begin();
+		ofy.put(flightEntries);
 	}
 
 	// --------------------------------------------------------------------------------------
