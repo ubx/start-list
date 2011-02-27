@@ -11,9 +11,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -39,14 +37,6 @@ public class CronJobServletTest {
 	private CronJobServlet cronJobServlet;
 
 	private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm z");
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -300,7 +290,7 @@ public class CronJobServletTest {
 	@Test
 	public void testDoGetHttpServletRequestHttpServletResponseAllDayCombination() {
 
-		String[] dateSerie = generateDateSerie("23.01.2011", 200); // start on SO
+		String[] dateSerie = generateDateSerie("23.01.2011", 100); // start on SO
 
 		for (int i = 0; i < Math.pow(2, 7) - 1; i++) {
 			PeriodicJob periodicJob = new PeriodicJob("Test-Job");

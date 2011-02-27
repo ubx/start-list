@@ -7,9 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ch.ubx.startlist.shared.SentFlightEntry;
@@ -22,14 +20,6 @@ public class SentFlightEntryDAOobjectifyTest {
 	private final static LocalDatastoreServiceTestConfig datastore = new LocalDatastoreServiceTestConfig();
 	private final static LocalServiceTestHelper helper = new LocalServiceTestHelper(datastore);
 	private static SentFlightEntryDAO sentFlightEntryDAO;
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
 
 	@Before
 	public void setUp() throws Exception {

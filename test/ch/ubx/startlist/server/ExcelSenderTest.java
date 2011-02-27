@@ -2,6 +2,7 @@ package ch.ubx.startlist.server;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -10,9 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ch.ubx.startlist.shared.FlightEntry;
@@ -23,23 +22,19 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 
 public class ExcelSenderTest {
 
+	//private static final Logger log = Logger.getLogger(ExcelSenderTest.class.getName());
+
 	private final static LocalDatastoreServiceTestConfig datastore = new LocalDatastoreServiceTestConfig();
 	private final static LocalServiceTestHelper helper = new LocalServiceTestHelper(datastore);
+	private final static ErrorOutputTestHelper errOutHelper = new ErrorOutputTestHelper();
 
 	private static FlightEntryDAO flightEntryDAO;
 	private static SentFlightEntryDAO sentFlightEntryDAO;
 	private static SendExcelDAO sendExcelDAO;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
 	@Before
 	public void setUp() throws Exception {
+		errOutHelper.setUp();
 		helper.setUp();
 		flightEntryDAO = new FlightEntryDAOobjectify();
 		sentFlightEntryDAO = new SentFlightEntryDAOobjectify();
@@ -49,6 +44,7 @@ public class ExcelSenderTest {
 	@After
 	public void tearDown() throws Exception {
 		helper.tearDown();
+		errOutHelper.tearDown();
 	}
 
 	/**
@@ -91,11 +87,6 @@ public class ExcelSenderTest {
 		List<String> names = new ArrayList<String>();
 		names.add(NAME);
 
-		// TODO -- alternatively be we could parse console output:
-		// ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-		// System.setOut(new PrintStream(outContent));
-		// assertEquals("xxxx", outContent.toString());
-		// see: http://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
 		assertEquals("No SentFlightEnties should be pending", 0, sentFlightEntryDAO.listFlightEntry(NAME).size());
 		try {
 			filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
@@ -127,6 +118,7 @@ public class ExcelSenderTest {
 			}
 			assertEquals(i + "-SentFlightEnties should disappear after 12 days", i < 12 ? 26 : 0, sentFlightEntryDAO.listFlightEntry(NAME).size());
 			assertEquals("No flights should be sent", 0, filteredFlightEntriesCnt);
+
 		}
 	}
 
@@ -173,6 +165,8 @@ public class ExcelSenderTest {
 		List<String> names = new ArrayList<String>();
 		names.add(NAME);
 
+		assertEquals("Output buffer must be empty", 0, errOutHelper.getSysErr().length());
+
 		assertEquals("No SentFlightEnties should be pending", 0, sentFlightEntryDAO.listFlightEntry(NAME).size());
 		try {
 			filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
@@ -181,6 +175,7 @@ public class ExcelSenderTest {
 			fail();
 		}
 		assertEquals("Flights should be sent", 16, filteredFlightEntriesCnt);
+		assertTrue(errOutHelper.getSysErr(), errOutHelper.contains("INFO: Create excel for FlighEnties: 16"));
 
 		// Simulate hourly cron job send
 		Calendar now2 = Calendar.getInstance();
@@ -193,8 +188,9 @@ public class ExcelSenderTest {
 				e.printStackTrace();
 				fail();
 			}
-			assertEquals(i + "-Amount of SentFlightEnties should not change", 16, sentFlightEntryDAO.listFlightEntry(NAME).size()); // TODO -- ??
+			assertEquals(i + "-Amount of SentFlightEnties should not change", 16, sentFlightEntryDAO.listFlightEntry(NAME).size());
 			assertEquals("No flights should be sent", 0, filteredFlightEntriesCnt);
+			assertTrue(errOutHelper.getSysErr(), errOutHelper.contains("INFO: Create excel for FlighEnties: 0"));
 		}
 
 		// Modify already sent flights
@@ -207,6 +203,7 @@ public class ExcelSenderTest {
 			fe.setModified(now3.getTimeInMillis() - (i * oneDayMillies));
 			flightEntryDAO.createOrUpdateFlightEntry(fe);
 		}
+
 		try {
 			filteredFlightEntriesCnt = ExcelSender.doSend(names, now3);
 		} catch (IOException e) {
@@ -214,6 +211,7 @@ public class ExcelSenderTest {
 		}
 		assertEquals("New flights should be sent", 4, filteredFlightEntriesCnt);
 		assertEquals("Still same SentFlightEnties", 16, sentFlightEntryDAO.listFlightEntry(NAME).size());
+		assertTrue(errOutHelper.getSysErr(), errOutHelper.contains("INFO: Create excel for FlighEnties: 4"));
 
 		// Modify very old flights
 		Calendar now4 = Calendar.getInstance();
@@ -225,6 +223,7 @@ public class ExcelSenderTest {
 			fe.setModified(now4.getTimeInMillis() - (i * oneDayMillies));
 			flightEntryDAO.createOrUpdateFlightEntry(fe);
 		}
+
 		try {
 			filteredFlightEntriesCnt = ExcelSender.doSend(names, now4);
 		} catch (IOException e) {
@@ -232,10 +231,12 @@ public class ExcelSenderTest {
 		}
 		assertEquals("No flights should be sent", 0, filteredFlightEntriesCnt);
 		assertEquals("Still same SentFlightEnties", 16, sentFlightEntryDAO.listFlightEntry(NAME).size());
+		assertTrue(errOutHelper.getSysErr(), errOutHelper.contains("INFO: Create excel for FlighEnties: 0"));
 
 		// Advance current time as few month
 		Calendar now5 = Calendar.getInstance();
 		now5.setTimeInMillis(TestUtil.parseTimeString("03.09.2011 04:30 utc").getTime());
+
 		try {
 			filteredFlightEntriesCnt = ExcelSender.doSend(names, now5);
 		} catch (IOException e) {
@@ -243,6 +244,8 @@ public class ExcelSenderTest {
 		}
 		assertEquals("No flights should be sent", 0, filteredFlightEntriesCnt);
 		assertEquals("No SentFlightEnties", 0, sentFlightEntryDAO.listFlightEntry(NAME).size());
-
+		assertTrue(errOutHelper.getSysErr(), errOutHelper.contains("INFO: Create excel for FlighEnties: 0"));
 	}
+
+
 }
