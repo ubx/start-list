@@ -87,6 +87,11 @@ public class ExcelSenderTest {
 		List<String> names = new ArrayList<String>();
 		names.add(NAME);
 
+		// TODO -- alternatively be we could parse console output:
+		// ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		// System.setOut(new PrintStream(outContent));
+		// assertEquals("xxxx", outContent.toString());
+		// see: http://stackoverflow.com/questions/1119385/junit-test-for-system-out-println
 		assertEquals("No SentFlightEnties should be pending", 0, sentFlightEntryDAO.listFlightEntry(NAME).size());
 		try {
 			filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
