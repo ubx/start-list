@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ch.ubx.startlist.server.admin.CronJobServlet;
 import ch.ubx.startlist.server.admin.OlcImportMain;
 import ch.ubx.startlist.shared.ImportOLC;
 
@@ -15,7 +14,7 @@ public class OLCImporter {
 
 	private static ImportOLCDAO importOLCDAO = new ImportOLCDAOobjectify();
 
-	private static final Logger log = Logger.getLogger(CronJobServlet.class.getName());
+	private static final Logger log = Logger.getLogger(OLCImporter.class.getName());
 
 	/**
 	 * Import for all ImportOLC from OLC web page;
@@ -31,10 +30,12 @@ public class OLCImporter {
 					log.log(Level.INFO, "Import from place=" + place + ", year=" + year);
 					// Split requests into small pieces to avoid DeadlineExceededException for the whole request.
 					int maxImport = 50;
+					log.log(Level.INFO, "Import...");
 					while (OlcImportMain.importFromOLC(place, year, 20).size() > 0 & maxImport > 0) {
-						log.log(Level.INFO, "Imported ...");
+						log.log(Level.INFO, "Imported 20 ...");
 						--maxImport;
 					}
+					log.log(Level.INFO, "...imported");
 				}
 			}
 		}

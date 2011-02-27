@@ -102,7 +102,7 @@ public class OlcImportMain {
 		}
 		flightEntryDAO.addFlightEntries(modifiedFlightEntries);
 		final SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		for (FlightEntry flightEntry : newFlightEntries) {
+		for (FlightEntry flightEntry : modifiedFlightEntries) {
 			log.log(Level.INFO, "Place: " + flightEntry.getPlace() + " Start: " + timeFormat.format(new Date(flightEntry.getStartTimeInMillis())));
 
 		}

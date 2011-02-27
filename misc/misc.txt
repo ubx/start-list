@@ -136,6 +136,8 @@ http://groups.google.com/group/google-appengine-java/browse_thread/thread/c8a788
 ====================
 Start cron job in devel mode:
 curl http://localhost:8888/cronjobs
+curl http://localhost:8888/cronjobs?now=26.02.2011%2023:00%20utc
+
 
 =====================
 Caution: Cron requests are always sent to the default version of the application.
@@ -148,4 +150,10 @@ until the datastore indexes are build. This may take some time, be patient!
 =====================
 Drag and Drop, for scheduler UI?
 http://code.google.com/p/gwt-dnd/
+
+=====================
+Performace test with Jmeter
+~/jakarta-jmeter-2.4/bin/jmeter
+
+
 

@@ -30,7 +30,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
-import ch.ubx.startlist.server.admin.CronJobServlet;
 import ch.ubx.startlist.shared.FlightEntry;
 import ch.ubx.startlist.shared.SendExcel;
 import ch.ubx.startlist.shared.SentFlightEntry;
@@ -44,7 +43,7 @@ public class ExcelSender implements TextConstants {
 	private static FlightEntryDAO flightEntryDAO = new FlightEntryDAOobjectify();
 	private static SentFlightEntryDAO sentFlightEntryDAO = new SentFlightEntryDAOobjectify();
 
-	private static final Logger log = Logger.getLogger(CronJobServlet.class.getName());
+	private static final Logger log = Logger.getLogger(ExcelSender.class.getName());
 
 	/**
 	 * Send e-mail with an excel sheet for all SendExcel.
