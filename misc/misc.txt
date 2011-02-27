@@ -155,5 +155,75 @@ http://code.google.com/p/gwt-dnd/
 Performace test with Jmeter
 ~/jakarta-jmeter-2.4/bin/jmeter
 
+=====================
+Save / Load webpage from file
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+
+import javax.swing.text.html.parser.DTD;
+
+public class MainClass {
+
+  public static void main(String[] args) {
+
+    try {
+      URL u = new URL("http://www.java2s.com");
+      OutputStream out = new FileOutputStream("test.htm");
+      InputStream in = u.openStream();
+      DTD html = DTD.getDTD("html");
+      System.out.println(html.getName());
+      in.close();
+      out.flush();
+      out.close();
+    } catch (Exception e) {
+      System.err.println("Usage: java PageSaver url local_file");
+    }
+
+  }
+
+}
+--
+mport java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SocketChannel;
+
+public class MainClass {
+
+  public static void main(String[] args) throws IOException {
+
+    URL u = new URL("http://www.java2s.com");
+    String host = u.getHost();
+    int port = 80;
+    String file = "/";
+
+    SocketAddress remote = new InetSocketAddress(host, port);
+    SocketChannel channel = SocketChannel.open(remote);
+    FileOutputStream out = new FileOutputStream("yourfile.htm");
+    FileChannel localFile = out.getChannel();
+
+    String request = "GET " + file + " HTTP/1.1\r\n" + "User-Agent: HTTPGrab\r\n"
+        + "Accept: text/*\r\n" + "Connection: close\r\n" + "Host: " + host + "\r\n" + "\r\n";
+
+    ByteBuffer header = ByteBuffer.wrap(request.getBytes("US-ASCII"));
+    channel.write(header);
+
+    ByteBuffer buffer = ByteBuffer.allocate(8192);
+    while (channel.read(buffer) != -1) {
+      buffer.flip();
+      localFile.write(buffer);
+      buffer.clear();
+    }
+
+    localFile.close();
+    channel.close();
+  }
+}
 
 
