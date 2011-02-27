@@ -79,7 +79,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 	protected DateBox2 dateBox;
 	protected SuggestBox2 pilotNameBox;
-	protected TextBox passengerOrInstructorNameBox;
+	protected SuggestBox2 passengerOrInstructorNameBox;
 	protected CheckBox trainingCheckBox;
 	protected TextBox remarksTextBox;
 	protected SuggestBox2 landingPlacesSuggestBox;
@@ -301,7 +301,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		Label lblPassengerOrInstructor = new Label(TXT_PASSENGER_OR_INSTRUCTOR);
 		flightEntryFlexTable.setWidget(3, 2, lblPassengerOrInstructor);
 
-		passengerOrInstructorNameBox = new TextBox();
+		passengerOrInstructorNameBox = new SuggestBox2(pilotNamesSuggest);
 		flightEntryFlexTable.setWidget(3, 3, passengerOrInstructorNameBox);
 
 		Label lblTraining = new Label(TXT_TRAINING);
@@ -1021,7 +1021,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	}
 	
 	public void service_eventAllListPilotsSuccessful(Set<Pilot> pilots) {
-		for (String pilot : GwtUtil.toPilotNames(pilots)) {
+		for (String pilot : GwtUtil.toPilotNames(pilots)){
 			pilotNamesSuggest.add(pilot);
 		}
 	}
