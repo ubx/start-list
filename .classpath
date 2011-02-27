@@ -3,12 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/simple-xml-2.3.3.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jdom.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jxl.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jericho-html-3.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-2.2.3.jar"/>
@@ -22,5 +20,9 @@
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/testing/appengine-testing.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api-labs.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/consoleImpl.jar"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/gwt-2.1.1"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/profilerImpl.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
