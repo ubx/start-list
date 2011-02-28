@@ -28,6 +28,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
 import ch.ubx.startlist.shared.FlightEntry;
@@ -117,9 +118,8 @@ public class ExcelSender implements TextConstants {
 				msg.setFrom(new InternetAddress("admin@" + applicationId + ".appspotmail.com"));
 				for (String recipient : sendExcel.getRecipientsList()) {
 					msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-				}
-				msg.setSubject(sendExcel.getSubject());
-
+				}				
+				msg.setSubject(MimeUtility.encodeText(sendExcel.getSubject(), "UTF-8", "Q")); 
 				Multipart mp = new MimeMultipart();
 				log.log(Level.INFO, "Create excel for FlighEnties: " + filteredFlightEntries.size());
 				// Excel attachment
