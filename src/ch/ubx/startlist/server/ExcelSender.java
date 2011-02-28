@@ -76,7 +76,8 @@ public class ExcelSender implements TextConstants {
 
 				for (SentFlightEntry sentFlightEntry : sentFlightEntries) {
 					for (FlightEntry flightEntry : flightEntries) {
-						if (sentFlightEntry.getFlightEntry() == flightEntry.getId()) {
+						// Compare Id values, not objects reference!
+						if (sentFlightEntry.getFlightEntry().compareTo(flightEntry.getId()) == 0) {
 							if (sentFlightEntry.getLastModified() == flightEntry.getModified() || flightEntry.getModified() < startDate.getTimeInMillis()) {
 								flightEntries.remove(flightEntry);
 								break;
