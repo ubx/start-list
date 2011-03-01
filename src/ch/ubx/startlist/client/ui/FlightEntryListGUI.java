@@ -80,6 +80,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	protected DateBox2 dateBox;
 	protected SuggestBox2 pilotNameBox;
 	protected SuggestBox2 passengerOrInstructorNameBox;
+	protected SuggestBox2 towplanePilotNameBox;
 	protected CheckBox trainingCheckBox;
 	protected TextBox remarksTextBox;
 	protected SuggestBox2 landingPlacesSuggestBox;
@@ -278,7 +279,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		endGliderDateBox.getDatePicker().setVisible(false);
 		flightEntryFlexTable.setWidget(1, 5, endGliderDateBox);
 
-		// row 2: registration of involved planes
+		// row 2: registration of involved planes and towplane pilot
 		Label lblTowplane = new Label(TXT_REGISTRATION_TOWPLANE);
 		flightEntryFlexTable.setWidget(2, 0, lblTowplane);
 
@@ -290,6 +291,12 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 		registrationGliderBox = new TextBox();
 		flightEntryFlexTable.setWidget(2, 3, registrationGliderBox);
+		
+		Label lblTowplanePilot = new Label(TXT_TOWPLANE_PILOT);
+		flightEntryFlexTable.setWidget(2, 4, lblTowplanePilot);
+		
+		towplanePilotNameBox = new SuggestBox2(pilotNamesSuggest);
+		flightEntryFlexTable.setWidget(2, 5, towplanePilotNameBox);
 
 		// row 3: pilot information
 		Label lblPilot = new Label(TXT_PILOT);
@@ -320,7 +327,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 		// Set tab order
 		setTabOrder(dateBox, allPlacesListBox, landingPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox,
-				registrationGliderBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox);
+				registrationGliderBox, towplanePilotNameBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox);
 
 		HorizontalPanel operationsPanel;
 		operationsPanel = new HorizontalPanel();
@@ -435,6 +442,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		dateBox.setEnabled(enable);
 		pilotNameBox.setEnabled(enable);
 		passengerOrInstructorNameBox.setEnabled(enable);
+		towplanePilotNameBox.setEnabled(enable);
 		startDateBox.setEnabled(enable);
 		endGliderDateBox.setEnabled(enable);
 		endTowplaneDateBox.setEnabled(enable);
@@ -452,6 +460,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		dateBox.setValue(null);
 		pilotNameBox.setValue(null);
 		passengerOrInstructorNameBox.setValue(null);
+		towplanePilotNameBox.setValue(null);
 		startDateBox.setValue(null);
 		endGliderDateBox.setValue(null);
 		endTowplaneDateBox.setValue(null);
@@ -516,6 +525,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		}
 		pilotNameBox.setValue(flightEntry.getPilot());
 		passengerOrInstructorNameBox.setValue(flightEntry.getPassengerOrInstructor());
+		towplanePilotNameBox.setValue(flightEntry.getTowplanePilot());
 		trainingCheckBox.setValue(flightEntry.isTraining());
 		remarksTextBox.setValue(flightEntry.getRemarks());
 		if (newEntry) {
@@ -605,6 +615,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		flightEntry.setRegistrationGlider(registrationGliderBox.getValue());
 		flightEntry.setRegistrationTowplane(registrationTowplaneBox.getValue());
 		flightEntry.setPassengerOrInstructor(passengerOrInstructorNameBox.getValue());
+		flightEntry.setTowplanePilot(towplanePilotNameBox.getValue());
 	}
 
 	private void modifyFlightEntry() {
@@ -617,7 +628,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			flightEntryDialogBox.setWidth("800px");
 			flightEntryDialogBox.show();
 
-			// set focus depending on content of current flight entry, optimized for live entry throught "Flugdienstleiter"
+			// set focus depending on content of current flight entry, optimized for live entry through "Flugdienstleiter"
 			if (!currentFlightEntry.isStartTimeValid()) {
 				startDateBox.setFocus(true); // no start time yet, FDL will want to enter it first
 			} else if (!currentFlightEntry.isEndTimeTowplaneValid()) {
@@ -632,6 +643,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 				pilotNameBox.setFocus(true);
 			} else if (currentFlightEntry.getPassengerOrInstructor().length() == 0) {
 				passengerOrInstructorNameBox.setFocus(true);
+			} else if (currentFlightEntry.getTowplanePilot().length() == 0) {
+				towplanePilotNameBox.setFocus(true);
 			} else if (currentFlightEntry.getRemarks().length() == 0) {
 				remarksTextBox.setFocus(true);
 			} else if (currentFlightEntry.getLandingPlace().length() == 0) {
