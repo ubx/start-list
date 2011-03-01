@@ -24,6 +24,7 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 	private String modifier;
 	private String pilot;
 	private String passengerOrInstructor;
+	private String towplanePilot;
 	private long startTimeInMillis;
 	private long endTimeGliderInMillis;
 	private long endTimeTowplaneInMillis;
@@ -115,6 +116,14 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 
 	public void setPassengerOrInstructor(String passengerOrInstructor) {
 		this.passengerOrInstructor = passengerOrInstructor;
+	}
+	
+	public String getTowplanePilot() {
+		return towplanePilot;
+	}
+
+	public void setTowplanePilot(String towplanePilot) {
+		this.towplanePilot = towplanePilot;
 	}
 
 	public long getStartTimeInMillis() {
@@ -302,6 +311,16 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 				return 1;
 			}
 		}
+		
+		if (getTowplanePilot() != null & other.getTowplanePilot() != null) {
+			if (!getTowplanePilot().equals(other.getTowplanePilot())) {
+				return 1;
+			}
+		} else {
+			if (getTowplanePilot() != other.getTowplanePilot()) {
+				return 1;
+			}
+		}
 
 		if (getPlace() != null & other.getPlace() != null) {
 			if (!getPlace().equals(other.getPlace())) {
@@ -411,6 +430,7 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 		copy.setEndTimeTowplaneInMillis(getEndTimeTowplaneInMillis());
 		copy.setPilot(getPilot());
 		copy.setPassengerOrInstructor(getPassengerOrInstructor());
+		copy.setTowplanePilot(getTowplanePilot());
 		copy.setPlace(getPlace());
 		copy.setLandingPlace(getLandingPlace());
 		copy.setRegistrationGlider(getRegistrationGlider());

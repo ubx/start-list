@@ -24,10 +24,10 @@ import ch.ubx.startlist.shared.TextConstants;
 public class ExcelSheet implements TextConstants {
 
 	private static final String[] columns = new String[] { TXT_DATE, TXT_START_PLACE, TXT_START_TIME + "[UTC]", TXT_LANDING_TIME_TOWPLANE + "[UTC]",
-			TXT_DURATION_TOWPLANE + "[Min.]", TXT_SHORT_REGISTRATION_TOWPLANE, TXT_LANDING_PLACE, TXT_LANDING_TIME_GLIDER + "[UTC]", TXT_DURATION_GLIDER + "[Min.]",
+			TXT_DURATION_TOWPLANE + "[Min.]", TXT_SHORT_REGISTRATION_TOWPLANE, TXT_TOWPLANE_PILOT, TXT_LANDING_PLACE, TXT_LANDING_TIME_GLIDER + "[UTC]", TXT_DURATION_GLIDER + "[Min.]",
 			TXT_SHORT_REGISTRATION_GLIDER, TXT_PILOT, TXT_PASSENGER_OR_INSTRUCTOR, TXT_TRAINING, TXT_REMARKS };
 
-	private static final int[] columnswidth = new int[] { 10, 18, 18, 18, 15, 18, 18, 18, 15, 18, 20, 20, 6, 60 };
+	private static final int[] columnswidth = new int[] { 10, 18, 18, 18, 15, 18, 18, 18, 18, 15, 18, 20, 20, 6, 60 };
 
 	private static final String TXT_COLUMN_LANDING_TIME_GLIDER = "H";
 	private static final String TXT_COLUMN_LANDING_TIME_TOWPLANE = "D";
@@ -107,11 +107,14 @@ public class ExcelSheet implements TextConstants {
 
 				// column F: registration towplane
 				sheet.addCell(new Label(col++, row, flightEntry.getRegistrationTowplane()));
+				
+				// column G: towplane pilot
+				sheet.addCell(new Label(col++, row, flightEntry.getTowplanePilot()));
 
-				// column G: landing place
+				// column H: landing place
 				sheet.addCell(new Label(col++, row, flightEntry.getLandingPlace()));
 
-				// column H: end time glider
+				// column I: end time glider
 				if (flightEntry.isEndTimeGliderValid()) {
 					time.setTime(flightEntry.getEndTimeGliderInMillis());
 				} else {
@@ -119,7 +122,7 @@ public class ExcelSheet implements TextConstants {
 				}
 				sheet.addCell(new DateTime(col++, row, time, cellTimeFormat));
 
-				// column I: glider duration: let excel calculate it
+				// column J: glider duration: let excel calculate it
 				if (flightEntry.isEndTimeGliderValid()) {
 					String durationBasicValueGlider = TXT_COLUMN_LANDING_TIME_GLIDER + (row + 1) + "-" + TXT_COLUMN_START_TIME + (row + 1);
 					String durationFormulaGlider = "STUNDE(" + durationBasicValueGlider + ")*60+MINUTE(" + durationBasicValueGlider + ")";
@@ -129,19 +132,19 @@ public class ExcelSheet implements TextConstants {
 					col++;	
 				}
 
-				// column J: registration glider
+				// column K: registration glider
 				sheet.addCell(new Label(col++, row, flightEntry.getRegistrationGlider()));
 
-				// column K: name of pilot
+				// column L: name of pilot
 				sheet.addCell(new Label(col++, row, flightEntry.getPilot()));
 
-				// column L: name of passenger or instructor
+				// column M: name of passenger or instructor
 				sheet.addCell(new Label(col++, row, flightEntry.getPassengerOrInstructor()));
 
-				// column M: training or not?
+				// column N: training or not?
 				sheet.addCell(new Label(col++, row, flightEntry.isTraining() ? TXT_Y : TXT_N));
 
-				// column N: remarks
+				// column O: remarks
 				sheet.addCell(new Label(col++, row, flightEntry.getRemarks()));
 
 				row++;

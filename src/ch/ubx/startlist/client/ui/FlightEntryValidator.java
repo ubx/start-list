@@ -122,6 +122,15 @@ public class FlightEntryValidator implements TextConstants{
 				return false;
 			}
 		}
+		
+		// Name of pilot of towplane
+		{
+			String towplanePilot = gui.towplanePilotNameBox.getValue();
+			if (towplanePilot.length() > 32) {
+				showMessage(gui.towplanePilotNameBox, TXT_VALIDATOR_ERROR_TOWPLANEPILOT_LENGTH);
+				return false;
+			}
+		}
 
 		// Landing Place
 		String lp = gui.landingPlacesSuggestBox.getValue();

@@ -35,8 +35,9 @@ public interface TextConstants {
 	public static final String TXT_NEXT = ">";
 	public static final String TXT_NO = "Nein";
 	public static final String TXT_OK = "OK";
-	public static final String TXT_PILOT = "Pilot";
+	public static final String TXT_PILOT = "Pilot SF";
 	public static final String TXT_PASSENGER_OR_INSTRUCTOR = "FL/Pax";
+	public static final String TXT_TOWPLANE_PILOT = "Schlepp-Pilot";
 	public static final String TXT_PREV = "<";
 	public static final String TXT_REALLY_DELETE_QUESWTION = "Flug wirklich löschen?";
 	public static final String TXT_REGISTRATION_GLIDER = "Segelflugzeug";
@@ -63,6 +64,7 @@ public interface TextConstants {
 	public static final String TXT_VALIDATOR_ERROR_ENDTIME_TOWPLANE_BEFORE_STARTTIME = "Landezeit Schlepper vor oder gleich Startzeit!";
 	public static final String TXT_VALIDATOR_ERROR_PILOT_LENGTH = "Piloten Name zu lang, maximum 32 Zeichen!";
 	public static final String TXT_VALIDATOR_ERROR_PASSENGERORINSTRUCTOR_LENGTH = "Pax/FL Name zu lang, maximum 32 Zeichen!";
+	public static final String TXT_VALIDATOR_ERROR_TOWPLANEPILOT_LENGTH = "Schlepppilot Name zu lang, maximum 32 Zeichen!";
 	public static final String TXT_VALIDATOR_ERROR_LANDINGPLACE_LENGTH = "Landeort zu lang, maximum 20 Zeichen!";
 	public static final String TXT_VALIDATOR_ERROR_REGISTRATION_GLIDER_LENGTH = "Immatrikulation SF zu lang, maximum 7 Zeichen!";
 	public static final String TXT_VALIDATOR_ERROR_REGISTRATION_GLIDER_FORMAT = "Immatrikulation SF muss in der Form HB-1234 sein!";
