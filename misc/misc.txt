@@ -227,7 +227,7 @@ public class MainClass {
 }
 
 =====================
-Refactoring PeriodicJob, SendExcel and ImportANCE using polymorphic:
+Refactoring PeriodicJob, SendExcel and ImportOLC using polymorphic:
 http://groups.google.com/group/objectify-appengine/msg/d26b40c7a8b1a89a
 
 
