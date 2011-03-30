@@ -22,6 +22,7 @@ import ch.ubx.startlist.shared.FlightEntry;
 import ch.ubx.startlist.shared.LoginInfo;
 import ch.ubx.startlist.shared.TextConstants;
 
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -118,8 +119,12 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	private AdminGUI adminGUI;
 	private FlightEntry lastflightEntry;
 	
-	// Get prefered place from url. If not defined null
+	// Get preferred place from url. If not defined null
 	private String prefPlace = Window.Location.getParameter("place");
+	
+	// Get the current version
+	//private String version = SystemProperty.version.get(); // TODO -- display somewhere on screen.
+
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -142,6 +147,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		RootPanel.get(STATUS_ROOT_PANEL).add(statusPanel, 10, 100);
 		status = new Label();
 		statusPanel.add(status);
+		
+		//statusPanel.add(new Label(version)); // TODO -- ???
 
 		stackPanel = new StackPanel();
 		RootPanel.get(STACK_ROOT_PANEL).add(stackPanel, 10, 130);

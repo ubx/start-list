@@ -224,16 +224,16 @@ public class CronJobServletTest {
 	public void testAdjustTimeInMillisNextScheduleSundayOnly() {
 		boolean[] days = new boolean[] { true, false, false, false, false, false, false };
 		String timeStr = "17:00";
-		testAdjustTime(true, days, "23.01.2011 17:05 utc", timeStr, "23.01.2011 17:00 utc"); //SO
-		testAdjustTime(false, days, "24.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); //MO
-		testAdjustTime(false, days, "25.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); //DI
-		testAdjustTime(false, days, "26.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); //MI
-		testAdjustTime(false, days, "27.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); //DO
-		testAdjustTime(false, days, "28.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); //FR
-		testAdjustTime(false, days, "29.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); //SA
-		testAdjustTime(false, days, "30.01.2011 17:05 utc", timeStr, "06.02.2011 17:00 utc"); //SO
-		testAdjustTime(false, days, "31.01.2011 17:05 utc", timeStr, "06.02.2011 17:00 utc"); //MO
-		testAdjustTime(false, days, "01.02.2011 17:05 utc", timeStr, "06.02.2011 17:00 utc"); //DI
+		testAdjustTime(true, days, "23.01.2011 17:05 utc", timeStr, "23.01.2011 17:00 utc"); // SO
+		testAdjustTime(false, days, "24.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); // MO
+		testAdjustTime(false, days, "25.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); // DI
+		testAdjustTime(false, days, "26.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); // MI
+		testAdjustTime(false, days, "27.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); // DO
+		testAdjustTime(false, days, "28.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); // FR
+		testAdjustTime(false, days, "29.01.2011 17:05 utc", timeStr, "30.01.2011 17:00 utc"); // SA
+		testAdjustTime(false, days, "30.01.2011 17:05 utc", timeStr, "06.02.2011 17:00 utc"); // SO
+		testAdjustTime(false, days, "31.01.2011 17:05 utc", timeStr, "06.02.2011 17:00 utc"); // MO
+		testAdjustTime(false, days, "01.02.2011 17:05 utc", timeStr, "06.02.2011 17:00 utc"); // DI
 	}
 
 	@Test
@@ -305,11 +305,42 @@ public class CronJobServletTest {
 				startCronJob(dateSerie[serieIdx] + " 15:00 utc");
 				periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
 				String exp = expectedDates[serieIdx] == null ? NULL_TIME_STR : expectedDates[serieIdx] + " 13:00 utc";
-				//System.out.println("DEBUG NextTime=" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())));
-				//System.out.println("DEBUG Expected=" + exp);
+				// System.out.println("DEBUG NextTime=" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())));
+				// System.out.println("DEBUG Expected=" + exp);
 				assertEquals(TestUtil.parseTimeString(exp).getTime(), periodicJob.getNextTimeInMillis());
 			}
 		}
+	}
+
+	@Test
+	public void testDoGetHttpServletRequestHttpServletResponse_Issue44() {
+
+		// Cron job scheduling does not work is expended if time is 23:59
+
+		PeriodicJob periodicJob = new PeriodicJob("Test-Job");
+		periodicJob.setTime("23:59");
+		periodicJob.setDays(new boolean[] { true, true, true, true, true, true, true });
+		periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
+
+		startCronJob("19.01.2011 24:00 utc");
+		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
+		assertEquals("is:" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())), TestUtil.parseTimeString("20.01.2011 23:59 utc").getTime(),
+				periodicJob.getNextTimeInMillis());
+
+		startCronJob("20.01.2011 24:00 utc");
+		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
+		assertEquals("is:" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())), TestUtil.parseTimeString("21.01.2011 23:59 utc").getTime(),
+				periodicJob.getNextTimeInMillis());
+
+		startCronJob("21.01.2011 24:00 utc");
+		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
+		assertEquals("is:" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())), TestUtil.parseTimeString("22.01.2011 23:59 utc").getTime(),
+				periodicJob.getNextTimeInMillis());
+
+		startCronJob("22.01.2011 24:00 utc");
+		periodicJob = periodicJobDAO.getPeriodicJob(periodicJob.getName());
+		assertEquals("is:" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())), TestUtil.parseTimeString("23.01.2011 23:59 utc").getTime(),
+				periodicJob.getNextTimeInMillis());
 	}
 
 	private void startCronJob(String nowStr) {
@@ -347,11 +378,10 @@ public class CronJobServletTest {
 		Calendar time = Calendar.getInstance();
 		time.setTimeInMillis(now.getTime());
 		cronJobServlet.adjustTimeInMillis(periodicJob, time);
-		//System.out.println("DEBUG ExpeTime=" + expectedTimeStr);
-		//System.out.println("DEBUG NextTime=" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())));
+		// System.out.println("DEBUG ExpeTime=" + expectedTimeStr);
+		// System.out.println("DEBUG NextTime=" + timeFormat.format(new Date(periodicJob.getNextTimeInMillis())));
 		assertEquals(TestUtil.parseTimeString(expectedTimeStr).getTime(), periodicJob.getNextTimeInMillis());
 	}
-
 
 	private static String[] generateDateSerie(String startTimeStr, int weeks) {
 		String[] timeStrs = new String[weeks * 7];
@@ -375,10 +405,10 @@ public class CronJobServletTest {
 		String last = null;
 		for (int i = retTimeStrs.length - 1; i > 0; --i) {
 			if (days[i % 7]) {
-				retTimeStrs[i-1] = timeStrs[i];
+				retTimeStrs[i - 1] = timeStrs[i];
 				last = timeStrs[i];
 			} else {
-				retTimeStrs[i-1] = last;
+				retTimeStrs[i - 1] = last;
 			}
 		}
 		return retTimeStrs;
