@@ -184,49 +184,10 @@ public class MainClass {
   }
 
 }
---
-mport java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.SocketChannel;
-
-public class MainClass {
-
-  public static void main(String[] args) throws IOException {
-
-    URL u = new URL("http://www.java2s.com");
-    String host = u.getHost();
-    int port = 80;
-    String file = "/";
-
-    SocketAddress remote = new InetSocketAddress(host, port);
-    SocketChannel channel = SocketChannel.open(remote);
-    FileOutputStream out = new FileOutputStream("yourfile.htm");
-    FileChannel localFile = out.getChannel();
-
-    String request = "GET " + file + " HTTP/1.1\r\n" + "User-Agent: HTTPGrab\r\n"
-        + "Accept: text/*\r\n" + "Connection: close\r\n" + "Host: " + host + "\r\n" + "\r\n";
-
-    ByteBuffer header = ByteBuffer.wrap(request.getBytes("US-ASCII"));
-    channel.write(header);
-
-    ByteBuffer buffer = ByteBuffer.allocate(8192);
-    while (channel.read(buffer) != -1) {
-      buffer.flip();
-      localFile.write(buffer);
-      buffer.clear();
-    }
-
-    localFile.close();
-    channel.close();
-  }
-}
+-----
 ===============================================================================================================
 For OLC-Import testing: mini webserver, simple lib/simple-4.1.21.jar
+
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -244,6 +205,8 @@ public class HelloWorld implements Container {
 	public void handle(Request request, Response response) {
 		PrintStream body = null;
 		try {
+			String path = request.getPath().getName();
+			String sp = request.getParameter("sp");
 			body = response.getPrintStream();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
