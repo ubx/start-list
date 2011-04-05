@@ -128,16 +128,16 @@ public class OlcImportMain {
 						}
 					}
 				}
-			}
-			if (!usedNewFlightEntries.contains(newFlightEntry)) {
-				modifiedFlightEntries.add(newFlightEntry);
+				if (!usedNewFlightEntries.contains(newFlightEntry)) {
+					modifiedFlightEntries.add(newFlightEntry);
+				}
 			}
 		}
 		flightEntryDAO.addFlightEntries(modifiedFlightEntries);
 		final SimpleDateFormat timeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm z");
 		for (FlightEntry flightEntry : modifiedFlightEntries) {
-			log.log(Level.INFO, "Place: " + flightEntry.getPlace() + " ,Start: " + timeFormat.format(new Date(flightEntry.getStartTimeInMillis())) + " ,Pilot: "
-					+ flightEntry.getPilot() + " ,Plane: " + flightEntry.getRegistrationGlider());
+			log.log(Level.INFO, "Place: " + flightEntry.getPlace() + " ,Start: " + timeFormat.format(new Date(flightEntry.getStartTimeInMillis()))
+					+ " ,Pilot: " + flightEntry.getPilot() + " ,Plane: " + flightEntry.getRegistrationGlider());
 		}
 		return modifiedFlightEntries;
 	}
