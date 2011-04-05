@@ -47,9 +47,25 @@ public class OlcImportMain {
 	}
 
 	/**
-	 * Merge new FlightEntries with uncompleted FlightEntries in data store. If merge is not possible the new FlightEntry is added to the data store.
-	 * Conditions: 1) Date and place are the same. 2) New FlightEntries are complete and therefore used only once for a merge or add operation. 3) A
-	 * modification of a FlightEntry from data store is done only by one new FlightEntry. Merge:
+	 * Merge new FlightEntries with uncompleted FlightEntries in data store. If merge is not possible the new FlightEntry is added to the data store. <code>
+	 * Conditions: 1) Date and place are the same.
+	 *             2) New FlightEntries are complete and therefore used only once for a merge or add operation.
+	 *             3) A modification of a FlightEntry from data store is done only by one new FlightEntry. Merge:
+	 *           
+	 *     OLC flight:       +==============+
+	 *  Manual flight 1:   ==|==============|====                 copy start and end
+	 *                2:  +==|==============|==                   copy end
+	 *                3:     |  +===========|==                   copy end
+	 *                4:  ===|============+ |                     copy start
+	 *                5:  ===|==============|======+              copy start
+	 *                6:  +==|========+     |                     do nothing
+	 *                7:  +==|==============|===+                 do nothing
+	 * 
+	 *            Key: + defined start/end
+	 *                 = open start/end
+	 *                 | start/end OLC flight
+	 *            
+	 *            </code>
 	 * 
 	 * @param flightEntries
 	 *            Contains new complete FlightEntries of the same place and year.
