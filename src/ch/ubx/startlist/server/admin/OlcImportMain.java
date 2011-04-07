@@ -90,8 +90,8 @@ public class OlcImportMain {
 				modifiedFlightEntries.add(newFlightEntry);
 			} else {
 				for (FlightEntry storedFlightEntry : storedFlightEntries) {
-					if (!modifiedFlightEntries.contains(storedFlightEntry) & samePilot(newFlightEntry, storedFlightEntry)
-							& samePlane(newFlightEntry, storedFlightEntry)) {
+					if (!modifiedFlightEntries.contains(storedFlightEntry) & (samePilot(newFlightEntry, storedFlightEntry)
+							| samePlane(newFlightEntry, storedFlightEntry))) {
 						// 1:
 						if (!storedFlightEntry.isStartTimeValid() & !storedFlightEntry.isEndTimeGliderValid()) {
 							storedFlightEntry.setStartTimeInMillis(newFlightEntry.getStartTimeInMillis());
@@ -128,16 +128,16 @@ public class OlcImportMain {
 						}
 					}
 				}
-			}
-			if (!usedNewFlightEntries.contains(newFlightEntry)) {
-				modifiedFlightEntries.add(newFlightEntry);
+				if (!usedNewFlightEntries.contains(newFlightEntry)) {
+					modifiedFlightEntries.add(newFlightEntry);
+				}
 			}
 		}
 		flightEntryDAO.addFlightEntries(modifiedFlightEntries);
 		final SimpleDateFormat timeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm z");
 		for (FlightEntry flightEntry : modifiedFlightEntries) {
-			log.log(Level.INFO, "Place: " + flightEntry.getPlace() + " ,Start: " + timeFormat.format(new Date(flightEntry.getStartTimeInMillis())) + " ,Pilot: "
-					+ flightEntry.getPilot() + " ,Plane: " + flightEntry.getRegistrationGlider());
+			log.log(Level.INFO, "Place: " + flightEntry.getPlace() + " ,Start: " + timeFormat.format(new Date(flightEntry.getStartTimeInMillis()))
+					+ " ,Pilot: " + flightEntry.getPilot() + " ,Plane: " + flightEntry.getRegistrationGlider());
 		}
 		return modifiedFlightEntries;
 	}
