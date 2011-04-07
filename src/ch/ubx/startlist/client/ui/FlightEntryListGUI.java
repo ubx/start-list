@@ -7,22 +7,21 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import ch.ubx.startlist.client.AirfieldServiceDelegate;
-import ch.ubx.startlist.client.PilotServiceDelegate;
 import ch.ubx.startlist.client.FlightEntryListeProvider;
 import ch.ubx.startlist.client.FlightEntryServiceDelegate;
 import ch.ubx.startlist.client.GwtUtil;
 import ch.ubx.startlist.client.LoginServiceDelegate;
-import ch.ubx.startlist.client.RowSelectionHandler;
+import ch.ubx.startlist.client.PilotServiceDelegate;
 import ch.ubx.startlist.client.RowDoubleclickHandler;
+import ch.ubx.startlist.client.RowSelectionHandler;
 import ch.ubx.startlist.client.TimeFormat;
 import ch.ubx.startlist.client.admin.ui.AdminGUI;
 import ch.ubx.startlist.shared.Airfield;
-import ch.ubx.startlist.shared.Pilot;
 import ch.ubx.startlist.shared.FlightEntry;
 import ch.ubx.startlist.shared.LoginInfo;
+import ch.ubx.startlist.shared.Pilot;
 import ch.ubx.startlist.shared.TextConstants;
 
-import com.google.appengine.api.utils.SystemProperty;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
