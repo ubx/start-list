@@ -332,10 +332,6 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		flightEntryFlexTable.setWidget(4, 1, remarksTextBox);
 		flightEntryFlexTable.getFlexCellFormatter().setColSpan(4, 1, 5);// TODO - does not work?
 
-		// Set tab order
-		setTabOrder(dateBox, allPlacesListBox, landingPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox,
-				registrationGliderBox, towplanePilotNameBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox);
-
 		HorizontalPanel operationsPanel;
 		operationsPanel = new HorizontalPanel();
 		operationsPanel.setSpacing(5);
@@ -353,6 +349,11 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		btnClose.setEnabled(true);
 		operationsPanel.add(btnClose);
 
+		// Set tab order
+		setTabOrder(dateBox, allPlacesListBox, landingPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox,
+				    registrationGliderBox, towplanePilotNameBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox, 
+				    saveButton, discardButton, btnClose);
+		
 		loadYears();
 
 		loadAllPlaces();
