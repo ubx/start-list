@@ -90,8 +90,8 @@ public class OlcImportMain {
 				modifiedFlightEntries.add(newFlightEntry);
 			} else {
 				for (FlightEntry storedFlightEntry : storedFlightEntries) {
-					if (!modifiedFlightEntries.contains(storedFlightEntry) & samePilot(newFlightEntry, storedFlightEntry)
-							& samePlane(newFlightEntry, storedFlightEntry)) {
+					if (!modifiedFlightEntries.contains(storedFlightEntry) & (samePilot(newFlightEntry, storedFlightEntry)
+							| samePlane(newFlightEntry, storedFlightEntry))) {
 						// 1:
 						if (!storedFlightEntry.isStartTimeValid() & !storedFlightEntry.isEndTimeGliderValid()) {
 							storedFlightEntry.setStartTimeInMillis(newFlightEntry.getStartTimeInMillis());
