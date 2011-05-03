@@ -47,15 +47,37 @@ public class OlcImportMain {
 	}
 
 	/**
-	 * Merge new FlightEntries with uncompleted FlightEntries in data store. If merge is not possible the new FlightEntry is added to the data store.
-	 * Conditions: 1) Date and place are the same. 2) New FlightEntries are complete and therefore used only once for a merge or add operation. 3) A
-	 * modification of a FlightEntry from data store is done only by one new FlightEntry. Merge:
+	 * Merge new FlightEntries with uncompleted FlightEntries in data store. If merge is not possible the new FlightEntry is added to the data store. <code>
+	 * Conditions: 1) Date and place are the same.
+	 *             2) New FlightEntries are complete and therefore used only once for a merge or add operation.
+	 *             3) A modification of a FlightEntry from data store is done only by one new FlightEntry. Merge rules:
+	 *           
+	 *       OLC flight:           +==============+
+	 *  Manual flight 1:         ==|==============|====                 copy start and end
+	 *                2:        +==|==============|==                   copy end
+	 *                3:           |  +=========  |                     copy end
+	 *                4:        ===|============+ |                     copy start
+	 *                5:        ===|==============|======+              copy start
+	 *                6:           |  +===========|==+                  ignore
+	 *                7:        +==|========+     |                     ignore
+	 *                8:        +==|==============|===+                 ignore
+	 *                9:           |              |  +========+         add
+	 *               10:  +=====+  |              |                     add
+	 * 
+	 *            Key: + defined start/end
+	 *                 = open start/end
+	 *                 | start/end OLC flight
+	 *            
+	 *            </code> * 7: +==|==============|===+ do nothing
+	 * 
 	 * 
 	 * @param flightEntries
 	 *            Contains new complete FlightEntries of the same place and year.
 	 */
 	private static List<FlightEntry> mergeAddFlightEntries(List<FlightEntry> flightEntries) {
+
 		List<FlightEntry> modifiedFlightEntries = new ArrayList<FlightEntry>();
+		List<FlightEntry> usedNewFlightEntries = new ArrayList<FlightEntry>();
 
 		// eliminate duplicates!
 		Set<FlightEntry> newFlightEntries = new TreeSet<FlightEntry>(flightEntries);
@@ -68,43 +90,54 @@ public class OlcImportMain {
 				modifiedFlightEntries.add(newFlightEntry);
 			} else {
 				for (FlightEntry storedFlightEntry : storedFlightEntries) {
-					if (!modifiedFlightEntries.contains(storedFlightEntry)) {
-						boolean samePilot = samePilot(newFlightEntry, storedFlightEntry);
-						boolean samePlane = samePlane(newFlightEntry, storedFlightEntry);
-						boolean sameStart = sameStartTime(newFlightEntry, storedFlightEntry);
-						boolean sameEnd = sameEndTime(newFlightEntry, storedFlightEntry);
-						if (samePilot & samePlane & !storedFlightEntry.isStartTimeValid() & !storedFlightEntry.isEndTimeGliderValid()) {
-							storedFlightEntry.setEndTimeGliderInMillis(newFlightEntry.getEndTimeGliderInMillis());
-							storedFlightEntry.setEndTimeGliderValid(true);
-							modifiedFlightEntries.add(storedFlightEntry);
-						} else if (samePilot & samePlane & sameStart & !sameEnd) {
-							storedFlightEntry.setEndTimeGliderInMillis(newFlightEntry.getEndTimeGliderInMillis());
-							storedFlightEntry.setEndTimeGliderValid(true);
-							modifiedFlightEntries.add(storedFlightEntry);
-						} else if (samePilot & samePlane & !sameStart & sameEnd) {
+					if (!modifiedFlightEntries.contains(storedFlightEntry) & (samePilot(newFlightEntry, storedFlightEntry)
+							| samePlane(newFlightEntry, storedFlightEntry))) {
+						// 1:
+						if (!storedFlightEntry.isStartTimeValid() & !storedFlightEntry.isEndTimeGliderValid()) {
 							storedFlightEntry.setStartTimeInMillis(newFlightEntry.getStartTimeInMillis());
-							storedFlightEntry.setStartTimeValid(true);
+							storedFlightEntry.setEndTimeGliderInMillis(newFlightEntry.getEndTimeGliderInMillis());
 							modifiedFlightEntries.add(storedFlightEntry);
-						} else if (samePilot & !samePlane & sameStart & sameEnd) {
-							storedFlightEntry.setRegistrationGlider(newFlightEntry.getRegistrationGlider());
+							usedNewFlightEntries.add(newFlightEntry);
+							log.log(Level.INFO, "Merge 1:  Pilot: " + storedFlightEntry.getPilot() + " ,Plane: " + storedFlightEntry.getRegistrationGlider());
+						}
+						// 2+3:
+						else if (!storedFlightEntry.isEndTimeGliderValid()
+								& storedFlightEntry.getStartTimeInMillis() < newFlightEntry.getEndTimeGliderInMillis()) {
+							storedFlightEntry.setEndTimeGliderInMillis(newFlightEntry.getEndTimeGliderInMillis());
 							modifiedFlightEntries.add(storedFlightEntry);
-						} else if (!samePilot & samePlane & sameStart & sameEnd) {
-							storedFlightEntry.setPilot(newFlightEntry.getPilot());
+							usedNewFlightEntries.add(newFlightEntry);
+							log.log(Level.INFO, "Merge 2+3:  Pilot: " + storedFlightEntry.getPilot() + " ,Plane: " + storedFlightEntry.getRegistrationGlider());
+						}
+						// 4+5:
+						else if (!storedFlightEntry.isStartTimeValid() & storedFlightEntry.getEndTimeGliderInMillis() > newFlightEntry.getStartTimeInMillis()) {
+							storedFlightEntry.setStartTimeInMillis(newFlightEntry.getStartTimeInMillis());
 							modifiedFlightEntries.add(storedFlightEntry);
-						} else {
-							if (!modifiedFlightEntries.contains(newFlightEntry)) {
-								modifiedFlightEntries.add(newFlightEntry);
-							}
+							usedNewFlightEntries.add(newFlightEntry);
+							log.log(Level.INFO, "Merge 4+5:  Pilot: " + storedFlightEntry.getPilot() + " ,Plane: " + storedFlightEntry.getRegistrationGlider());
+						}
+						// 6..8:
+						else if (!(storedFlightEntry.getEndTimeGliderInMillis() < newFlightEntry.getStartTimeInMillis() & storedFlightEntry
+								.getStartTimeInMillis() > newFlightEntry.getEndTimeGliderInMillis())) {
+							usedNewFlightEntries.add(newFlightEntry);
+							log.log(Level.INFO, "Merge 6..8:  Pilot: " + storedFlightEntry.getPilot() + " ,Plane: " + storedFlightEntry.getRegistrationGlider());
+
+						} // 9+10:
+						else if (!modifiedFlightEntries.contains(newFlightEntry)) {
+							modifiedFlightEntries.add(newFlightEntry);
+							log.log(Level.INFO, "Merge 9+10:  Pilot: " + newFlightEntry.getPilot() + " ,Plane: " + newFlightEntry.getRegistrationGlider());
 						}
 					}
+				}
+				if (!usedNewFlightEntries.contains(newFlightEntry)) {
+					modifiedFlightEntries.add(newFlightEntry);
 				}
 			}
 		}
 		flightEntryDAO.addFlightEntries(modifiedFlightEntries);
-		final SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		final SimpleDateFormat timeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm z");
 		for (FlightEntry flightEntry : modifiedFlightEntries) {
-			log.log(Level.INFO, "Place: " + flightEntry.getPlace() + " Start: " + timeFormat.format(new Date(flightEntry.getStartTimeInMillis())));
-
+			log.log(Level.INFO, "Place: " + flightEntry.getPlace() + " ,Start: " + timeFormat.format(new Date(flightEntry.getStartTimeInMillis()))
+					+ " ,Pilot: " + flightEntry.getPilot() + " ,Plane: " + flightEntry.getRegistrationGlider());
 		}
 		return modifiedFlightEntries;
 	}
@@ -132,20 +165,6 @@ public class OlcImportMain {
 			if (name0.equalsIgnoreCase(name1)) {
 				return true;
 			}
-		}
-		return false;
-	}
-
-	private static boolean sameStartTime(FlightEntry fe0, FlightEntry fe1) {
-		if (fe0.isStartTimeValid() && fe1.isStartTimeValid()) {
-			return fe0.getStartTimeInMillis() == fe1.getStartTimeInMillis();
-		}
-		return false;
-	}
-
-	private static boolean sameEndTime(FlightEntry fe0, FlightEntry fe1) {
-		if (fe0.isEndTimeGliderValid() && fe1.isEndTimeGliderValid()) {
-			return fe0.getEndTimeGliderInMillis() == fe1.getEndTimeGliderInMillis();
 		}
 		return false;
 	}

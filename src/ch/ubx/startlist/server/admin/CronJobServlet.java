@@ -3,6 +3,7 @@ package ch.ubx.startlist.server.admin;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,7 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 		log.log(Level.INFO, req.getRequestURI());
 
 		Calendar now = Calendar.getInstance();
-		
+
 		// For testing, the now parameter sets the time!
 		String nowStr = req.getParameter("now");
 		if (nowStr != null) {
@@ -50,11 +51,13 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 
 		// Get all expired (or not yet initialized, i.e. timeInMillis == 0).
 		List<PeriodicJob> periodicJobs = periodicJobDAO.listExpiredPeriodicJob(now.getTimeInMillis());
+		List<PeriodicJob> periodicJobsMod = new ArrayList<PeriodicJob>();
 
 		// Adjust all with timeInMillis == 0
 		for (PeriodicJob periodicJob : periodicJobs) {
 			if (periodicJob.getNextTimeInMillis() == 0) {
 				adjustTimeInMillis(periodicJob, now);
+				periodicJobsMod.add(periodicJob);
 			}
 		}
 
@@ -63,16 +66,20 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 			if (periodicJob.getNextTimeInMillis() <= now.getTimeInMillis()) {
 				OLCImporter.doImport(periodicJob.getImportOLCJobList());
 				ExcelSender.doSend(periodicJob.getSendExcelJobList(), now);
+				adjustTimeInMillis(periodicJob, now);
+				periodicJobsMod.add(periodicJob);
 			}
 		}
 
-		// Adjust all timeInMillis for next execution
-		for (PeriodicJob periodicJob : periodicJobs) {
-			adjustTimeInMillis(periodicJob, now);
-		}
+		// // Adjust all timeInMillis for next execution
+		// for (PeriodicJob periodicJob : periodicJobs) {
+		// adjustTimeInMillis(periodicJob, now);
+		// }
 
 		// Update all
-		periodicJobDAO.updatePeriodicJobs(periodicJobs);
+		if (periodicJobsMod.size() > 0) {
+			periodicJobDAO.updatePeriodicJobs(periodicJobs);
+		}
 	}
 
 	protected void adjustTimeInMillis(PeriodicJob periodicJob, Calendar now) {
@@ -93,14 +100,16 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 		Calendar nextTime = Calendar.getInstance();
 		nextTime.setTimeZone(timeFormat.getTimeZone());
 		nextTime.setTime(time);
-		nextTime.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE));
+		nextTime.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
 
 		int curDayOfWeek = nextTime.get(Calendar.DAY_OF_WEEK) - 1; // Start with 0
 		boolean days[] = periodicJob.getDays();
 		for (int i = curDayOfWeek; i < days.length * 2; i++) {
 			int daysToAdd = i - curDayOfWeek;
 			if (days[i % days.length]) {
-				if (daysToAdd > 0 || periodicJob.getNextTimeInMillis() == 0) {
+				// TODO -- this is a temporary solution:
+				// NOTE: we assume here that the periodic jobs run on a hourly basis, so we do nothing an hour before midnight!!
+				if (daysToAdd > 0 || periodicJob.getNextTimeInMillis() == 0 || nextTime.get(Calendar.HOUR_OF_DAY) == 23) {
 					nextTime.add(Calendar.DATE, daysToAdd);
 					periodicJob.setNextTimeInMillis(nextTime.getTimeInMillis());
 					log.log(Level.INFO, "Next day(DAY_OF_WEEK)=" + nextTime.get(Calendar.DAY_OF_WEEK));

@@ -7,19 +7,19 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import ch.ubx.startlist.client.AirfieldServiceDelegate;
-import ch.ubx.startlist.client.PilotServiceDelegate;
 import ch.ubx.startlist.client.FlightEntryListeProvider;
 import ch.ubx.startlist.client.FlightEntryServiceDelegate;
 import ch.ubx.startlist.client.GwtUtil;
 import ch.ubx.startlist.client.LoginServiceDelegate;
-import ch.ubx.startlist.client.RowSelectionHandler;
+import ch.ubx.startlist.client.PilotServiceDelegate;
 import ch.ubx.startlist.client.RowDoubleclickHandler;
+import ch.ubx.startlist.client.RowSelectionHandler;
 import ch.ubx.startlist.client.TimeFormat;
 import ch.ubx.startlist.client.admin.ui.AdminGUI;
 import ch.ubx.startlist.shared.Airfield;
-import ch.ubx.startlist.shared.Pilot;
 import ch.ubx.startlist.shared.FlightEntry;
 import ch.ubx.startlist.shared.LoginInfo;
+import ch.ubx.startlist.shared.Pilot;
 import ch.ubx.startlist.shared.TextConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -118,8 +118,12 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 	private AdminGUI adminGUI;
 	private FlightEntry lastflightEntry;
 	
-	// Get prefered place from url. If not defined null
+	// Get preferred place from url. If not defined null
 	private String prefPlace = Window.Location.getParameter("place");
+	
+	// Get the current version
+	//private String version = SystemProperty.version.get(); // TODO -- display somewhere on screen.
+
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -142,6 +146,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		RootPanel.get(STATUS_ROOT_PANEL).add(statusPanel, 10, 100);
 		status = new Label();
 		statusPanel.add(status);
+		
+		//statusPanel.add(new Label(version)); // TODO -- ???
 
 		stackPanel = new StackPanel();
 		RootPanel.get(STACK_ROOT_PANEL).add(stackPanel, 10, 130);
@@ -325,10 +331,6 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		flightEntryFlexTable.setWidget(4, 1, remarksTextBox);
 		flightEntryFlexTable.getFlexCellFormatter().setColSpan(4, 1, 5);// TODO - does not work?
 
-		// Set tab order
-		setTabOrder(dateBox, allPlacesListBox, landingPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox,
-				registrationGliderBox, towplanePilotNameBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox);
-
 		HorizontalPanel operationsPanel;
 		operationsPanel = new HorizontalPanel();
 		operationsPanel.setSpacing(5);
@@ -346,6 +348,11 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		btnClose.setEnabled(true);
 		operationsPanel.add(btnClose);
 
+		// Set tab order
+		setTabOrder(dateBox, allPlacesListBox, landingPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox,
+				    registrationGliderBox, towplanePilotNameBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox, 
+				    saveButton, discardButton, btnClose);
+		
 		loadYears();
 
 		loadAllPlaces();
