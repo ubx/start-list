@@ -29,7 +29,7 @@ public class ExcelSheet implements TextConstants {
 
 	private static final int[] columnswidth = new int[] { 10, 18, 18, 18, 15, 18, 18, 18, 18, 15, 18, 20, 20, 6, 60 };
 
-	private static final String TXT_COLUMN_LANDING_TIME_GLIDER = "H";
+	private static final String TXT_COLUMN_LANDING_TIME_GLIDER = "I";
 	private static final String TXT_COLUMN_LANDING_TIME_TOWPLANE = "D";
 	private static final String TXT_COLUMN_START_TIME = "C";
 
