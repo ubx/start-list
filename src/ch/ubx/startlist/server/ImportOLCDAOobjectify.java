@@ -3,12 +3,11 @@ package ch.ubx.startlist.server;
 import java.util.List;
 import java.util.Map;
 
+import ch.ubx.startlist.shared.ImportOLC;
+
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
-
-import ch.ubx.startlist.shared.ImportOLC;
-import ch.ubx.startlist.shared.SendExcel;
 
 public class ImportOLCDAOobjectify implements ImportOLCDAO {
 
