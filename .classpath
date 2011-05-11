@@ -17,16 +17,11 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/auth.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/baseViewerImpl.jar"/>
+	<classpathentry kind="lib" path="lib/httpunit.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api-labs.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api-stubs.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-local-runtime.jar"/>
+	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-local-runtime.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/testing/appengine-testing.jar"/>
-	<classpathentry kind="lib" path="lib/httpunit.jar"/>
-	<classpathentry kind="lib" path="C:/eclipsehome/3.6/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.0.r36v201105092302/appengine-java-sdk-1.5.0/lib/user/appengine-api-1.0-sdk-1.5.0.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/eclipsehome/3.6/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.4.3.r36v201104261928/appengine-java-sdk-1.4.3/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
