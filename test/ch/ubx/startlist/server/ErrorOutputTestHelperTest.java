@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 public class ErrorOutputTestHelperTest {
 

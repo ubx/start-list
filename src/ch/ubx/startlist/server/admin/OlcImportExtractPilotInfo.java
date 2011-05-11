@@ -21,7 +21,7 @@ import net.sf.jsr107cache.CacheFactory;
 import net.sf.jsr107cache.CacheManager;
 import ch.ubx.startlist.shared.FlightEntry;
 
-import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
+import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
 
 public class OlcImportExtractPilotInfo {
 
@@ -39,7 +39,7 @@ public class OlcImportExtractPilotInfo {
 	public OlcImportExtractPilotInfo(List<FlightEntry> storedFlightEntries) {
 		this.storedFlightEntries = new ArrayList<FlightEntry>(storedFlightEntries);
 
-		Map<String, Integer> props = new HashMap<String, Integer>();
+		Map<Integer, Integer> props = new HashMap<Integer, Integer>();
 		props.put(GCacheFactory.EXPIRATION_DELTA, 600); // 600 seconds
 		try {
 			CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
