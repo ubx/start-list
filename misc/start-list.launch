@@ -13,7 +13,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gwt.eclipse.core.moduleClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.DevMode"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -logLevel INFO -codeServerPort 9997 -port 8888 -war &quot;C:\Documents and Settings\Andreas\workspace7\start-list\war&quot; -server com.google.appengine.tools.development.gwt.AppEngineLauncher ch.ubx.startlist.StartList"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -logLevel INFO -codeServerPort 9997 -port 8888 -war &quot;C:\Documents and Settings\Andreas\workspace6\start-list\war&quot; -server com.google.appengine.tools.development.gwt.AppEngineLauncher ch.ubx.startlist.StartList"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="start-list"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -javaagent:C:\eclipsehome\3.6\eclipse\plugins\com.google.appengine.eclipse.sdkbundle_1.5.0.r36v201105092302\appengine-java-sdk-1.5.0\lib\agent\appengine-agent.jar"/>
 </launchConfiguration>
