@@ -23,6 +23,5 @@
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-local-runtime.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/testing/appengine-testing.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
