@@ -630,8 +630,9 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			enablePilotFields(true);
 			flightEntryDialogBox.setTitle(TXT_TITLE_MODIFY_FLIGHT);
 			flightEntryDialogBox.setHTML(TXT_MODIFY_FLIGHT);
-			flightEntryDialogBox.setPopupPosition(modifyButton.getAbsoluteLeft() + modifyButton.getOffsetWidth(), modifyButton.getAbsoluteTop()
-					- flightEntryDialogBox.getOffsetHeight() - 20);
+			flightEntryDialogBox.setPopupPosition(modifyButton.getAbsoluteLeft() + modifyButton.getOffsetWidth(),
+					modifyButton.getAbsoluteTop() - flightEntryDialogBox.getOffsetHeight() - 260);
+			
 			flightEntryDialogBox.setWidth("800px");
 			flightEntryDialogBox.show();
 
@@ -684,7 +685,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		flightEntryDialogBox.setTitle(TXT_TITLE_CREATE_NEW_FLIGHT);
 		flightEntryDialogBox.setText(TXT_CREATE_NEW_FLIGHT);
 		flightEntryDialogBox.setPopupPosition(newButton.getAbsoluteLeft() + newButton.getOffsetWidth(),
-				newButton.getAbsoluteTop() - flightEntryDialogBox.getOffsetHeight() - 20);
+				newButton.getAbsoluteTop() - flightEntryDialogBox.getOffsetHeight() - 260);
 		flightEntryDialogBox.setWidth("800px");
 		flightEntryDialogBox.show();
 		startDateBox.setFocus(true);
