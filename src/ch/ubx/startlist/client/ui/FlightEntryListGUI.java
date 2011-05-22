@@ -184,6 +184,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		datePanel.add(lblDatum);
 
 		prevDayPushButton = new Button(TXT_PREV);
+		prevDayPushButton.setText("<");
 		datePanel.add(prevDayPushButton);
 
 		dateListBox = new ListBox();
