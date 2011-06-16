@@ -511,13 +511,14 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
 		// Get date from current selected
 		Date date = new Date(strToDate.get(dateListBox.getItemText(dateListBox.getSelectedIndex())));
-		dateBox.setValue(date);
 		if (flightEntry.isStartTimeValid()) {
 			date.setTime(flightEntry.getStartTimeInMillis());
 			startDateBox.setValue(date);
+			dateBox.setValue(date);
 		} else {
 			Date dateNow = new Date();
 			startDateBox.setValue(dateNow);
+			dateBox.setValue(dateNow);
 		}
 		if (flightEntry.isEndTimeGliderValid()) {
 			date.setTime(flightEntry.getEndTimeGliderInMillis());
