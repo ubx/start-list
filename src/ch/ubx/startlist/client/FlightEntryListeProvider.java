@@ -89,12 +89,12 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
 			Date date = new Date();
 			if (flightEntry.isStartTimeValid()) {
 				date.setTime(flightEntry.getStartTimeInMillis());
-				rows[i][COL_START_TIME] = TIME_FORMAT.format(date);
+				rows[i][COL_START_TIME] = TIME_FORMAT_TABLE.format(date);
 			}
 			
 			if (flightEntry.isEndTimeTowplaneValid()) {
 				date.setTime(flightEntry.getEndTimeTowplaneInMillis());
-				rows[i][COL_LDG_TIME_TOWPLANE] = TIME_FORMAT.format(date);
+				rows[i][COL_LDG_TIME_TOWPLANE] = TIME_FORMAT_TABLE.format(date);
 			}
 			
 			if (flightEntry.isStartTimeValid() && flightEntry.isEndTimeTowplaneValid()) {
@@ -108,7 +108,7 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
 			
 			if (flightEntry.isEndTimeGliderValid()) {
 				date.setTime(flightEntry.getEndTimeGliderInMillis());
-				rows[i][COL_LDG_TIME_GLIDER] = TIME_FORMAT.format(date);
+				rows[i][COL_LDG_TIME_GLIDER] = TIME_FORMAT_TABLE.format(date);
 			}
 			
 			if (flightEntry.isStartTimeValid() && flightEntry.isEndTimeGliderValid()) {

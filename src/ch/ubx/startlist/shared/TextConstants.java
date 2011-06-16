@@ -57,9 +57,9 @@ public interface TextConstants {
 	public static final String TXT_TRAINING = "Schulung";
 	public static final String TXT_VALIDATOR_OKBUTTON = "OK";
 	public static final String TXT_VALIDATOR_ERROR_DATE_IN_FUTURE = "Datum in der Zukunft!";	
-	public static final String TXT_VALIDATOR_ERROR_STARTTIME_FORMAT = "Startzeit format mm:ss sein!";	
-	public static final String TXT_VALIDATOR_ERROR_ENDTIME_GLIDER_FORMAT = "Landezeit Segelflugzeug format mm:ss sein!";	
-	public static final String TXT_VALIDATOR_ERROR_ENDTIME_TOWPLANE_FORMAT = "Landezeit Schleppflugzeug format mm:ss sein!";	
+	public static final String TXT_VALIDATOR_ERROR_STARTTIME_FORMAT = "Startzeit Format muss mmss sein (z.B. 1200)!";	
+	public static final String TXT_VALIDATOR_ERROR_ENDTIME_GLIDER_FORMAT = "Landezeit Segelflugzeug Format muss mmss sein (z.B. 1200)!";	
+	public static final String TXT_VALIDATOR_ERROR_ENDTIME_TOWPLANE_FORMAT = "Landezeit Schleppflugzeug Format muss mmss sein (z.B. 1200)!";	
 	public static final String TXT_VALIDATOR_ERROR_ENDTIME_GLIDER_BEFORE_STARTTIME = "Landezeit SF vor oder gleich Startzeit!";	
 	public static final String TXT_VALIDATOR_ERROR_ENDTIME_TOWPLANE_BEFORE_STARTTIME = "Landezeit Schlepper vor oder gleich Startzeit!";
 	public static final String TXT_VALIDATOR_ERROR_PILOT_LENGTH = "Piloten Name zu lang, maximum 32 Zeichen!";

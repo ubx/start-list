@@ -192,7 +192,10 @@ public class FlightEntryValidator implements TextConstants{
 		if (value.length() == 0) {
 			return true;
 		}
-		String[] mmss = value.split(":");
+		
+		String[] mmss = new String[2];
+		mmss[0] = value.substring(0, 2);
+		mmss[1] = value.substring(2, 4);
 		if (mmss.length == 2) {
 			int val;
 			for (String ms : mmss) {
@@ -201,12 +204,30 @@ public class FlightEntryValidator implements TextConstants{
 				} catch (Exception e) {
 					return false;
 				}
+				//TODO seems to be not necessary since "2261" is already converted to "2301" by DateBox?
 				if (val < 0 || val > 59) {
 					return false;
 				}
 			}
 			return true;
 		}
+
+		//TODO old check for format "MM:DD", save for later use		
+//		String[] mmss = value.split(":");
+//		if (mmss.length == 2) {
+//			int val;
+//			for (String ms : mmss) {
+//				try {
+//					val = Integer.parseInt(ms);
+//				} catch (Exception e) {
+//					return false;
+//				}
+//				if (val < 0 || val > 59) {
+//					return false;
+//				}
+//			}
+//			return true;
+//		}
 		return false;
 	}
 
