@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
-  <widgets xsi:type="model:Window" x="104" y="48" width="753" height="889" text="Admin" locked="true" measuredWidth="753" measuredHeight="889" verticalScrollbar="true"/>
+  <widgets xsi:type="model:Window" x="104" y="48" width="753" height="889" text="Admin" measuredWidth="753" measuredHeight="889" verticalScrollbar="true"/>
   <widgets xsi:type="model:Label" x="114" y="72" width="159" text="Olc2006 Airfields upload" measuredWidth="159" measuredHeight="24">
     <font/>
   </widgets>
@@ -53,7 +53,7 @@
     <font/>
   </widgets>
   <widgets xsi:type="model:Combo" x="312" y="311" text="Grenchen GLD&#xA;" measuredWidth="111" measuredHeight="24">
-    <font bold="false" italic="false"/>
+    <font/>
   </widgets>
   <widgets xsi:type="model:HLine" x="114" y="387" width="733" measuredWidth="733" measuredHeight="6"/>
   <widgets xsi:type="model:Label" x="114" y="395" text="Send Excel" measuredWidth="70" measuredHeight="24">
@@ -74,7 +74,7 @@
       <font/>
     </widgets>
   </widgets>
-  <widgets xsi:type="model:Table" x="114" y="418" width="591" height="120" text="Name,days,Gliders,Towplanes,Place           , ecipients,subject &#xA;SendToMrX,8,HB-3377;HB-1551,HB-WAR,,x.y@p.ch,Blable...&#xA;SendToMrY,2,HB-3274,HB-WAR,,x.y@p.ch,Blable...&#xA;" measuredWidth="591" measuredHeight="120" horizontalLines="true">
+  <widgets xsi:type="model:Table" x="114" y="418" width="591" height="120" text="Name,days,Gliders,Towplanes,Place           , ecipients,subject &#xA;SendToMrX,8,HB-3377;HB-1551,HB-WAR,,x.y@p.ch,Blable...&#xA;SendToMrY,2,HB-3274,HB-WAR,,x.y@p.ch,Blable...&#xA;" measuredWidth="591" measuredHeight="120">
     <font/>
   </widgets>
   <widgets xsi:type="model:Label" x="114" y="560" text="OLC Import" measuredWidth="73" measuredHeight="24">
@@ -91,7 +91,7 @@
       <font/>
     </widgets>
   </widgets>
-  <widgets xsi:type="model:Table" x="114" y="583" width="212" height="120" text="Name,place&#xA;Test1,Grenchen&#xA;Test2,Bellechasse&#xA;" measuredWidth="212" measuredHeight="120" horizontalLines="true">
+  <widgets xsi:type="model:Table" x="114" y="583" width="212" height="120" text="Name,place&#xA;Test1,Grenchen&#xA;Test2,Bellechasse&#xA;" measuredWidth="212" measuredHeight="120">
     <font/>
   </widgets>
   <widgets xsi:type="model:HLine" x="114" y="722" width="733" measuredWidth="733" measuredHeight="6"/>
@@ -107,7 +107,7 @@
   <widgets xsi:type="model:Combo" x="477" y="463" width="82" text="Bellechasse" measuredWidth="82" measuredHeight="24">
     <font/>
   </widgets>
-  <widgets xsi:type="model:Table" x="114" y="756" width="591" height="138" text="Name,Job          ,Time,Days,Enabe&#xA;Late, ,19:30,Mo Di Mi Do Fr Sa So,[x]&#xA;Mn,,22:00,Di Mi Do Fr Sa So,[x]&#xA;Sleep,,02:00,Di Mi Do Fr Sa So,[]&#xA;" measuredWidth="591" measuredHeight="138" horizontalLines="true">
+  <widgets xsi:type="model:Table" x="114" y="756" width="591" height="138" text="Name,Job          ,Time,Days,Enabe&#xA;Late, ,19:30,Mo Di Mi Do Fr Sa So,[x]&#xA;Mn,,22:00,Di Mi Do Fr Sa So,[x]&#xA;Sleep,,02:00,Di Mi Do Fr Sa So,[]&#xA;" measuredWidth="591" measuredHeight="138">
     <font/>
   </widgets>
   <widgets xsi:type="model:WidgetGroup" x="190" y="780" measuredWidth="114" measuredHeight="67">
