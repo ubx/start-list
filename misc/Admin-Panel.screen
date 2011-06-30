@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Window" x="104" y="48" width="753" height="889" text="Admin" locked="true" measuredWidth="753" measuredHeight="889" verticalScrollbar="true"/>
+  <widgets xsi:type="model:Label" x="114" y="72" width="159" text="Olc2006 Airfields upload" measuredWidth="159" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Rectangle" x="114" y="98" width="185" height="33" measuredWidth="185" measuredHeight="33">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" x="312" y="102" text="Browse..." measuredWidth="74" measuredHeight="26">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" x="419" y="102" width="62" text="Analyze" measuredWidth="62" measuredHeight="26">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" x="504" y="103" text="Countries" measuredWidth="82" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:List" x="114" y="144" width="137" height="33" text="[x] Erase all airfields before upload&#xA;" measuredWidth="137" measuredHeight="33" border="false" alpha="0">
+    <font/>
+    <items x="0" y="2" width="137" height="22" text="[x] Erase all airfields before upload"/>
+  </widgets>
+  <widgets xsi:type="model:Button" x="312" y="145" text="Store" measuredWidth="52" measuredHeight="26">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="419" y="146" text="Status:" measuredWidth="46" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" x="114" y="183" width="733" measuredWidth="733" measuredHeight="6"/>
+  <widgets xsi:type="model:Label" x="114" y="193" text="Create Excel" measuredWidth="79" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" x="250" y="226" text="Excel" measuredWidth="35" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" x="114" y="226" text="2011" measuredWidth="56" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" x="114" y="268" width="733" measuredWidth="733" measuredHeight="6"/>
+  <widgets xsi:type="model:Combo" x="114" y="311" text="2011" measuredWidth="56" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="114" y="274" text="Import from OLC" measuredWidth="105" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" x="114" y="346" text="Import" measuredWidth="61" measuredHeight="26">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="250" y="311" text="Airfield" measuredWidth="50" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="250" y="347" text="Status: " measuredWidth="49" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" x="312" y="311" text="Grenchen GLD&#xA;" measuredWidth="111" measuredHeight="24">
+    <font bold="false" italic="false"/>
+  </widgets>
+  <widgets xsi:type="model:HLine" x="114" y="387" width="733" measuredWidth="733" measuredHeight="6"/>
+  <widgets xsi:type="model:Label" x="114" y="395" text="Send Excel" measuredWidth="70" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" x="114" y="551" width="733" measuredWidth="733" measuredHeight="6"/>
+  <widgets xsi:type="model:Label" x="114" y="731" width="56" text="Schedule" measuredWidth="56" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" x="718" y="440" measuredWidth="60" measuredHeight="98">
+    <widgets xsi:type="model:Button" text="New.." measuredWidth="53" measuredHeight="26">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Button" y="37" text="Edit.." measuredWidth="50" measuredHeight="26">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Button" y="72" text="Delete" measuredWidth="60" measuredHeight="26">
+      <font/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:Table" x="114" y="418" width="591" height="120" text="Name,days,Gliders,Towplanes,Place           , ecipients,subject &#xA;SendToMrX,8,HB-3377;HB-1551,HB-WAR,,x.y@p.ch,Blable...&#xA;SendToMrY,2,HB-3274,HB-WAR,,x.y@p.ch,Blable...&#xA;" measuredWidth="591" measuredHeight="120" horizontalLines="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="114" y="560" text="OLC Import" measuredWidth="73" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" x="335" y="605" measuredWidth="60" measuredHeight="98">
+    <widgets xsi:type="model:Button" text="New.." measuredWidth="53" measuredHeight="26">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Button" y="37" text="Edit.." measuredWidth="50" measuredHeight="26">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Button" y="72" text="Delete" measuredWidth="60" measuredHeight="26">
+      <font/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:Table" x="114" y="583" width="212" height="120" text="Name,place&#xA;Test1,Grenchen&#xA;Test2,Bellechasse&#xA;" measuredWidth="212" measuredHeight="120" horizontalLines="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" x="114" y="722" width="733" measuredWidth="733" measuredHeight="6"/>
+  <widgets xsi:type="model:Combo" x="190" y="605" width="134" text="Grenchen" measuredWidth="134" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" x="190" y="631" width="134" text="Bellechasse" measuredWidth="134" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" x="477" y="440" width="81" text="Grenchen" measuredWidth="81" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" x="477" y="463" width="82" text="Bellechasse" measuredWidth="82" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" x="114" y="756" width="591" height="138" text="Name,Job          ,Time,Days,Enabe&#xA;Late, ,19:30,Mo Di Mi Do Fr Sa So,[x]&#xA;Mn,,22:00,Di Mi Do Fr Sa So,[x]&#xA;Sleep,,02:00,Di Mi Do Fr Sa So,[]&#xA;" measuredWidth="591" measuredHeight="138" horizontalLines="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" x="190" y="780" measuredWidth="114" measuredHeight="67">
+    <widgets xsi:type="model:Combo" width="114" text="Test1&#xA;" measuredWidth="114" measuredHeight="24">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Combo" y="20" width="114" text="SendToMrX" measuredWidth="114" measuredHeight="24">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Combo" x="1" y="43" width="112" text="SendToMrY" measuredWidth="112" measuredHeight="24">
+      <font/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" x="712" y="780" measuredWidth="60" measuredHeight="98">
+    <widgets xsi:type="model:Button" text="New.." measuredWidth="53" measuredHeight="26">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Button" y="37" text="Edit.." measuredWidth="50" measuredHeight="26">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Button" y="72" text="Delete" measuredWidth="60" measuredHeight="26">
+      <font/>
+    </widgets>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>
