@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+<<<<<<< HEAD
   <widgets xsi:type="model:Window" x="104" y="48" width="753" height="889" text="Admin" locked="true" measuredWidth="753" measuredHeight="889" verticalScrollbar="true"/>
   <widgets xsi:type="model:Label" x="114" y="72" width="159" text="Olc2006 Airfields upload" measuredWidth="159" measuredHeight="24">
     <font/>
@@ -132,6 +133,64 @@
       <font/>
     </widgets>
   </widgets>
+=======
+  <widgets xsi:type="model:Window" x="104" y="48" width="601" height="697" text="Admin" measuredWidth="601" measuredHeight="697"/>
+  <widgets xsi:type="model:Label" x="114" y="80" width="159" text="Olc2006 Airfields upload" measuredWidth="159" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Rectangle" x="114" y="117" width="185" height="33" measuredWidth="185" measuredHeight="33">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" x="312" y="121" text="Browse..." measuredWidth="74" measuredHeight="26">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" x="419" y="121" width="62" text="Analyze" measuredWidth="62" measuredHeight="26">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" x="504" y="122" text="Countries" measuredWidth="82" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:List" x="114" y="160" width="137" height="33" text="[x] Erase all airfields before upload&#xA;" measuredWidth="137" measuredHeight="33" border="false" alpha="0">
+    <font/>
+    <items x="0" y="2" width="137" height="22" text="[x] Erase all airfields before upload"/>
+  </widgets>
+  <widgets xsi:type="model:Button" x="312" y="164" text="Store" measuredWidth="52" measuredHeight="26">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="419" y="165" text="Status:" measuredWidth="46" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" x="114" y="200" width="581" measuredWidth="581" measuredHeight="6"/>
+  <widgets xsi:type="model:Label" x="114" y="224" text="Create Excel" measuredWidth="79" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" x="250" y="257" text="Excel" measuredWidth="35" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" x="114" y="257" text="2011" measuredWidth="56" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" x="114" y="302" width="581" measuredWidth="581" measuredHeight="6"/>
+  <widgets xsi:type="model:Combo" x="114" y="349" text="2011" measuredWidth="56" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="114" y="320" text="Import from OLC" measuredWidth="105" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" x="114" y="384" text="Import" measuredWidth="61" measuredHeight="26">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="250" y="349" text="Airfield" measuredWidth="50" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="250" y="385" text="Status: " measuredWidth="49" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" x="312" y="349" text="Grenchen GLD&#xA;" measuredWidth="111" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" x="114" y="424" width="581" measuredWidth="581" measuredHeight="6"/>
+>>>>>>> branch 'v1.0.0' of https://ubx@github.com/ubx/start-list.git
   <hRuler/>
   <vRuler/>
   <font/>
