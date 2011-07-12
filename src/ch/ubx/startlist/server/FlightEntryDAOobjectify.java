@@ -30,9 +30,12 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	public FlightEntryDAOobjectify() {
 		userService = UserServiceFactory.getUserService();
 		currentUser = userService.getCurrentUser();
+		
 		// If we are called from a cron job, we need to create one!
+		// NOTE: for security reasons this should be done only if we running in a cron job!
+		// TODO - find a way to implement
 		if (currentUser == null) {
-			currentUser = new User("admin@" + SystemProperty.applicationId.get() + ".appspotmail.com", "gmail.com");
+			currentUser = new User("admin.cron@" + SystemProperty.applicationId.get() + ".appspotmail.com", "gmail.com");
 		}
 	}
 
