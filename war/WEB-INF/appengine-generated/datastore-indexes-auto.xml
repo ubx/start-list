@@ -1,4 +1,10 @@
-<!-- Indices written at Fri, 8 Jul 2011 18:17:09 UTC -->
+<!-- Indices written at Sun, 17 Jul 2011 14:22:18 UTC -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="FlightEntry" ancestor="false" source="auto">
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>
