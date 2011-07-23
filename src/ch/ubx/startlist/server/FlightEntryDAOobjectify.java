@@ -25,18 +25,11 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 
 	private LoginInfo loginInfo = null;
 	private UserService userService;
-	private User currentUser;
+	private User adminUser;
 
 	public FlightEntryDAOobjectify() {
 		userService = UserServiceFactory.getUserService();
-		currentUser = userService.getCurrentUser();
-
-		// If we are called from a cron job, we need to create one!
-		// NOTE: for security reasons this should be done only if we running in a cron job!
-		// TODO - find a way to implement
-		if (currentUser == null) {
-			currentUser = new User("admin.cron@" + SystemProperty.applicationId.get() + ".appspotmail.com", "gmail.com");
-		}
+		adminUser = new User("admin.cron@" + SystemProperty.applicationId.get() + ".appspotmail.com", "gmail.com");
 	}
 
 	/*
@@ -325,6 +318,13 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 	}
 
 	private void doPrePersist(FlightEntry flightEntry) {
+		User currentUser = userService.getCurrentUser();
+		// If we are called from a cron job, we need to create one!
+		// NOTE: for security reasons this should be done only if we running in a cron job!
+		// TODO - find a way to implement
+		if (currentUser == null) {
+			currentUser = adminUser;
+		}
 		flightEntry.setModifier(currentUser.getEmail());
 		flightEntry.setModified(System.currentTimeMillis());
 		if (flightEntry.getId() == null) {
