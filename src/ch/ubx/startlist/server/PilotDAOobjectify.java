@@ -8,8 +8,9 @@ import ch.ubx.startlist.shared.Pilot;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.helper.DAOBase;
 
-public class PilotDAOobjectify implements PilotDAO {
+public class PilotDAOobjectify extends DAOBase implements PilotDAO {
 
 	static {
 		ObjectifyService.register(Pilot.class);
@@ -17,14 +18,12 @@ public class PilotDAOobjectify implements PilotDAO {
 
 	@Override
 	public void addPilot(Pilot pilot) {
-		Objectify ofy = ObjectifyService.begin();
-		ofy.put(pilot);
+		ofy().put(pilot);
 	}
 
 	@Override
 	public Set<Pilot> getPilots() {
-		Objectify ofy = ObjectifyService.begin();
-		Query<Pilot> query = ofy.query(Pilot.class);
+		Query<Pilot> query = ofy().query(Pilot.class);
 		return new HashSet<Pilot>(query.list());
 	}
 
@@ -33,15 +32,13 @@ public class PilotDAOobjectify implements PilotDAO {
 
 	// TODO is this necessary?
 	public void deleteAllPilots() {
-		Objectify ofy = ObjectifyService.begin();
-		Query<Pilot> query = ofy.query(Pilot.class);
-		ofy.delete(query);
+		Query<Pilot> query = ofy().query(Pilot.class);
+		ofy().delete(query);
 	}
 
 	// TODO is this necessary?
 	public Pilot getPilot(String name) {
-		Objectify ofy = ObjectifyService.begin();
-		return ofy.get(Pilot.class, name);
+		return ofy().get(Pilot.class, name);
 	}
 
 }

@@ -128,7 +128,7 @@ CubicTest - http://boss.bekk.no/cubictest/update/
 
 ====================
 Delete index
-make sure app.yaml ist there an correct!
+make sure app.yaml is there an correct!
 http://groups.google.com/group/google-appengine-java/browse_thread/thread/c8a7888438efeb9/cdbaeb27befcfd75
 ~/google_appengine/appcfg.py vacuum_indexes ~/workspaces/ws3/start-list
 

@@ -39,17 +39,54 @@ public class FlightEntryDAOobjectifyTest {
 	public void testListflightEntryStringLongIntInt() {
 		Calendar now = Calendar.getInstance();
 		now.setTimeInMillis(TestUtil.parseTimeString("20.02.2011 19:30 utc").getTime());
-		createFlightEntries(now, 20000);
-		assertEquals(20000, flightEntryDAOobjectify.listflightEntry(now.get(Calendar.YEAR) - 100, now.get(Calendar.YEAR), PLACE).size());
+		final String[] places = new String[100];
+		for (int i = 0; i < places.length; i++) {
+			places[i] = "Place-" + i;
+		}
+		final int cnt = places.length * 1000;
+		createFlightEntries(now, cnt, places);
+		for (int i = 0; i < places.length; i++) {
+			assertEquals(cnt / places.length,
+					flightEntryDAOobjectify.listflightEntry(now.get(Calendar.YEAR) - 100, now.get(Calendar.YEAR), places[i]).size());
+		}
 	}
 
-	private void createFlightEntries(Calendar now, int size) {
-		final long oneDayMillies = 24 * 60 * 60 * 1000;
+	@Test
+	public void testListflightEntryCalendarString() {
+		Calendar now = Calendar.getInstance();
+		now.setTimeInMillis(TestUtil.parseTimeString("20.02.2011 19:30 utc").getTime());
+		final String[] places = new String[100];
+		for (int i = 0; i < places.length; i++) {
+			places[i] = "Place-" + i;
+		}
+		final int cnt = places.length * 1000;
+		createFlightEntries(now, cnt, places);
+		for (int i = 0; i < places.length; i++) {
+			assertEquals(cnt / places.length, flightEntryDAOobjectify.listflightEntry(now, places[i]).size());
+		}
+	}
+
+	@Test
+	public void testListflightEntryInt() {
+		Calendar now = Calendar.getInstance();
+		now.setTimeInMillis(TestUtil.parseTimeString("20.02.2011 19:30 utc").getTime());
+		final String[] places = new String[100];
+		for (int i = 0; i < places.length; i++) {
+			places[i] = "Place-" + i;
+		}
+		final int cnt = places.length * 1000;
+		createFlightEntries(now, cnt, places);
+		assertEquals(cnt, flightEntryDAOobjectify.listflightEntry(now.get(Calendar.YEAR)).size());
+
+	}
+
+	private void createFlightEntries(Calendar now, int size, String[] places) {
+		final long dayMillies = 1;
 		// NOTE: period max. one year!
 		List<FlightEntry> flightEntries = new ArrayList<FlightEntry>(size);
-		for (long l = 0; l < size; l++) {
-			long millies = now.getTimeInMillis() - (l * oneDayMillies);
-			FlightEntry fe = new FlightEntry(PILOT, millies, millies + 1, false, REMARKS, PLACE);
+		for (int l = 0; l < size; l++) {
+			long millies = now.getTimeInMillis() - (l * dayMillies);
+			FlightEntry fe = new FlightEntry(PILOT, millies, millies + 1, false, REMARKS, places[l % places.length]);
 			fe.setModified(now.getTimeInMillis());
 			flightEntries.add(fe);
 		}

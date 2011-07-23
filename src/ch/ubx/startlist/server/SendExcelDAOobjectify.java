@@ -5,11 +5,11 @@ import java.util.Map;
 
 import ch.ubx.startlist.shared.SendExcel;
 
-import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.helper.DAOBase;
 
-public class SendExcelDAOobjectify implements SendExcelDAO {
+public class SendExcelDAOobjectify extends DAOBase implements SendExcelDAO {
 
 	static {
 		ObjectifyService.register(SendExcel.class);
@@ -23,14 +23,12 @@ public class SendExcelDAOobjectify implements SendExcelDAO {
 
 	@Override
 	public void createOrUpdateSendExcel(SendExcel sendExcel) {
-		Objectify ofy = ObjectifyService.begin();
-		ofy.put(sendExcel);
+		ofy().put(sendExcel);
 	}
 
 	@Override
 	public List<SendExcel> listAllSendExcel() {
-		Objectify ofy = ObjectifyService.begin();
-		Query<SendExcel> query = ofy.query(SendExcel.class);
+		Query<SendExcel> query = ofy().query(SendExcel.class);
 		return query.list();
 	}
 	
@@ -38,8 +36,7 @@ public class SendExcelDAOobjectify implements SendExcelDAO {
 
 	@Override
 	public Map<String, SendExcel> listSendExcel(List<String> names) {
-		Objectify ofy = ObjectifyService.begin();
-		return ofy.get(SendExcel.class, names);
+		return ofy().get(SendExcel.class, names);
 	}
 
 

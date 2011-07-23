@@ -12,11 +12,11 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.utils.SystemProperty;
-import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.helper.DAOBase;
 
-public class FlightEntryDAOobjectify implements FlightEntryDAO {
+public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 
 	static {
 		ObjectifyService.register(FlightEntry.class);
@@ -30,7 +30,7 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	public FlightEntryDAOobjectify() {
 		userService = UserServiceFactory.getUserService();
 		currentUser = userService.getCurrentUser();
-		
+
 		// If we are called from a cron job, we need to create one!
 		// NOTE: for security reasons this should be done only if we running in a cron job!
 		// TODO - find a way to implement
@@ -64,8 +64,7 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	 */
 	@Override
 	public FlightEntry removeFlightEntry(FlightEntry flightEntry) {
-		Objectify ofy = ObjectifyService.begin();
-		ofy.delete(flightEntry);
+		ofy().delete(flightEntry);
 		return flightEntry;
 	}
 
@@ -77,9 +76,8 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 
 	@Override
 	public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry) {
-		Objectify ofy = ObjectifyService.begin();
 		doPrePersist(flightEntry);
-		ofy.put(flightEntry);
+		ofy().put(flightEntry);
 		return flightEntry;
 	}
 
@@ -129,9 +127,7 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	 */
 	@Override
 	public Set<Integer> listYears() {
-		Objectify ofy = ObjectifyService.begin();
-
-		List<FlightEntry> list = ofy.query(FlightEntry.class).list();
+		List<FlightEntry> list = ofy().query(FlightEntry.class).list();
 		Set<Integer> years = new TreeSet<Integer>();
 		Calendar cal = Calendar.getInstance();
 		for (FlightEntry flightEntry : list) {
@@ -154,8 +150,6 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	 */
 	@Override
 	public List<FlightEntry> listflightEntry(int year) {
-		Objectify ofy = ObjectifyService.begin();
-
 		Calendar yearStart = Calendar.getInstance();
 		yearStart.setTimeInMillis(0);
 		yearStart.set(Calendar.YEAR, year);
@@ -164,7 +158,7 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		yearEnd.setTimeInMillis(0);
 		yearEnd.set(Calendar.YEAR, year + 1);
 
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", yearStart.getTimeInMillis())
+		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("startTimeInMillis >=", yearStart.getTimeInMillis())
 				.filter("startTimeInMillis <", yearEnd.getTimeInMillis()).order("startTimeInMillis");
 
 		return query.list();
@@ -177,8 +171,6 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	 */
 	@Override
 	public List<FlightEntry> listflightEntry(Calendar date, String place) {
-		Objectify ofy = ObjectifyService.begin();
-
 		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
 		dateStart.setTimeInMillis(date.getTimeInMillis());
 		dateStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -189,15 +181,14 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		dateEnd.setTimeInMillis(dateStart.getTimeInMillis());
 		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
 
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
-				.filter("startTimeInMillis <", dateEnd.getTimeInMillis()).order("startTimeInMillis");
+		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place ==", place)
+				.filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <", dateEnd.getTimeInMillis())
+				.order("startTimeInMillis");
 		return query.list();
 	}
 
 	@Override
 	public List<FlightEntry> listflightEntry(Calendar startDate, Calendar endDate, String place) {
-		Objectify ofy = ObjectifyService.begin();
-
 		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
 		dateStart.setTimeInMillis(startDate.getTimeInMillis());
 		dateStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -207,8 +198,8 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 
 		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
 		dateEnd.setTimeInMillis(endDate.getTimeInMillis());
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
-				.filter("startTimeInMillis <=", dateEnd.getTimeInMillis());
+		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place", place)
+				.filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <=", dateEnd.getTimeInMillis());
 		return query.list();
 	}
 
@@ -219,7 +210,6 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	 */
 	@Override
 	public List<FlightEntry> listflightEntry(int year, int month, int day, String place) {
-		Objectify ofy = ObjectifyService.begin();
 		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
 		dateStart.setTimeInMillis(0);
 		dateStart.set(Calendar.YEAR, year);
@@ -232,7 +222,7 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		dateEnd.set(Calendar.MONTH, month);
 		dateEnd.set(Calendar.DAY_OF_MONTH, day);
 		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
 				.filter("startTimeInMillis <", dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
 		return query.list();
 
@@ -255,8 +245,6 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	 */
 	@Override
 	public List<FlightEntry> listflightEntry(int yearStart, int yearEnd, String place) {
-		Objectify ofy = ObjectifyService.begin();
-
 		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
 		dateStart.setTimeInMillis(0);
 		dateStart.set(Calendar.YEAR, yearStart);
@@ -267,7 +255,7 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 		dateEnd.set(Calendar.YEAR, yearEnd);
 		dateEnd.set(Calendar.DAY_OF_YEAR, 1);
 		dateEnd.add(Calendar.YEAR, 1);
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
 				.filter("startTimeInMillis <", dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
 		return query.list();
 	}
@@ -279,9 +267,8 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	 */
 	@Override
 	public void removeFlightEntries(String place, int source) {
-		Objectify ofy = ObjectifyService.begin();
-		Query<FlightEntry> query = ofy.query(FlightEntry.class).filter("place ==", place).filter("source ==", source);
-		ofy.delete(query);
+		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place ==", place).filter("source ==", source);
+		ofy().delete(query);
 	}
 
 	/*
@@ -292,11 +279,10 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	@Override
 	public void addFlightEntries(List<FlightEntry> flightEntries) {
 		if (flightEntries.size() > 0) {
-			Objectify ofy = ObjectifyService.begin();
 			for (FlightEntry flightEntry : flightEntries) {
 				doPrePersist(flightEntry);
 			}
-			ofy.put(flightEntries);
+			ofy().put(flightEntries);
 		}
 	}
 
@@ -309,8 +295,7 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 	 */
 	@Override
 	public void addFlightEntries4Test(List<FlightEntry> flightEntries) {
-		Objectify ofy = ObjectifyService.begin();
-		ofy.put(flightEntries);
+		ofy().put(flightEntries);
 	}
 
 	// --------------------------------------------------------------------------------------
@@ -325,12 +310,13 @@ public class FlightEntryDAOobjectify implements FlightEntryDAO {
 				modifiable = true;
 			} else {
 				if (loginInfo == null) {
-					Objectify ofy = ObjectifyService.begin();
-					loginInfo = ofy.find(LoginInfo.class, userService.getCurrentUser().getEmail());
+					loginInfo = ofy().find(LoginInfo.class, userService.getCurrentUser().getEmail());
 				}
 				if (loginInfo != null) {
-					modifiable = loginInfo.isCanModFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
-					deletable = loginInfo.isCanDelFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+					modifiable = loginInfo.isCanModFlightEntry()
+							|| userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+					deletable = loginInfo.isCanDelFlightEntry()
+							|| userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
 				}
 			}
 			flightEntry.setModifiable(modifiable);

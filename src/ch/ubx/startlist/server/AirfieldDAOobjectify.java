@@ -5,11 +5,11 @@ import java.util.Set;
 
 import ch.ubx.startlist.shared.Airfield;
 
-import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
+import com.googlecode.objectify.helper.DAOBase;
 
-public class AirfieldDAOobjectify implements AirfieldDAO {
+public class AirfieldDAOobjectify extends DAOBase implements AirfieldDAO {
 
 	static {
 		ObjectifyService.register(Airfield.class);
@@ -17,21 +17,18 @@ public class AirfieldDAOobjectify implements AirfieldDAO {
 
 	@Override
 	public void addAirfield(Airfield airfield) {
-		Objectify ofy = ObjectifyService.begin();
-		ofy.put(airfield);
+		ofy().put(airfield);
 	}
 
 	@Override
 	public void addAirfields(Set<Airfield> airfields) {
-		Objectify ofy = ObjectifyService.begin();
-		ofy.put(airfields);
+		ofy().put(airfields);
 
 	}
 
 	@Override
 	public Set<Airfield> getAirfields() {
-		Objectify ofy = ObjectifyService.begin();
-		Query<Airfield> query = ofy.query(Airfield.class);
+		Query<Airfield> query = ofy().query(Airfield.class);
 		return new HashSet<Airfield>(query.list());
 	}
 
@@ -39,14 +36,12 @@ public class AirfieldDAOobjectify implements AirfieldDAO {
 	// server internal access methods
 
 	public void deleteAllAirfields() {
-		Objectify ofy = ObjectifyService.begin();
-		Query<Airfield> query = ofy.query(Airfield.class);
-		ofy.delete(query);
+		Query<Airfield> query = ofy().query(Airfield.class);
+		ofy().delete(query);
 	}
 
 	public Airfield getAirfield(String name) {
-		Objectify ofy = ObjectifyService.begin();
-		return ofy.get(Airfield.class, name);
+		return ofy().get(Airfield.class, name);
 	}
 
 }
