@@ -256,17 +256,6 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see ch.ubx.startlist.server.X#removeFlightEntries(java.lang.String, int)
-	 */
-	@Override
-	public void removeFlightEntries(String place, int source) {
-		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place ==", place).filter("source ==", source);
-		ofy().delete(query);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see ch.ubx.startlist.server.X#addFlightEntries(java.util.List)
 	 */
 	@Override

@@ -236,4 +236,8 @@ public class HelloWorld implements Container {
 Refactoring PeriodicJob, SendExcel and ImportOLC using polymorphic:
 http://groups.google.com/group/objectify-appengine/msg/d26b40c7a8b1a89a
 
+===============================================================================================================
+JUnit test wit real data:
+http://code.google.com/appengine/forum/java-forum.html?place=topic%2Fgoogle-appengine-java%2F_1_8ChqYnww%2Fdiscussion
+http://stackoverflow.com/questions/4767918/acceptance-testing-preloading-of-data-into-gae-dev-server-datastore
 

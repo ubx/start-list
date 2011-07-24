@@ -18,7 +18,6 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 public class FlightEntryDAOobjectifyTest {
 
 	private static final String REMARKS = "blabla";
-	private static final String PLACE = "placeName";
 	private static final String PILOT = "pilot1";
 	private static final LocalDatastoreServiceTestConfig datastore = new LocalDatastoreServiceTestConfig();
 	private static final LocalServiceTestHelper helper = new LocalServiceTestHelper(datastore);
