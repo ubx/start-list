@@ -32,6 +32,11 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 		adminUser = new User("admin.cron@" + SystemProperty.applicationId.get() + ".appspotmail.com", "gmail.com");
 	}
 
+	@Override
+	public List<FlightEntry> listflightEntry() {
+		return ofy().query(FlightEntry.class).list();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -321,5 +326,6 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 			flightEntry.setCreated(flightEntry.getModified());
 		}
 	}
+
 
 }

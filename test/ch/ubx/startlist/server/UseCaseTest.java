@@ -2,13 +2,19 @@ package ch.ubx.startlist.server;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
+import javax.validation.constraints.AssertTrue;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -55,6 +61,8 @@ public class UseCaseTest {
 			assertEquals(x++, i);
 		}
 
+		List<FlightEntry> fesBefore = dao.listflightEntry();
+		assertEquals(3796, fesBefore.size());
 		assertEquals(2212, dao.listflightEntry(2011).size());
 		assertEquals(1578, dao.listflightEntry(2010).size());
 		assertEquals(6, dao.listflightEntry(2009).size());
@@ -72,6 +80,21 @@ public class UseCaseTest {
 
 		assertEquals(31, dao.listflightEntry(2011, 6, 2, "Grenchen Gld").size());
 		assertEquals(14, dao.listflightEntry(2011, 6, 9, "Grenchen Gld").size());
+
+		// do something
+
+		List<FlightEntry> fesAfter = dao.listflightEntry();
+		assertEquals(fesBefore.size(), fesAfter.size());
+
+		for (FlightEntry fe0 : fesAfter) {
+			for (FlightEntry fe1 : fesBefore) {
+				if (fe1.compareTo(fe0) == 0) {
+					fesBefore.remove(fe1);
+					break;
+				}
+			}
+		}
+		assertEquals(0, fesBefore.size());
 
 		// assertEquals(1, daoP.getPilots().size());
 

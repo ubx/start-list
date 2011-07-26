@@ -8,6 +8,8 @@ import ch.ubx.startlist.shared.FlightEntry;
 
 public interface FlightEntryDAO {
 
+	public abstract List<FlightEntry> listflightEntry();
+
 	public abstract List<FlightEntry> listflightEntry(String place, long dateTimeInMillis, int startIndex, int maxCount);
 
 	public abstract FlightEntry removeFlightEntry(FlightEntry flightEntry);
