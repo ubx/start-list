@@ -2,11 +2,8 @@ package ch.ubx.startlist.server;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import javax.validation.constraints.AssertTrue;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,8 +21,6 @@ public class UseCaseTest {
 	private static LocalDatastoreServiceTestConfig datastore;
 	private static LocalServiceTestHelper helper;
 	private static FlightEntryDAOobjectify dao;
-	private static PilotDAOobjectify daoP;
-
 	@BeforeClass
 	public static void setUpBeforeClass() {
 		datastore = new LocalDatastoreServiceTestConfig();
@@ -44,7 +39,7 @@ public class UseCaseTest {
 	public void setUp() throws Exception {
 		helper.setUp();
 		dao = new FlightEntryDAOobjectify();
-		daoP = new PilotDAOobjectify();
+		new PilotDAOobjectify();
 	}
 
 	@After

@@ -5,7 +5,6 @@ import java.util.Set;
 
 import ch.ubx.startlist.shared.Pilot;
 
-import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.helper.DAOBase;
