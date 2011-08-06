@@ -356,10 +356,6 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 		
 		loadYears();
 
-		loadAllPlaces();
-		
-		loadAllPilots();	
-
 		enablePilotFields(false);
 
 		initLogin();
@@ -543,12 +539,14 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			pilotNameBox.setValue(""); // don't set pilot name from login info at the moment
 			// pilotNameBox.setValue(currentLoginInfo.getLastName() + " " + currentLoginInfo.getFirstName());
 		}
-		GwtUtil.setItems(allPlacesListBox, GwtUtil.toAirfieldNames(allAirfields));
-		// TODO - it may be slow if lots of airfields -> optimize!
-		for (int i = 0; i < allPlacesListBox.getItemCount(); i++) {
-			if (flightEntry.getPlace().equals(allPlacesListBox.getValue(i))) {
-				allPlacesListBox.setSelectedIndex(i);
-				break;
+		if (allAirfields != null) {
+			GwtUtil.setItems(allPlacesListBox, GwtUtil.toAirfieldNames(allAirfields));
+			// TODO - it may be slow if lots of airfields -> optimize!
+			for (int i = 0; i < allPlacesListBox.getItemCount(); i++) {
+				if (flightEntry.getPlace().equals(allPlacesListBox.getValue(i))) {
+					allPlacesListBox.setSelectedIndex(i);
+					break;
+				}
 			}
 		}
 		landingPlacesSuggestBox.setValue(flightEntry.getLandingPlace());
@@ -1066,6 +1064,10 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 			signInLink.setHref(loginInfo.getLogoutUrl());
 			loggedInAs.setText(TXT_LOGGED_IN_AS + loginInfo.getEmail() + ")");
 			operationNewModDel.setVisible(true);
+			
+			// get Places and Pilots
+			loadAllPlaces();			
+			loadAllPilots();	
 
 			if (loginInfo.isAdmin()) {
 				if (adminGUI == null) {
