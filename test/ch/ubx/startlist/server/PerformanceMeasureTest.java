@@ -94,7 +94,7 @@ public class PerformanceMeasureTest {
     @Test
     public void testReadFlightEntries2() {
         assertEquals(
-                10,
+                1000,
                 flightEntryDAOobjectify.listflightEntry(nows[2].get(Calendar.YEAR), nows[2].get(Calendar.MONTH),
                         nows[2].get(Calendar.DAY_OF_MONTH), places[20]).size());
     }
