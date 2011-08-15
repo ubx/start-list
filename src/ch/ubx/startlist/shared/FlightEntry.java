@@ -4,449 +4,459 @@ import java.io.Serializable;
 
 import javax.persistence.Id;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
-
 
 public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 
-	public static final int SRC_MANUEL = 0;
-	public static final int SRC_OLC = 1;
-	public static final int SRC_FLARM = 2;
+    public static final int SRC_MANUEL = 0;
+    public static final int SRC_OLC = 1;
+    public static final int SRC_FLARM = 2;
 
-	private static final long serialVersionUID = 1L;
-	private static final int version = 0;
+    private static final long serialVersionUID = 1L;
+    private static final int version = 0;
 
-	@Id
-	private Long id = null;
-	private long created;
-	private long modified;
-	private String creator;
-	private String modifier;
-	private String pilot;
-	private String passengerOrInstructor;
-	private String towplanePilot;
-	private long startTimeInMillis;
-	private long endTimeGliderInMillis;
-	private long endTimeTowplaneInMillis;
-	private boolean training;
-	private String remarks;
-	private String place;
-	private String LandingPlace;
-	private String registrationGlider;
-	private String registrationTowplane;
-	private boolean startTimeValid = false;
-	private boolean endTimeGliderValid = false;
-	private boolean endTimeTowplaneValid = false;
-	private String club;
-	private String competitionID;
-	private int source = SRC_MANUEL;
-	@NotSaved
-	private boolean modifiable;
-	@NotSaved
-	private boolean deletable;
+    @Id
+    private Long id = null;
+    private Key<FeDate> date;
+    private long created;
+    private long modified;
+    private String creator;
+    private String modifier;
+    private String pilot;
+    private String passengerOrInstructor;
+    private String towplanePilot;
+    private long startTimeInMillis;
+    private long endTimeGliderInMillis;
+    private long endTimeTowplaneInMillis;
+    private boolean training;
+    private String remarks;
+    private String place;
+    private String LandingPlace;
+    private String registrationGlider;
+    private String registrationTowplane;
+    private boolean startTimeValid = false;
+    private boolean endTimeGliderValid = false;
+    private boolean endTimeTowplaneValid = false;
+    private String club;
+    private String competitionID;
+    private int source = SRC_MANUEL;
+    @NotSaved
+    private boolean modifiable;
+    @NotSaved
+    private boolean deletable;
 
-	public FlightEntry(String pilot, long startTimeInMillis, long endTimeGliderInMillis, boolean training, String remarks, String place) {
-		this.pilot = pilot;
-		this.startTimeInMillis = startTimeInMillis;
-		this.endTimeGliderInMillis = endTimeGliderInMillis;
-		this.training = training;
-		this.remarks = remarks;
-		this.place = place;
-	}
+    public FlightEntry(String pilot, long startTimeInMillis, long endTimeGliderInMillis, boolean training, String remarks,
+            String place) {
+        this.pilot = pilot;
+        this.startTimeInMillis = startTimeInMillis;
+        this.endTimeGliderInMillis = endTimeGliderInMillis;
+        this.training = training;
+        this.remarks = remarks;
+        this.place = place;
+    }
 
-	public void setCreated(long created) {
-		this.created = created;
-	}
+    public void setCreated(long created) {
+        this.created = created;
+    }
 
-	public void setModifier(String modifier) {
-		this.modifier = modifier;
-	}
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Key<FeDate> getDate() {
+        return date;
+    }
 
-	public static int getVersion() {
-		return version;
-	}
+    public void setDate(Key<FeDate> date) {
+        this.date = date;
+    }
 
-	public long getModified() {
-		return modified;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setModified(long modified) {
-		this.modified = modified;
-	}
+    public static int getVersion() {
+        return version;
+    }
 
-	public String getPlace() {
-		return place;
-	}
+    public long getModified() {
+        return modified;
+    }
 
-	public void setPlace(String place) {
-		this.place = place;
-	}
+    public void setModified(long modified) {
+        this.modified = modified;
+    }
 
-	public FlightEntry() {
-		super();
-	}
+    public String getPlace() {
+        return place;
+    }
 
-	public String getCreator() {
-		return creator;
-	}
+    public void setPlace(String place) {
+        this.place = place;
+    }
 
-	public void setCreator(String user) {
-		this.creator = user;
-	}
+    public FlightEntry() {
+        super();
+    }
 
-	public String getPilot() {
-		return pilot;
-	}
+    public String getCreator() {
+        return creator;
+    }
 
-	public void setPilot(String pilot) {
-		this.pilot = pilot;
-	}
-	
-	public String getPassengerOrInstructor() {
-		return passengerOrInstructor;
-	}
+    public void setCreator(String user) {
+        this.creator = user;
+    }
 
-	public void setPassengerOrInstructor(String passengerOrInstructor) {
-		this.passengerOrInstructor = passengerOrInstructor;
-	}
-	
-	public String getTowplanePilot() {
-		return towplanePilot;
-	}
+    public String getPilot() {
+        return pilot;
+    }
 
-	public void setTowplanePilot(String towplanePilot) {
-		this.towplanePilot = towplanePilot;
-	}
+    public void setPilot(String pilot) {
+        this.pilot = pilot;
+    }
 
-	public long getStartTimeInMillis() {
-		return startTimeInMillis;
-	}
+    public String getPassengerOrInstructor() {
+        return passengerOrInstructor;
+    }
 
-	public void setStartTimeInMillis(long startTimeInMillis) {
-		this.startTimeInMillis = startTimeInMillis;
-	}
+    public void setPassengerOrInstructor(String passengerOrInstructor) {
+        this.passengerOrInstructor = passengerOrInstructor;
+    }
 
-	public long getEndTimeGliderInMillis() {
-		return endTimeGliderInMillis;
-	}
+    public String getTowplanePilot() {
+        return towplanePilot;
+    }
 
-	public void setEndTimeGliderInMillis(long endTimeGliderInMillis) {
-		this.endTimeGliderInMillis = endTimeGliderInMillis;
-	}
+    public void setTowplanePilot(String towplanePilot) {
+        this.towplanePilot = towplanePilot;
+    }
 
-	public long getEndTimeTowplaneInMillis() {
-		return endTimeTowplaneInMillis;
-	}
+    public long getStartTimeInMillis() {
+        return startTimeInMillis;
+    }
 
-	public void setEndTimeTowplaneInMillis(long endTimeTowplaneInMillis) {
-		this.endTimeTowplaneInMillis = endTimeTowplaneInMillis;
-	}
-	
-	public boolean isTraining() {
-		return training;
-	}
+    public void setStartTimeInMillis(long startTimeInMillis) {
+        this.startTimeInMillis = startTimeInMillis;
+    }
 
-	public void setTraining(boolean training) {
-		this.training = training;
-	}
+    public long getEndTimeGliderInMillis() {
+        return endTimeGliderInMillis;
+    }
 
-	public String getRemarks() {
-		return remarks;
-	}
+    public void setEndTimeGliderInMillis(long endTimeGliderInMillis) {
+        this.endTimeGliderInMillis = endTimeGliderInMillis;
+    }
 
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
+    public long getEndTimeTowplaneInMillis() {
+        return endTimeTowplaneInMillis;
+    }
 
-	public boolean isStartTimeValid() {
-		return startTimeValid;
-	}
+    public void setEndTimeTowplaneInMillis(long endTimeTowplaneInMillis) {
+        this.endTimeTowplaneInMillis = endTimeTowplaneInMillis;
+    }
 
-	public void setStartTimeValid(boolean startTimeValid) {
-		this.startTimeValid = startTimeValid;
-	}
+    public boolean isTraining() {
+        return training;
+    }
 
-	public boolean isEndTimeGliderValid() {
-		return endTimeGliderValid;
-	}
+    public void setTraining(boolean training) {
+        this.training = training;
+    }
 
-	public void setEndTimeGliderValid(boolean endTimeGliderValid) {
-		this.endTimeGliderValid = endTimeGliderValid;
-	}
+    public String getRemarks() {
+        return remarks;
+    }
 
-	public boolean isEndTimeTowplaneValid() {
-		return endTimeTowplaneValid;
-	}
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 
-	public void setEndTimeTowplaneValid(boolean endTimeTowplaneValid) {
-		this.endTimeTowplaneValid = endTimeTowplaneValid;
-	}
-	
-	public String getRegistrationGlider() {
-		return registrationGlider;
-	}
+    public boolean isStartTimeValid() {
+        return startTimeValid;
+    }
 
-	public void setRegistrationGlider(String registrationGlider) {
-		this.registrationGlider = registrationGlider;
-	}
+    public void setStartTimeValid(boolean startTimeValid) {
+        this.startTimeValid = startTimeValid;
+    }
 
-	public String getRegistrationTowplane() {
-		return registrationTowplane;
-	}
+    public boolean isEndTimeGliderValid() {
+        return endTimeGliderValid;
+    }
 
-	public void setRegistrationTowplane(String registrationTowplane) {
-		this.registrationTowplane = registrationTowplane;
-	}
-	
-	public String getLandingPlace() {
-		return LandingPlace;
-	}
+    public void setEndTimeGliderValid(boolean endTimeGliderValid) {
+        this.endTimeGliderValid = endTimeGliderValid;
+    }
 
-	public void setLandingPlace(String landingPlace) {
-		LandingPlace = landingPlace;
-	}
+    public boolean isEndTimeTowplaneValid() {
+        return endTimeTowplaneValid;
+    }
 
-	public boolean isModifiable() {
-		return modifiable;
-	}
+    public void setEndTimeTowplaneValid(boolean endTimeTowplaneValid) {
+        this.endTimeTowplaneValid = endTimeTowplaneValid;
+    }
 
-	public void setModifiable(boolean modifiable) {
-		this.modifiable = modifiable;
-	}
+    public String getRegistrationGlider() {
+        return registrationGlider;
+    }
 
-	public boolean isDeletable() {
-		return deletable;
-	}
+    public void setRegistrationGlider(String registrationGlider) {
+        this.registrationGlider = registrationGlider;
+    }
 
-	public void setDeletable(boolean deletable) {
-		this.deletable = deletable;
-	}
+    public String getRegistrationTowplane() {
+        return registrationTowplane;
+    }
 
-	public long getCreated() {
-		return created;
-	}
+    public void setRegistrationTowplane(String registrationTowplane) {
+        this.registrationTowplane = registrationTowplane;
+    }
 
-	public String getModifier() {
-		return modifier;
-	}
+    public String getLandingPlace() {
+        return LandingPlace;
+    }
 
-	// ----
-	public void setClub(String club) {
-		this.club = club;
-	}
+    public void setLandingPlace(String landingPlace) {
+        LandingPlace = landingPlace;
+    }
 
-	public String getClub() {
-		return club;
-	}
+    public boolean isModifiable() {
+        return modifiable;
+    }
 
-	public void setCompetitionID(String competitionID) {
-		this.competitionID = competitionID;
-	}
+    public void setModifiable(boolean modifiable) {
+        this.modifiable = modifiable;
+    }
 
-	public String getCompetitionID() {
-		return competitionID;
-	}
+    public boolean isDeletable() {
+        return deletable;
+    }
 
-	public int getSource() {
-		return source;
-	}
+    public void setDeletable(boolean deletable) {
+        this.deletable = deletable;
+    }
 
-	public void setSource(int source) {
-		this.source = source;
-	}
+    public long getCreated() {
+        return created;
+    }
 
-	@Override
-	//Compares everything except created, modified, creator, modifier, club, competitionID, source, modifiable, deletable
-	//returns 0 if equal, 1 if not equal
-	public int compareTo(FlightEntry other) {
-		if (getStartTimeInMillis() != other.getStartTimeInMillis()) {
-			return 1;
-		}
-		if (isStartTimeValid() != other.isStartTimeValid()) {
-			return 1;
-		}
+    public String getModifier() {
+        return modifier;
+    }
 
-		if (isEndTimeGliderValid() != other.isEndTimeGliderValid()) {
-			return 1;
-		}
-		if (isEndTimeGliderValid() & other.isEndTimeGliderValid()) {
-			if (getEndTimeGliderInMillis() != other.getEndTimeGliderInMillis()) {
-				return 1;
-			}
-		}
-		
-		if (isEndTimeTowplaneValid() != other.isEndTimeTowplaneValid()) {
-			return 1;
-		}
-		if (isEndTimeTowplaneValid() & other.isEndTimeTowplaneValid()) {
-			if (getEndTimeTowplaneInMillis() != other.getEndTimeTowplaneInMillis()) {
-				return 1;
-			}
-		}
+    // ----
+    public void setClub(String club) {
+        this.club = club;
+    }
 
-		if (getPilot() != null & other.getPilot() != null) {
-			if (!getPilot().equals(other.getPilot())) {
-				return 1;
-			}
-		} else {
-			if (getPilot() != other.getPilot()) {
-				return 1;
-			}
-		}
-		
-		if (getPassengerOrInstructor() != null & other.getPassengerOrInstructor() != null) {
-			if (!getPassengerOrInstructor().equals(other.getPassengerOrInstructor())) {
-				return 1;
-			}
-		} else {
-			if (getPassengerOrInstructor() != other.getPassengerOrInstructor()) {
-				return 1;
-			}
-		}
-		
-		if (getTowplanePilot() != null & other.getTowplanePilot() != null) {
-			if (!getTowplanePilot().equals(other.getTowplanePilot())) {
-				return 1;
-			}
-		} else {
-			if (getTowplanePilot() != other.getTowplanePilot()) {
-				return 1;
-			}
-		}
+    public String getClub() {
+        return club;
+    }
 
-		if (getPlace() != null & other.getPlace() != null) {
-			if (!getPlace().equals(other.getPlace())) {
-				return 1;
-			}
-		} else {
-			if (getPlace() != other.getPlace()) {
-				return 1;
-			}
-		}
+    public void setCompetitionID(String competitionID) {
+        this.competitionID = competitionID;
+    }
 
-		if (getLandingPlace() != null & other.getLandingPlace() != null) {
-			if (!getLandingPlace().equals(other.getLandingPlace())) {
-				return 1;
-			}
-		} else {
-			if (getLandingPlace() != other.getLandingPlace()) {
-				return 1;
-			}
-		}
+    public String getCompetitionID() {
+        return competitionID;
+    }
 
-		if (getRegistrationGlider() != null & other.getRegistrationGlider() != null) {
-			if (!getRegistrationGlider().equalsIgnoreCase(other.getRegistrationGlider())) {
-				return 1;
-			}
-		} else {
-			if (getRegistrationGlider() != other.getRegistrationGlider()) {
-				return 1;
-			}
-		}
-		
-		if (getRegistrationTowplane() != null & other.getRegistrationTowplane() != null) {
-			if (!getRegistrationTowplane().equalsIgnoreCase(other.getRegistrationTowplane())) {
-				return 1;
-			}
-		} else {
-			if (getRegistrationTowplane() != other.getRegistrationTowplane()) {
-				return 1;
-			}
-		}
+    public int getSource() {
+        return source;
+    }
 
-		if (isTraining() != other.isTraining()) {
-			return 1;
-		}
+    public void setSource(int source) {
+        this.source = source;
+    }
 
-		if (getRemarks() != null & other.getRemarks() != null) {
-			if (!getRemarks().equals(other.getRemarks())) {
-				return 1;
-			}
-		} else {
-			if (getRemarks() != other.getRemarks()) {
-				return 1;
-			}
-		}
+    @Override
+    // Compares everything except created, modified, creator, modifier, club, competitionID, source, modifiable, deletable
+    // returns 0 if equal, 1 if not equal
+    public int compareTo(FlightEntry other) {
+        if (getStartTimeInMillis() != other.getStartTimeInMillis()) {
+            return 1;
+        }
+        if (isStartTimeValid() != other.isStartTimeValid()) {
+            return 1;
+        }
 
-		// all equal!
-		return 0;
-	}
+        if (isEndTimeGliderValid() != other.isEndTimeGliderValid()) {
+            return 1;
+        }
+        if (isEndTimeGliderValid() & other.isEndTimeGliderValid()) {
+            if (getEndTimeGliderInMillis() != other.getEndTimeGliderInMillis()) {
+                return 1;
+            }
+        }
 
-	// used to compare FlightEntrys which are not complete (OLC import)
-	public int compareToMajor(FlightEntry other) {
-		boolean samePilot = false;
-		boolean samePlane = false;
-		if (isStartTimeValid() && other.isStartTimeValid()) {
-			if (getStartTimeInMillis() != other.getStartTimeInMillis()) {
-				return 1;
-			}
-		} else {
-			return 1;
-		}
-		if (isEndTimeGliderValid() && other.isEndTimeGliderValid()) {
-			if (getEndTimeGliderInMillis() != other.getEndTimeGliderInMillis()) {
-				return 1;
-			}
-		} else {
-			return 1;
-		}
-		if (getPlace() != null & other.getPlace() != null) {
-			if (!getPlace().equalsIgnoreCase(other.getPlace())) {
-				return 1;
-			}
-		} else {
-			return 1;
-		}
-		if (getPilot() != null & other.getPilot() != null) {
-			samePilot = getPilot().equalsIgnoreCase(other.getPilot());
-		} else {
-			return 1;
-		}
-		if (getRegistrationGlider() != null & other.getRegistrationGlider() != null) {
-			samePlane = getRegistrationGlider().equalsIgnoreCase(other.getRegistrationGlider());
-		} else {
-			return 1;
-		}
-		return samePilot | samePlane ? 0 : 1;
-	}
+        if (isEndTimeTowplaneValid() != other.isEndTimeTowplaneValid()) {
+            return 1;
+        }
+        if (isEndTimeTowplaneValid() & other.isEndTimeTowplaneValid()) {
+            if (getEndTimeTowplaneInMillis() != other.getEndTimeTowplaneInMillis()) {
+                return 1;
+            }
+        }
 
-	// copies all property of the instance into a new instance
-	public FlightEntry copy() {
-		FlightEntry copy = new FlightEntry();
-		copy.setId(getId());
-		copy.setStartTimeValid(isStartTimeValid());
-		copy.setStartTimeInMillis(getStartTimeInMillis());
-		copy.setEndTimeGliderValid(isEndTimeGliderValid());
-		copy.setEndTimeTowplaneValid(isEndTimeTowplaneValid());
-		copy.setEndTimeGliderInMillis(getEndTimeGliderInMillis());
-		copy.setEndTimeTowplaneInMillis(getEndTimeTowplaneInMillis());
-		copy.setPilot(getPilot());
-		copy.setPassengerOrInstructor(getPassengerOrInstructor());
-		copy.setTowplanePilot(getTowplanePilot());
-		copy.setPlace(getPlace());
-		copy.setLandingPlace(getLandingPlace());
-		copy.setRegistrationGlider(getRegistrationGlider());
-		copy.setRegistrationTowplane(getRegistrationGlider());
-		copy.setTraining(isTraining());
-		copy.setRemarks(getRemarks());
-		copy.setModifiable(isModifiable());
-		copy.setDeletable(isDeletable());
-		copy.setCreated(getCreated());
-		copy.setCreator(getCreator());
-		copy.setModified(getModified());
-		copy.setModifier(getModifier());
-		copy.setClub(getClub());
-		copy.setCompetitionID(getCompetitionID());
-		copy.setSource(getSource());
-		return copy;
-	}
+        if (getPilot() != null & other.getPilot() != null) {
+            if (!getPilot().equals(other.getPilot())) {
+                return 1;
+            }
+        } else {
+            if (getPilot() != other.getPilot()) {
+                return 1;
+            }
+        }
+
+        if (getPassengerOrInstructor() != null & other.getPassengerOrInstructor() != null) {
+            if (!getPassengerOrInstructor().equals(other.getPassengerOrInstructor())) {
+                return 1;
+            }
+        } else {
+            if (getPassengerOrInstructor() != other.getPassengerOrInstructor()) {
+                return 1;
+            }
+        }
+
+        if (getTowplanePilot() != null & other.getTowplanePilot() != null) {
+            if (!getTowplanePilot().equals(other.getTowplanePilot())) {
+                return 1;
+            }
+        } else {
+            if (getTowplanePilot() != other.getTowplanePilot()) {
+                return 1;
+            }
+        }
+
+        if (getPlace() != null & other.getPlace() != null) {
+            if (!getPlace().equals(other.getPlace())) {
+                return 1;
+            }
+        } else {
+            if (getPlace() != other.getPlace()) {
+                return 1;
+            }
+        }
+
+        if (getLandingPlace() != null & other.getLandingPlace() != null) {
+            if (!getLandingPlace().equals(other.getLandingPlace())) {
+                return 1;
+            }
+        } else {
+            if (getLandingPlace() != other.getLandingPlace()) {
+                return 1;
+            }
+        }
+
+        if (getRegistrationGlider() != null & other.getRegistrationGlider() != null) {
+            if (!getRegistrationGlider().equalsIgnoreCase(other.getRegistrationGlider())) {
+                return 1;
+            }
+        } else {
+            if (getRegistrationGlider() != other.getRegistrationGlider()) {
+                return 1;
+            }
+        }
+
+        if (getRegistrationTowplane() != null & other.getRegistrationTowplane() != null) {
+            if (!getRegistrationTowplane().equalsIgnoreCase(other.getRegistrationTowplane())) {
+                return 1;
+            }
+        } else {
+            if (getRegistrationTowplane() != other.getRegistrationTowplane()) {
+                return 1;
+            }
+        }
+
+        if (isTraining() != other.isTraining()) {
+            return 1;
+        }
+
+        if (getRemarks() != null & other.getRemarks() != null) {
+            if (!getRemarks().equals(other.getRemarks())) {
+                return 1;
+            }
+        } else {
+            if (getRemarks() != other.getRemarks()) {
+                return 1;
+            }
+        }
+
+        // all equal!
+        return 0;
+    }
+
+    // used to compare FlightEntrys which are not complete (OLC import)
+    public int compareToMajor(FlightEntry other) {
+        boolean samePilot = false;
+        boolean samePlane = false;
+        if (isStartTimeValid() && other.isStartTimeValid()) {
+            if (getStartTimeInMillis() != other.getStartTimeInMillis()) {
+                return 1;
+            }
+        } else {
+            return 1;
+        }
+        if (isEndTimeGliderValid() && other.isEndTimeGliderValid()) {
+            if (getEndTimeGliderInMillis() != other.getEndTimeGliderInMillis()) {
+                return 1;
+            }
+        } else {
+            return 1;
+        }
+        if (getPlace() != null & other.getPlace() != null) {
+            if (!getPlace().equalsIgnoreCase(other.getPlace())) {
+                return 1;
+            }
+        } else {
+            return 1;
+        }
+        if (getPilot() != null & other.getPilot() != null) {
+            samePilot = getPilot().equalsIgnoreCase(other.getPilot());
+        } else {
+            return 1;
+        }
+        if (getRegistrationGlider() != null & other.getRegistrationGlider() != null) {
+            samePlane = getRegistrationGlider().equalsIgnoreCase(other.getRegistrationGlider());
+        } else {
+            return 1;
+        }
+        return samePilot | samePlane ? 0 : 1;
+    }
+
+    // copies all property of the instance into a new instance
+    public FlightEntry copy() {
+        FlightEntry copy = new FlightEntry();
+        copy.setId(getId());
+        copy.setStartTimeValid(isStartTimeValid());
+        copy.setStartTimeInMillis(getStartTimeInMillis());
+        copy.setEndTimeGliderValid(isEndTimeGliderValid());
+        copy.setEndTimeTowplaneValid(isEndTimeTowplaneValid());
+        copy.setEndTimeGliderInMillis(getEndTimeGliderInMillis());
+        copy.setEndTimeTowplaneInMillis(getEndTimeTowplaneInMillis());
+        copy.setPilot(getPilot());
+        copy.setPassengerOrInstructor(getPassengerOrInstructor());
+        copy.setTowplanePilot(getTowplanePilot());
+        copy.setPlace(getPlace());
+        copy.setLandingPlace(getLandingPlace());
+        copy.setRegistrationGlider(getRegistrationGlider());
+        copy.setRegistrationTowplane(getRegistrationGlider());
+        copy.setTraining(isTraining());
+        copy.setRemarks(getRemarks());
+        copy.setModifiable(isModifiable());
+        copy.setDeletable(isDeletable());
+        copy.setCreated(getCreated());
+        copy.setCreator(getCreator());
+        copy.setModified(getModified());
+        copy.setModifier(getModifier());
+        copy.setClub(getClub());
+        copy.setCompetitionID(getCompetitionID());
+        copy.setSource(getSource());
+        return copy;
+    }
 
 }
