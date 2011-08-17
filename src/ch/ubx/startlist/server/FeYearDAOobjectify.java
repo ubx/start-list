@@ -9,24 +9,21 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.helper.DAOBase;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FeYearDAOobjectify.
+ */
 public class FeYearDAOobjectify extends DAOBase implements FeYearDAO {
 
     static {
         ObjectifyService.register(FeYear.class);
     }
 
-    private final static FeStoreDAO feStoreDAO = new FeStoreDAOobjectify();
-
-    @Override
-    public Key<FeYear> getOrCreateKey(long year, String storeName) {
-        Key<FeStore> store = feStoreDAO.getOrCreateKey(storeName);
-        Key<FeYear> key = ofy().query(FeYear.class).filter("year", year).filter("store", store).getKey();
-        if (key == null) {
-            key = ofy().put(new FeYear(year, store));
-        }
-        return key;
-    }
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see ch.ubx.startlist.server.FeYearDAO#getOrCreateKey(long, com.googlecode.objectify.Key)
+     */
     @Override
     public Key<FeYear> getOrCreateKey(long year, Key<FeStore> storeKey) {
         Key<FeYear> key = ofy().query(FeYear.class).filter("year", year).filter("store", storeKey).getKey();
@@ -36,46 +33,66 @@ public class FeYearDAOobjectify extends DAOBase implements FeYearDAO {
         return key;
     }
 
-    @Override
-    public FeYear getOrCreate(long year, String storeName) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see ch.ubx.startlist.server.FeYearDAO#getOrCreate(long, com.googlecode.objectify.Key)
+     */
     @Override
     public FeYear getOrCreate(long year, Key<FeStore> storeKey) {
-        // TODO Auto-generated method stub
-        return null;
+        FeYear elem = ofy().query(FeYear.class).filter("year", year).filter("store", storeKey).get();
+        if (elem == null) {
+            elem = new FeYear(year, storeKey);
+            ofy().put(elem);
+        }
+        return elem;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see ch.ubx.startlist.server.FeYearDAO#get(com.googlecode.objectify.Key)
+     */
     @Override
     public FeYear get(Key<FeYear> key) {
-        // TODO Auto-generated method stub
-        return null;
+        return ofy().get(key);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see ch.ubx.startlist.server.FeYearDAO#delete(com.googlecode.objectify.Key)
+     */
     @Override
     public void delete(Key<FeYear> key) {
-        // TODO Auto-generated method stub
-
+        ofy().delete(key);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see ch.ubx.startlist.server.FeYearDAO#delete(ch.ubx.startlist.shared.FeYear)
+     */
     @Override
     public void delete(FeYear year) {
-        // TODO Auto-generated method stub
-
+        ofy().delete(year);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see ch.ubx.startlist.server.FeYearDAO#list()
+     */
     @Override
     public List<FeYear> list() {
         return ofy().query(FeYear.class).list();
     }
 
-    @Override
-    public List<FeYear> list(String storeName) {
-        return ofy().query(FeYear.class).filter("store", feStoreDAO.getOrCreateKey(storeName)).list();
-    }
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see ch.ubx.startlist.server.FeYearDAO#list(com.googlecode.objectify.Key)
+     */
     @Override
     public List<FeYear> list(Key<FeStore> storeKey) {
         return ofy().query(FeYear.class).filter("store", storeKey).list();

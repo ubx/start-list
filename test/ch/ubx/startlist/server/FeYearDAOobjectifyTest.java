@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.ubx.startlist.shared.FeStore;
+import ch.ubx.startlist.shared.FeYear;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -14,18 +15,20 @@ import com.googlecode.objectify.Key;
 
 public class FeYearDAOobjectifyTest {
 
-    private static final String OLD = "Old";
-    private static final String ACTIVE = "Active";
     private static final LocalDatastoreServiceTestConfig datastore = new LocalDatastoreServiceTestConfig();
     private static final LocalServiceTestHelper helper = new LocalServiceTestHelper(datastore);
     private static FeYearDAOobjectify yearDAO;
     private static FeStoreDAOobjectify storeDAO;
+    private static Key<FeStore> storeActiveKey;
+    private static Key<FeStore> storeOldKey;
 
     @Before
     public void setUp() throws Exception {
         helper.setUp();
         yearDAO = new FeYearDAOobjectify();
         storeDAO = new FeStoreDAOobjectify();
+        storeActiveKey = storeDAO.getOrCreateKey("Active");
+        storeOldKey = storeDAO.getOrCreateKey("Old");
     }
 
     @After
@@ -35,104 +38,95 @@ public class FeYearDAOobjectifyTest {
 
     @Test
     public void testGetOrCreateKey() {
-        yearDAO.getOrCreateKey(2008, ACTIVE);
-        yearDAO.getOrCreateKey(2009, ACTIVE);
-        yearDAO.getOrCreateKey(2010, ACTIVE);
-        yearDAO.getOrCreateKey(2011, ACTIVE);
-        yearDAO.getOrCreateKey(2011, ACTIVE);
-        yearDAO.getOrCreateKey(2001, OLD);
-        yearDAO.getOrCreateKey(2002, OLD);
-        yearDAO.getOrCreateKey(2003, OLD);
-        yearDAO.getOrCreateKey(2004, OLD);
+        yearDAO.getOrCreateKey(2008, storeActiveKey);
+        yearDAO.getOrCreateKey(2009, storeActiveKey);
+        yearDAO.getOrCreateKey(2010, storeActiveKey);
+        yearDAO.getOrCreateKey(2011, storeActiveKey);
+        yearDAO.getOrCreateKey(2011, storeActiveKey);
+        yearDAO.getOrCreateKey(2001, storeOldKey);
+        yearDAO.getOrCreateKey(2002, storeOldKey);
+        yearDAO.getOrCreateKey(2003, storeOldKey);
+        yearDAO.getOrCreateKey(2004, storeOldKey);
         assertEquals(8, yearDAO.list().size()); // total
-        assertEquals(4, yearDAO.list(ACTIVE).size());
-        assertEquals(4, yearDAO.list(OLD).size());
+        assertEquals(4, yearDAO.list(storeActiveKey).size());
+        assertEquals(4, yearDAO.list(storeOldKey).size());
         assertEquals(2, storeDAO.list().size());
 
         // move 2001 from OLD to ACTIVE
-        yearDAO.getOrCreateKey(2001, ACTIVE);
+        yearDAO.getOrCreateKey(2001, storeActiveKey);
         assertEquals(8, yearDAO.list().size()); // total
-        assertEquals(5, yearDAO.list(ACTIVE).size());
-        assertEquals(3, yearDAO.list(OLD).size());
+        assertEquals(5, yearDAO.list(storeActiveKey).size());
+        assertEquals(3, yearDAO.list(storeOldKey).size());
         assertEquals(2, storeDAO.list().size());
 
-        assertEquals(2010, yearDAO.getOrCreateKey(2010, ACTIVE).getId());
-        assertEquals(2008, yearDAO.getOrCreateKey(2008, ACTIVE).getId());
-        assertEquals(2010, yearDAO.getOrCreateKey(2010, OLD).getId());
-
-        // TODO -- move to another test
-        // FeYear y = yearDAO.getOrCreate(2010, ACTIVE);
-        // assertEquals(2010, y.getYear().longValue());
-        // assertEquals(ACTIVE, y.getStore().getName());
+        assertEquals(2010, yearDAO.getOrCreateKey(2010, storeActiveKey).getId());
+        assertEquals(2008, yearDAO.getOrCreateKey(2008, storeActiveKey).getId());
+        assertEquals(2010, yearDAO.getOrCreateKey(2010, storeOldKey).getId());
     }
 
     @Test
     public void testGetOrCreateKey2() {
-        Key<FeStore> sk0 = storeDAO.getOrCreateKey(ACTIVE);
-        Key<FeStore> sk1 = storeDAO.getOrCreateKey(OLD);
-        yearDAO.getOrCreateKey(2008, sk0);
-        yearDAO.getOrCreateKey(2009, sk0);
-        yearDAO.getOrCreateKey(2010, sk0);
-        yearDAO.getOrCreateKey(2011, sk0);
-        yearDAO.getOrCreateKey(2011, sk0);
-        yearDAO.getOrCreateKey(2001, sk1);
-        yearDAO.getOrCreateKey(2002, sk1);
-        yearDAO.getOrCreateKey(2003, sk1);
-        yearDAO.getOrCreateKey(2004, sk1);
+        yearDAO.getOrCreateKey(2008, storeActiveKey);
+        yearDAO.getOrCreateKey(2009, storeActiveKey);
+        yearDAO.getOrCreateKey(2010, storeActiveKey);
+        yearDAO.getOrCreateKey(2011, storeActiveKey);
+        yearDAO.getOrCreateKey(2011, storeActiveKey);
+        yearDAO.getOrCreateKey(2001, storeOldKey);
+        yearDAO.getOrCreateKey(2002, storeOldKey);
+        yearDAO.getOrCreateKey(2003, storeOldKey);
+        yearDAO.getOrCreateKey(2004, storeOldKey);
         assertEquals(8, yearDAO.list().size()); // total
-        assertEquals(4, yearDAO.list(ACTIVE).size());
-        assertEquals(4, yearDAO.list(OLD).size());
+        assertEquals(4, yearDAO.list(storeActiveKey).size());
+        assertEquals(4, yearDAO.list(storeOldKey).size());
         assertEquals(2, storeDAO.list().size());
 
         // move 2001 from OLD to ACTIVE
-        yearDAO.getOrCreateKey(2001, sk0);
+        yearDAO.getOrCreateKey(2001, storeActiveKey);
         assertEquals(8, yearDAO.list().size()); // total
-        assertEquals(5, yearDAO.list(sk0).size());
-        assertEquals(3, yearDAO.list(OLD).size());
+        assertEquals(5, yearDAO.list(storeActiveKey).size());
+        assertEquals(3, yearDAO.list(storeOldKey).size());
         assertEquals(2, storeDAO.list().size());
 
-        assertEquals(2010, yearDAO.getOrCreateKey(2010, sk0).getId());
-        assertEquals(2008, yearDAO.getOrCreateKey(2008, sk0).getId());
-        assertEquals(2010, yearDAO.getOrCreateKey(2010, sk1).getId());
-
-        // TODO -- move to another test
-        // FeYear y = yearDAO.getOrCreate(2010, ACTIVE);
-        // assertEquals(2010, y.getYear().longValue());
-        // assertEquals(ACTIVE, y.getStore().getName());
+        assertEquals(2010, yearDAO.getOrCreateKey(2010, storeActiveKey).getId());
+        assertEquals(2008, yearDAO.getOrCreateKey(2008, storeActiveKey).getId());
+        assertEquals(2010, yearDAO.getOrCreateKey(2010, storeOldKey).getId());
     }
 
     @Test
     public void testGetOrCreateKey3() {
         for (long year = 1000; year < 2000; year++) {
-            yearDAO.getOrCreateKey(year, ACTIVE);
+            yearDAO.getOrCreateKey(year, storeActiveKey);
         }
         assertEquals(1000, yearDAO.list().size()); // total
-        assertEquals(1000, yearDAO.list(ACTIVE).size());
-    }
-
-    @Test
-    public void testGetOrCreate() {
-        fail("Not yet implemented");
+        assertEquals(1000, yearDAO.list(storeActiveKey).size());
     }
 
     @Test
     public void testGet() {
-        fail("Not yet implemented");
+        Key<FeYear> yk = yearDAO.getOrCreateKey(2001, storeActiveKey);
+        assertEquals(2001, yearDAO.get(yk).getYear().longValue());
     }
 
     @Test
     public void testDeleteKeyOfFeYear() {
-        fail("Not yet implemented");
+        Key<FeYear> yk = yearDAO.getOrCreateKey(2001, storeActiveKey);
+        yearDAO.delete(yk);
+        assertEquals(0, yearDAO.list().size());
     }
 
     @Test
     public void testDeleteFeYear() {
-        fail("Not yet implemented");
+        FeYear y = yearDAO.getOrCreate(2001, storeActiveKey);
+        yearDAO.delete(y);
+        assertEquals(0, yearDAO.list().size());
     }
 
     @Test
     public void testList() {
-        fail("Not yet implemented");
+        for (long i = 2000; i < 2011; i++) {
+            yearDAO.getOrCreateKey(i, storeActiveKey);
+        }
+        assertEquals(11, yearDAO.list().size());
     }
 
 }

@@ -8,18 +8,18 @@ import com.googlecode.objectify.Key;
 
 public interface FeDateDAO {
 
-    public Key<FeDate> getOrCreateKey(long date, String placeName);
+    public Key<FeDate> getOrCreateKey(long date, Key<FeDate> placeKey);
 
-    public FeDate getOrCreate(long date, String placeName);
+    public FeDate getOrCreate(long date, Key<FeDate> placeKey);
 
     public FeDate get(Key<FeDate> key);
 
     public void delete(Key<FeDate> key);
 
-    public void delete(String placeName);
+    public void delete(FeDate date);
 
     public List<FeDate> list();
 
-    public List<FeDate> list(long date);
+    public List<FeDate> list(Key<FeDate> key);
 
 }
