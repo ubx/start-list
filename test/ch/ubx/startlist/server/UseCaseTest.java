@@ -2,9 +2,13 @@ package ch.ubx.startlist.server;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.ClassUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,10 +25,22 @@ public class UseCaseTest {
 	private static LocalDatastoreServiceTestConfig datastore;
 	private static LocalServiceTestHelper helper;
 	private static FlightEntryDAOobjectify dao;
+	private static String sfName = "testdata/" + ClassUtils.getPackageName(UseCaseTest.class) + "/local4junit_db.bin";
+	private static String tfName = "testdata/" + ClassUtils.getPackageName(UseCaseTest.class) + "/temp.bin";
+	private static File sf = new File(sfName);
+	private static File tf = new File(tfName);
+
 	@BeforeClass
 	public static void setUpBeforeClass() {
+		// copy local4junit_db.bin to a temporary db
+		try {
+			FileUtils.copyFile(sf, tf);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		datastore = new LocalDatastoreServiceTestConfig();
-		datastore.setBackingStoreLocation("war/WEB-INF/appengine-generated/local4junit_db.bin");
+		datastore.setBackingStoreLocation(tfName);
 		datastore.setNoStorage(false);
 		helper = new LocalServiceTestHelper(datastore);
 		helper.setEnvAppId("start-list");
@@ -33,6 +49,7 @@ public class UseCaseTest {
 
 	@AfterClass
 	public static void tearDownAfterClass() {
+		FileUtils.deleteQuietly(tf);
 	}
 
 	@Before
