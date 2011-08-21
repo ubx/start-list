@@ -2,28 +2,18 @@ package ch.ubx.startlist.shared;
 
 import java.io.Serializable;
 
-import javax.persistence.Id;
+import com.googlecode.objectify.annotation.Subclass;
 
-public class FeStore implements Serializable {
+@Subclass
+public class FeStore extends FeNodeName implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    private String name;
-
     public FeStore() {
     }
-    
+
     public FeStore(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        super(name);
     }
 
 }

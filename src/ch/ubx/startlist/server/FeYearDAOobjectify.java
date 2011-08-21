@@ -7,7 +7,7 @@ import ch.ubx.startlist.shared.FeYear;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.helper.DAOBase;
+import com.googlecode.objectify.util.DAOBase;
 
 // TODO: Auto-generated Javadoc
 /**
