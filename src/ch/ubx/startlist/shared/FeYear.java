@@ -2,6 +2,7 @@ package ch.ubx.startlist.shared;
 
 import java.io.Serializable;
 
+
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Subclass;
 

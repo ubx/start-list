@@ -25,5 +25,4 @@ public interface FeGenDAO<T> {
     public List<? extends FeNodeName> list();
 
     public List<? extends FeNodeName> list(Key<? extends FeNodeName> othersKey);
-
 }
