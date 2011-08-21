@@ -2,40 +2,36 @@ package ch.ubx.startlist.shared;
 
 import java.io.Serializable;
 
-import javax.persistence.Id;
-
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Subclass;
 
-public class FeYear implements Serializable {
+@Subclass
+public class FeYear extends FeNodeName implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    private Long year;
-    private Key<FeStore> store;
 
     public FeYear() {
     }
 
-    public FeYear(Long year, Key<FeStore> store) {
-        this.year = year;
-        this.store = store;
+    public FeYear(Long year, Key<FeNodeName> store) {
+        setName(Long.toString(year));
+        setOthers(store);
     }
 
     public Long getYear() {
-        return year;
+        return Long.valueOf(getName());
     }
 
     public void setYear(Long year) {
-        this.year = year;
+        setName(Long.toString(year));
     }
 
-    public Key<FeStore> getStore() {
-        return store;
+    public Key<FeNodeName> getStore() {
+        return getOthers();
     }
 
-    public void setStore(Key<FeStore> store) {
-        this.store = store;
+    public void setStore(Key<FeNodeName> store) {
+        setOthers(store);
     }
 
 }
