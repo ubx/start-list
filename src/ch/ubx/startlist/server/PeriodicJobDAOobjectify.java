@@ -6,7 +6,7 @@ import ch.ubx.startlist.shared.PeriodicJob;
 
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.helper.DAOBase;
+import com.googlecode.objectify.util.DAOBase;
 
 public class PeriodicJobDAOobjectify extends DAOBase implements PeriodicJobDAO {
 

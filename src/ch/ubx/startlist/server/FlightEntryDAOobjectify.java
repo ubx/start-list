@@ -14,7 +14,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.helper.DAOBase;
+import com.googlecode.objectify.util.DAOBase;
 
 public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 

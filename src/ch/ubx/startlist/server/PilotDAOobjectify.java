@@ -7,7 +7,7 @@ import ch.ubx.startlist.shared.Pilot;
 
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.helper.DAOBase;
+import com.googlecode.objectify.util.DAOBase;
 
 public class PilotDAOobjectify extends DAOBase implements PilotDAO {
 

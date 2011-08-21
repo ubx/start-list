@@ -7,7 +7,7 @@ import ch.ubx.startlist.shared.ImportOLC;
 
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
-import com.googlecode.objectify.helper.DAOBase;
+import com.googlecode.objectify.util.DAOBase;
 
 public class ImportOLCDAOobjectify extends DAOBase implements ImportOLCDAO {
 
