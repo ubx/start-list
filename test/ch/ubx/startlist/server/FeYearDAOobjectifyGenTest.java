@@ -25,10 +25,10 @@ public class FeYearDAOobjectifyGenTest {
     @Before
     public void setUp() throws Exception {
         helper.setUp();
+        storeDAO = new FeGenDAOobjectify<FeStore>(FeStore.class);
         storeActiveKey = storeDAO.getOrCreateKey("Active");
         storeOldKey = storeDAO.getOrCreateKey("Old");
         yearDAO = new FeGenDAOobjectify<FeYear>(FeYear.class);
-        storeDAO = new FeGenDAOobjectify<FeStore>(FeStore.class);
     }
 
     @After

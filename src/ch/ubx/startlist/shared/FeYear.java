@@ -16,7 +16,7 @@ public class FeYear extends FeNodeName implements Serializable {
 
     public FeYear(Long year, Key<FeNodeName> store) {
         setName(Long.toString(year));
-        setOthers(store);
+        setParent(store);
     }
 
     public Long getYear() {
@@ -25,14 +25,6 @@ public class FeYear extends FeNodeName implements Serializable {
 
     public void setYear(Long year) {
         setName(Long.toString(year));
-    }
-
-    public Key<FeNodeName> getStore() {
-        return getOthers();
-    }
-
-    public void setStore(Key<FeNodeName> store) {
-        setOthers(store);
     }
 
 }

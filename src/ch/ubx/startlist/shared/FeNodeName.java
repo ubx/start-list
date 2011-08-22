@@ -14,7 +14,7 @@ public class FeNodeName implements Serializable {
 
     @Id
     private String name;
-    private Key<FeNodeName> others;
+    private Key<FeNodeName> parent;
 
     public FeNodeName() {
     }
@@ -31,12 +31,12 @@ public class FeNodeName implements Serializable {
         this.name = name;
     }
 
-    public Key<FeNodeName> getOthers() {
-        return others;
+    public Key<FeNodeName> getParent() {
+        return parent;
     }
 
-    public void setOthers(Key<FeNodeName> othersKey) {
-        this.others = othersKey;
+    public void setParent(Key<FeNodeName> parent) {
+        this.parent = parent;
     }
 
 }
