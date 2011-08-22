@@ -8,7 +8,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.DAOBase;
 
-public class FeGenDAOobjectify<T extends FeNodeName> extends DAOBase implements FeGenDAO<T> {
+public class FeGenDAOobjectify<T extends FeNodeName<?, P>, P> extends DAOBase implements IFeGenDAO<T, P> {
 
     private final Class<T> clazz;
 
@@ -18,26 +18,27 @@ public class FeGenDAOobjectify<T extends FeNodeName> extends DAOBase implements 
     }
 
     @Override
-    public Key<T> getOrCreateKey(String name) {
-        Key<T> key = (Key<T>) ofy().query(clazz).filter("name", name).getKey();
+    public Key<T> getOrCreateKey(String id) {
+        Key<T> key = (Key<T>) ofy().query(clazz).filter("id", id).getKey();
         if (key == null) {
-            key = (Key<T>) ofy().put(newNode(name));
+            key = (Key<T>) ofy().put(newNode(id));
         }
         return key;
     }
 
     @Override
-    public Key<T> getOrCreateKey(String name, Key<? extends FeNodeName> parentKey) {
-        Key<T> key = (Key<T>) ofy().query(clazz).filter("name", name).filter("parent", parentKey).getKey();
+    public Key<T> getOrCreateKey(String id, Key<P> parentKey) {
+        Key<T> key = (Key<T>) ofy().query(clazz).filter("id", id).filter("parent", parentKey).getKey();
         if (key == null) {
-            key = (Key<T>) ofy().put(newNode(name, parentKey));
+            key = (Key<T>) ofy().put(newNode(id, parentKey));
         }
         return key;
     }
 
+    
     @Override
     public T getOrCreate(String name) {
-        T elem = (T) ofy().find(clazz, name);
+        T elem = ofy().find(clazz, name);
         if (elem == null) {
             elem = newNode(name);
             ofy().put(elem);
@@ -46,18 +47,18 @@ public class FeGenDAOobjectify<T extends FeNodeName> extends DAOBase implements 
     }
 
     @Override
-    public T getOrCreate(String name, Key<? extends FeNodeName> parentKey) {
-        T elem = (T) ofy().find(clazz, name);
+    public T getOrCreate(String name, Key<P> parentKey) {
+        T elem = ofy().find(clazz, name);
         if (elem == null) {
             elem = newNode(name, parentKey);
             ofy().put(elem);
         }
         return elem;
     }
-
+    
     @Override
     public T get(Key<T> key) {
-        return ((T) ofy().get(key));
+        return ofy().get(key);
     }
 
     @Override
@@ -71,13 +72,13 @@ public class FeGenDAOobjectify<T extends FeNodeName> extends DAOBase implements 
     }
 
     @Override
-    public List<? extends FeNodeName> list() {
+    public List<T> list() {
         return ofy().query(clazz).list();
 
     }
 
     @Override
-    public List<? extends FeNodeName> list(Key<? extends FeNodeName> parentKey) {
+    public List<T> list(Key<P> parentKey) {
         return ofy().query(clazz).filter("parent", parentKey).list();
     }
 
@@ -85,12 +86,12 @@ public class FeGenDAOobjectify<T extends FeNodeName> extends DAOBase implements 
         return newNode(name, null);
     }
 
-    private T newNode(String name, Key<? extends FeNodeName> parentKey) {
+    private T newNode(String name, Key<P> parentKey) {
         T elem = null;
         try {
-            elem = (T) clazz.newInstance();
-            elem.setName(name);
-            elem.setParent((Key<FeNodeName>) parentKey);
+            elem = clazz.newInstance();
+            elem.setId(name);
+            elem.setParent(parentKey);
         } catch (InstantiationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -100,4 +101,5 @@ public class FeGenDAOobjectify<T extends FeNodeName> extends DAOBase implements 
         }
         return elem;
     }
+
 }

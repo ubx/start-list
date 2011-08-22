@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.ubx.startlist.shared.FePlace;
+import ch.ubx.startlist.shared.FeStore;
 import ch.ubx.startlist.shared.FeYear;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
@@ -17,17 +18,17 @@ public class FePlaceDAOobjectifyGenTest {
 
     private static final LocalDatastoreServiceTestConfig datastore = new LocalDatastoreServiceTestConfig();
     private static final LocalServiceTestHelper helper = new LocalServiceTestHelper(datastore);
-    private static FeGenDAOobjectify<FeYear> yearDAO;
-    private static FeGenDAOobjectify<FePlace> placeDAO;
+    private static FeGenDAOobjectify<FeYear, FeStore> yearDAO;
+    private static FeGenDAOobjectify<FePlace, FeYear> placeDAO;
     private static Key<FeYear> currentYear, lastYear;
 
     @Before
     public void setUp() throws Exception {
         helper.setUp();
-        yearDAO = new FeGenDAOobjectify<FeYear>(FeYear.class);
+        yearDAO = new FeGenDAOobjectify<FeYear, FeStore>(FeYear.class);
         currentYear = yearDAO.getOrCreateKey("2011");
         lastYear = yearDAO.getOrCreateKey("2010");
-        placeDAO = new FeGenDAOobjectify<FePlace>(FePlace.class);
+        placeDAO = new FeGenDAOobjectify<FePlace, FeYear>(FePlace.class);
     }
 
     @After

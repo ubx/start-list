@@ -18,7 +18,7 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
 
     @Id
     private Long id = null;
-    private Key<FeNodeName> parent;
+    private Key<FeDate> parent;
     private long created;
     private long modified;
     private String creator;
@@ -68,11 +68,11 @@ public class FlightEntry implements Serializable, Comparable<FlightEntry> {
         return id;
     }
 
-    public Key<FeNodeName> getParent() {
+    public Key<FeDate> getParent() {
         return parent;
     }
 
-    public void setParent(Key<FeNodeName> parent) {
+    public void setParent(Key<FeDate> parent) {
         this.parent = parent;
     }
 

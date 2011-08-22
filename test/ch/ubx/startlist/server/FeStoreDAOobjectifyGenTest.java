@@ -16,12 +16,12 @@ public class FeStoreDAOobjectifyGenTest {
 
     private final static LocalDatastoreServiceTestConfig datastore = new LocalDatastoreServiceTestConfig();
     private final static LocalServiceTestHelper helper = new LocalServiceTestHelper(datastore);
-    private static FeGenDAOobjectify<FeStore> daoStore;
+    private static FeGenDAOobjectify<FeStore, FeStore> daoStore;
 
     @Before
     public void setUp() throws Exception {
         helper.setUp();
-        daoStore = new FeGenDAOobjectify<FeStore>(FeStore.class);
+        daoStore = new FeGenDAOobjectify<FeStore, FeStore>(FeStore.class);
     }
 
     @After
@@ -44,6 +44,7 @@ public class FeStoreDAOobjectifyGenTest {
         daoStore.getOrCreate("Archive");
         assertEquals(2, daoStore.list().size());
     }
+
     @Test
     public void testDeleteKey() {
         Key<FeStore> key = daoStore.getOrCreateKey("Active");

@@ -7,6 +7,7 @@ import ch.ubx.startlist.server.admin.CronJobServletTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ SentFlightEntryDAOobjectifyTest.class, ExcelSenderTest.class, CronJobServletTest.class,
-        FlightEntryDAOobjectifyTest.class, FeStoreDAOobjectifyGenTest.class, FeYearDAOobjectifyGenTest.class, UseCaseTest.class })
+        FlightEntryDAOobjectifyTest.class, FeStoreDAOobjectifyGenTest.class, FeYearDAOobjectifyGenTest.class,
+        FePlaceDAOobjectifyGenTest.class, UseCaseTest.class })
 public class AllTests {
 }

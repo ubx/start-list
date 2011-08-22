@@ -2,25 +2,22 @@ package ch.ubx.startlist.shared;
 
 import java.io.Serializable;
 
-import javax.persistence.Id;
-
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Subclass;
 
-public class FeDate implements Serializable {
+@Subclass
+public class FeDate extends FeNodeName<Long, FePlace> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    private Long date;
 
     private Key<FePlace> place;
 
     public Long getDate() {
-        return date;
+        return getValue();
     }
 
     public void setDate(Long date) {
-        this.date = date;
+        setValue(date);
     }
 
     public Key<FePlace> getPlace() {

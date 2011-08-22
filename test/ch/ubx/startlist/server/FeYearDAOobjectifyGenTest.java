@@ -17,18 +17,18 @@ public class FeYearDAOobjectifyGenTest {
 
     private static final LocalDatastoreServiceTestConfig datastore = new LocalDatastoreServiceTestConfig();
     private static final LocalServiceTestHelper helper = new LocalServiceTestHelper(datastore);
-    private static FeGenDAOobjectify<FeYear> yearDAO;
-    private static FeGenDAOobjectify<FeStore> storeDAO;
+    private static FeGenDAOobjectify<FeYear, FeStore> yearDAO;
+    private static FeGenDAOobjectify<FeStore, FeStore> storeDAO;
     private static Key<FeStore> storeActiveKey;
     private static Key<FeStore> storeOldKey;
 
     @Before
     public void setUp() throws Exception {
         helper.setUp();
-        storeDAO = new FeGenDAOobjectify<FeStore>(FeStore.class);
+        storeDAO = new FeGenDAOobjectify<FeStore, FeStore>(FeStore.class);
         storeActiveKey = storeDAO.getOrCreateKey("Active");
         storeOldKey = storeDAO.getOrCreateKey("Old");
-        yearDAO = new FeGenDAOobjectify<FeYear>(FeYear.class);
+        yearDAO = new FeGenDAOobjectify<FeYear, FeStore>(FeYear.class);
     }
 
     @After
@@ -103,20 +103,22 @@ public class FeYearDAOobjectifyGenTest {
 
     @Test
     public void testGet() {
-        Key<FeYear> yk = yearDAO.getOrCreateKey(Long.toString(2001), storeActiveKey);
-        assertEquals(2001, yearDAO.get(yk).getYear().longValue());
+        Key<FeYear> yk = yearDAO.getOrCreateKey("2001", storeActiveKey);
+        FeYear y = yearDAO.get(yk);
+        y.setYear(2001L);
+        assertEquals(2001, y.getYear().longValue());
     }
 
     @Test
     public void testDeleteKeyOfFeYear() {
-        Key<FeYear> yk = yearDAO.getOrCreateKey(Long.toString(2001), storeActiveKey);
+        Key<FeYear> yk = yearDAO.getOrCreateKey("2001", storeActiveKey);
         yearDAO.delete(yk);
         assertEquals(0, yearDAO.list().size());
     }
 
     @Test
     public void testDeleteFeYear() {
-        FeYear y = yearDAO.getOrCreate(Long.toString(2001), storeActiveKey);
+        FeYear y = yearDAO.getOrCreate("2001", storeActiveKey);
         yearDAO.delete(y);
         assertEquals(0, yearDAO.list().size());
     }
