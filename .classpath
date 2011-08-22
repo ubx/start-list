@@ -9,7 +9,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jxl.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jericho-html-3.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-2.2.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/consoleImpl.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/profilerImpl.jar"/>
@@ -23,5 +22,6 @@
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-local-runtime.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/testing/appengine-testing.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.0.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
