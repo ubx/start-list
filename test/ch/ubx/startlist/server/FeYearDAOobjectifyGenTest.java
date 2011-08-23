@@ -52,9 +52,8 @@ public class FeYearDAOobjectifyGenTest {
         assertEquals(4, yearDAO.list(storeOldKey).size());
         assertEquals(2, storeDAO.list().size());
 
-        // move 2001 from OLD to ACTIVE
         yearDAO.getOrCreateKey(Long.toString(2001), storeActiveKey);
-        assertEquals(8, yearDAO.list().size()); // total
+        assertEquals(9, yearDAO.list().size()); // total
         assertEquals(5, yearDAO.list(storeActiveKey).size());
         assertEquals(3, yearDAO.list(storeOldKey).size());
         assertEquals(2, storeDAO.list().size());
@@ -80,9 +79,8 @@ public class FeYearDAOobjectifyGenTest {
         assertEquals(4, yearDAO.list(storeOldKey).size());
         assertEquals(2, storeDAO.list().size());
 
-        // move 2001 from OLD to ACTIVE
         yearDAO.getOrCreateKey(Long.toString(2001), storeActiveKey);
-        assertEquals(8, yearDAO.list().size()); // total
+        assertEquals(9, yearDAO.list().size()); // total
         assertEquals(5, yearDAO.list(storeActiveKey).size());
         assertEquals(3, yearDAO.list(storeOldKey).size());
         assertEquals(2, storeDAO.list().size());

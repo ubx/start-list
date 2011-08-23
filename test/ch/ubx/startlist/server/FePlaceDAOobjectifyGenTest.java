@@ -46,7 +46,7 @@ public class FePlaceDAOobjectifyGenTest {
         placeDAO.getOrCreateKey("Place8", lastYear);
         placeDAO.getOrCreateKey("Place9", lastYear);
         assertEquals(2, yearDAO.list().size()); // total years
-        assertEquals(5, placeDAO.list().size()); // total places
+        assertEquals(7, placeDAO.list().size()); // total places
         assertEquals(3, placeDAO.list(currentYear).size());
         assertEquals(4, placeDAO.list(lastYear).size());
     }

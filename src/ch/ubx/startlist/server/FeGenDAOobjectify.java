@@ -28,14 +28,14 @@ public class FeGenDAOobjectify<T extends FeNodeName<?, P>, P> extends DAOBase im
 
     @Override
     public Key<T> getOrCreateKey(String id, Key<P> parentKey) {
-        Key<T> key = (Key<T>) ofy().query(clazz).filter("id", id).filter("parent", parentKey).getKey();
+        String cId = parentKey.getName() + "-" + id;
+        Key<T> key = (Key<T>) ofy().query(clazz).filter("id", cId).filter("parent", parentKey).getKey();
         if (key == null) {
-            key = (Key<T>) ofy().put(newNode(id, parentKey));
+            key = (Key<T>) ofy().put(newNode(cId, parentKey));
         }
         return key;
     }
 
-    
     @Override
     public T getOrCreate(String name) {
         T elem = ofy().find(clazz, name);
@@ -47,15 +47,16 @@ public class FeGenDAOobjectify<T extends FeNodeName<?, P>, P> extends DAOBase im
     }
 
     @Override
-    public T getOrCreate(String name, Key<P> parentKey) {
-        T elem = ofy().find(clazz, name);
+    public T getOrCreate(String id, Key<P> parentKey) {
+        String cId = parentKey.getName() + "-" + id;
+        T elem = ofy().find(clazz, cId);
         if (elem == null) {
-            elem = newNode(name, parentKey);
+            elem = newNode(cId, parentKey);
             ofy().put(elem);
         }
         return elem;
     }
-    
+
     @Override
     public T get(Key<T> key) {
         return ofy().get(key);
