@@ -4,15 +4,15 @@ import java.util.List;
 
 import com.googlecode.objectify.Key;
 
-public interface IFeGenDAO<T,P> {
+public interface IFeGenDAO<P, V, T> {
 
-    public Key<T> getOrCreateKey(String name);
+    public Key<T> getOrCreateKey(V value);
 
-    public Key<T> getOrCreateKey(String name, Key<P> parent);
+    public Key<T> getOrCreateKey(V value, Key<P> parentKey);
 
-    public T getOrCreate(String name);
+    public T getOrCreate(V value);
 
-    public T getOrCreate(String name, Key<P> parent);
+    public T getOrCreate(V value, Key<P> parent);
 
     public T get(Key<T> key);
 

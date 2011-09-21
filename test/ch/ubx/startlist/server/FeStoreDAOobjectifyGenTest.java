@@ -16,12 +16,12 @@ public class FeStoreDAOobjectifyGenTest {
 
     private final static LocalDatastoreServiceTestConfig datastore = new LocalDatastoreServiceTestConfig();
     private final static LocalServiceTestHelper helper = new LocalServiceTestHelper(datastore);
-    private static FeGenDAOobjectify<FeStore, FeStore> daoStore;
+    private static FeGenDAOobjectify<FeStore, FeStore, String> daoStore;
 
     @Before
     public void setUp() throws Exception {
         helper.setUp();
-        daoStore = new FeGenDAOobjectify<FeStore, FeStore>(FeStore.class);
+        daoStore = new FeGenDAOobjectify<FeStore, FeStore, String>(FeStore.class);
     }
 
     @After
@@ -48,10 +48,14 @@ public class FeStoreDAOobjectifyGenTest {
     @Test
     public void testDeleteKey() {
         Key<FeStore> key = daoStore.getOrCreateKey("Active");
-        assertEquals("Active", key.getName());
+        assertEquals(1, key.getId()); // TODO - ???
+        FeStore store = daoStore.get(key);
+        assertEquals("Active", store.getValue());
         assertEquals(1, daoStore.list().size());
         Key<FeStore> key2 = daoStore.getOrCreateKey("Active2");
-        assertEquals("Active2", key2.getName());
+        assertEquals(2, key2.getId()); // TODO - ???
+        FeStore store2 = daoStore.get(key2);
+        assertEquals("Active2", store2.getValue());
         assertEquals(2, daoStore.list().size());
         daoStore.delete(key);
         assertEquals(1, daoStore.list().size());

@@ -8,27 +8,32 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 
 @Entity
-public class FeNodeName<V, P> implements Serializable {
+public class FeNode<V, P> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String id;
+    private Long id = null;
     private Key<P> parent;
     private V value;
 
-    public FeNodeName() {
+    public FeNode() {
     }
 
-    public FeNodeName(String id) {
-        this.id = id;
+    public FeNode(V value) {
+        this.value = value;
     }
 
-    public String getId() {
+    public FeNode(V value, Key<P> parent) {
+        this.value = value;
+        this.parent = parent;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,7 +46,7 @@ public class FeNodeName<V, P> implements Serializable {
     }
 
     public V getValue() {
-        return value;
+        return this.value;
     }
 
     public void setValue(V value) {
