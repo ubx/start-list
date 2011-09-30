@@ -10,6 +10,9 @@ public class FeDate extends FeNode<Long, FePlace> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public FeDate() {
+    }
+
     public FeDate(Long value, Key<FePlace> parent) {
         setValue(value);
         setParent(parent);

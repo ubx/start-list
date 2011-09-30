@@ -40,132 +40,138 @@ import com.google.appengine.api.utils.SystemProperty;
 
 public class ExcelSender implements TextConstants {
 
-	private static SendExcelDAO sendExcelDAO = new SendExcelDAOobjectify();
-	private static FlightEntryDAO flightEntryDAO = new FlightEntryDAOobjectify();
-	private static SentFlightEntryDAO sentFlightEntryDAO = new SentFlightEntryDAOobjectify();
+    private static SendExcelDAO sendExcelDAO = new SendExcelDAOobjectify();
+    private static FlightEntryDAO flightEntryDAO = new FlightEntryDAOobjectify();
+    private static SentFlightEntryDAO sentFlightEntryDAO = new SentFlightEntryDAOobjectify();
 
-	private static final Logger log = Logger.getLogger(ExcelSender.class.getName());
+    private static final Logger log = Logger.getLogger(ExcelSender.class.getName());
 
-	/**
-	 * Send e-mail with an excel sheet for all SendExcel.
-	 * 
-	 * @param currentTime
-	 * 
-	 * @throws IOException
-	 * @throws UnsupportedEncodingException
-	 */
-	public static int doSend(List<String> names, Calendar currentTime) throws IOException {
-		int filteredFlightEntriesCnt = 0;
-		Calendar now = Calendar.getInstance();
-		now.setTimeInMillis(currentTime.getTimeInMillis());
-		Calendar startDate = Calendar.getInstance();
-		String applicationId = SystemProperty.applicationId.get();
-		Map<String, SendExcel> sendExcelMap = sendExcelDAO.listSendExcel(names);
+    /**
+     * Send e-mail with an excel sheet for all SendExcel.
+     * 
+     * @param currentTime
+     * 
+     * @throws IOException
+     * @throws UnsupportedEncodingException
+     */
+    public static int doSend(List<String> names, Calendar currentTime) throws IOException {
+        int filteredFlightEntriesCnt = 0;
+        Calendar now = Calendar.getInstance();
+        now.setTimeInMillis(currentTime.getTimeInMillis());
+        Calendar startDate = Calendar.getInstance();
+        String applicationId = SystemProperty.applicationId.get();
+        Map<String, SendExcel> sendExcelMap = sendExcelDAO.listSendExcel(names);
 
-		for (SendExcel sendExcel : sendExcelMap.values()) {
-			// TODO - use EntrySet to get job name
-			String sheetname = String.format("%1$tY%1$tm%1$te", now) + "-" + sendExcel.getPlace().replace(" ", "_");
-			List<FlightEntry> flightEntries;
-			List<SentFlightEntry> sentFlightEntries = null;
+        for (SendExcel sendExcel : sendExcelMap.values()) {
+            // TODO - use EntrySet to get job name
+            String sheetname = String.format("%1$tY%1$tm%1$te", now) + "-" + sendExcel.getPlace().replace(" ", "_");
+            List<FlightEntry> flightEntries;
+            List<SentFlightEntry> sentFlightEntries = null;
 
-			// Handle already sent FlightEntries TODO - better comment!
-			if (sendExcel.getDaysBehind() > 0) {
-				startDate.setTimeInMillis(now.getTimeInMillis());
-				startDate.add(Calendar.DAY_OF_YEAR, sendExcel.getDaysBehind() * -1);
-				flightEntries = flightEntryDAO.listflightEntry(startDate, now, sendExcel.getPlace());
-				sentFlightEntries = sentFlightEntryDAO.listFlightEntry(sendExcel.getName());
+            // Handle already sent FlightEntries TODO - better comment!
+            if (sendExcel.getDaysBehind() > 0) {
+                startDate.setTimeInMillis(now.getTimeInMillis());
+                startDate.add(Calendar.DAY_OF_YEAR, sendExcel.getDaysBehind() * -1);
+                flightEntries = flightEntryDAO.listflightEntry(startDate, now, sendExcel.getPlace());
+                sentFlightEntries = sentFlightEntryDAO.listFlightEntry(sendExcel.getName());
 
-				for (SentFlightEntry sentFlightEntry : sentFlightEntries) {
-					for (FlightEntry flightEntry : flightEntries) {
-						// Compare Id values, not objects reference!
-						if (sentFlightEntry.getFlightEntry().compareTo(flightEntry.getId()) == 0) {
-							if (sentFlightEntry.getLastModified() == flightEntry.getModified() || flightEntry.getModified() < startDate.getTimeInMillis()) {
-								flightEntries.remove(flightEntry);
-								break;
-							}
-						}
-					}
-				}
-			} else {
-				flightEntries = flightEntryDAO.listflightEntry(now, sendExcel.getPlace());
-			}
+                for (SentFlightEntry sentFlightEntry : sentFlightEntries) {
+                    for (FlightEntry flightEntry : flightEntries) {
+                        // Compare Id values, not objects reference!
+                        if (sentFlightEntry.getFlightEntry().compareTo(flightEntry.getId()) == 0) {
+                            if (sentFlightEntry.getLastModified() == flightEntry.getModified()
+                                    || flightEntry.getModified() < startDate.getTimeInMillis()) {
+                                flightEntries.remove(flightEntry);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else {
+                flightEntries = flightEntryDAO.listflightEntry(now, sendExcel.getPlace());
+            }
 
-			List<FlightEntry> filteredFlightEntries = new ArrayList<FlightEntry>();
-			if (!flightEntries.isEmpty()) {
-				// Filter Gliders and Towplanes
-				Set<String> filterGliders = new TreeSet<String>();
-				if (sendExcel.getFilterGliders() != null) {
-					filterGliders.addAll(Arrays.asList(sendExcel.getFilterGliders().split(";")));
-				}
-				Set<String> filterTowplanes = new TreeSet<String>();
-				if (sendExcel.getFilterTowplanes() != null) {
-					filterTowplanes.addAll(Arrays.asList(sendExcel.getFilterTowplanes().split(";")));
-				}
-				for (FlightEntry flightEntry : flightEntries) {
-					if (filterGliders.isEmpty() & filterTowplanes.isEmpty()) {
-						filteredFlightEntries.add(flightEntry);
-					} else if (flightEntry.getRegistrationGlider() != null && filterGliders.contains(flightEntry.getRegistrationGlider())
-							|| (flightEntry.getRegistrationTowplane() != null && filterTowplanes.contains(flightEntry.getRegistrationTowplane()))) {
-						filteredFlightEntries.add(flightEntry);
-					}
-				}
-			}
+            List<FlightEntry> filteredFlightEntries = new ArrayList<FlightEntry>();
+            if (!flightEntries.isEmpty()) {
+                // Filter Gliders and Towplanes
+                Set<String> filterGliders = new TreeSet<String>();
+                if (sendExcel.getFilterGliders() != null) {
+                    filterGliders.addAll(Arrays.asList(sendExcel.getFilterGliders().split(";")));
+                }
+                Set<String> filterTowplanes = new TreeSet<String>();
+                if (sendExcel.getFilterTowplanes() != null) {
+                    filterTowplanes.addAll(Arrays.asList(sendExcel.getFilterTowplanes().split(";")));
+                }
+                for (FlightEntry flightEntry : flightEntries) {
+                    if (filterGliders.isEmpty() & filterTowplanes.isEmpty()) {
+                        filteredFlightEntries.add(flightEntry);
+                    } else if (flightEntry.getRegistrationGlider() != null
+                            && filterGliders.contains(flightEntry.getRegistrationGlider())
+                            || (flightEntry.getRegistrationTowplane() != null && filterTowplanes.contains(flightEntry
+                                    .getRegistrationTowplane()))) {
+                        filteredFlightEntries.add(flightEntry);
+                    }
+                }
+            }
 
-			Properties props = new Properties();
-			Session session = Session.getDefaultInstance(props, null);
-			try {
-				Message msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("admin@" + applicationId + ".appspotmail.com"));
-				for (String recipient : sendExcel.getRecipientsList()) {
-					msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-				}				
-				msg.setSubject(MimeUtility.encodeText(sendExcel.getSubject(), "UTF-8", "Q")); 
-				Multipart mp = new MimeMultipart();
-				log.log(Level.INFO, "Create excel for FlighEnties: " + filteredFlightEntries.size());
-				// Excel attachment
-				if (!filteredFlightEntries.isEmpty()) {
-					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-					ExcelSheet.createExcel(filteredFlightEntries, outputStream, sheetname);
-					MimeBodyPart attachmentBP = new MimeBodyPart();
-					attachmentBP.setFileName(URLEncoder.encode(sheetname + ".xls", "UTF-8"));
-					attachmentBP.setDisposition(Part.ATTACHMENT);
-					DataSource src = new ByteArrayDataSource(outputStream.toByteArray(), "application/x-ms-excel");
-					DataHandler handler = new DataHandler(src);
-					attachmentBP.setDataHandler(handler);
-					mp.addBodyPart(attachmentBP);
-				}
+            Properties props = new Properties();
+            Session session = Session.getDefaultInstance(props, null);
+            try {
+                Message msg = new MimeMessage(session);
+                msg.setFrom(new InternetAddress("admin@" + applicationId + ".appspotmail.com"));
+                for (String recipient : sendExcel.getRecipientsList()) {
+                    msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+                }
+                msg.setSubject(MimeUtility.encodeText(sendExcel.getSubject(), "UTF-8", "Q"));
+                Multipart mp = new MimeMultipart();
+                log.log(Level.INFO, "Create excel for FlighEnties: " + filteredFlightEntries.size());
+                // Excel attachment
+                if (!filteredFlightEntries.isEmpty()) {
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    ExcelSheet.createExcel(filteredFlightEntries, outputStream, sheetname);
+                    MimeBodyPart attachmentBP = new MimeBodyPart();
+                    attachmentBP.setFileName(URLEncoder.encode(sheetname + ".xls", "UTF-8"));
+                    attachmentBP.setDisposition(Part.ATTACHMENT);
+                    DataSource src = new ByteArrayDataSource(outputStream.toByteArray(), "application/x-ms-excel");
+                    DataHandler handler = new DataHandler(src);
+                    attachmentBP.setDataHandler(handler);
+                    mp.addBodyPart(attachmentBP);
+                }
 
-				// Message body
-				MimeBodyPart plainBody = new MimeBodyPart();
-				plainBody.setContent(filteredFlightEntries.isEmpty() ? TXT_NO_FLIGHT_TODAY : TXT_FLIGHT_FOR_TODY_IN_EXCEL_FILE, "text/plain");
-				plainBody.setFileName("body.txt");
-				mp.addBodyPart(plainBody);
-				msg.setText(sendExcel.getSubject());
-				msg.setContent(mp);
-				msg.saveChanges();
-				Transport.send(msg);
+                // Message body
+                MimeBodyPart plainBody = new MimeBodyPart();
+                plainBody.setContent(filteredFlightEntries.isEmpty() ? TXT_NO_FLIGHT_TODAY : TXT_FLIGHT_FOR_TODY_IN_EXCEL_FILE,
+                        "text/plain");
+                plainBody.setFileName("body.txt");
+                mp.addBodyPart(plainBody);
+                msg.setText(sendExcel.getSubject());
+                msg.setContent(mp);
+                msg.saveChanges();
+                Transport.send(msg);
 
-				// Update SentFlightEntry
-				if (sendExcel.getDaysBehind() > 0) {
-					for (FlightEntry flightEntry : filteredFlightEntries) {
-						SentFlightEntry sentFlightEntry = sentFlightEntryDAO.getSentFlightEntry(sendExcel.getName(), flightEntry.getId());
-						if (sentFlightEntry == null) {
-							sentFlightEntry = new SentFlightEntry(flightEntry.getId(), sendExcel.getName(), flightEntry.getModified());
-						} else {
-							sentFlightEntry.setLastModified(flightEntry.getModified());
-						}
-						sentFlightEntryDAO.createOrUpdateSentFlightEntry(sentFlightEntry);
-					}
-					sentFlightEntryDAO.purgeSentFlightEntry(sendExcel.getName(), startDate);
-				}
-			} catch (AddressException e) {
-				// ...
-			} catch (MessagingException e) {
-				// ...
-			}
-			filteredFlightEntriesCnt = filteredFlightEntriesCnt + filteredFlightEntries.size();
-		}
-		return filteredFlightEntriesCnt; // for unit test only!
-	}
+                // Update SentFlightEntry
+                if (sendExcel.getDaysBehind() > 0) {
+                    for (FlightEntry flightEntry : filteredFlightEntries) {
+                        SentFlightEntry sentFlightEntry = sentFlightEntryDAO.getSentFlightEntry(sendExcel.getName(),
+                                flightEntry.getId());
+                        if (sentFlightEntry == null) {
+                            sentFlightEntry = new SentFlightEntry(flightEntry.getId(), sendExcel.getName(),
+                                    flightEntry.getModified());
+                        } else {
+                            sentFlightEntry.setLastModified(flightEntry.getModified());
+                        }
+                        sentFlightEntryDAO.createOrUpdateSentFlightEntry(sentFlightEntry);
+                    }
+                    sentFlightEntryDAO.purgeSentFlightEntry(sendExcel.getName(), startDate);
+                }
+            } catch (AddressException e) {
+                // ...
+            } catch (MessagingException e) {
+                // ...
+            }
+            filteredFlightEntriesCnt = filteredFlightEntriesCnt + filteredFlightEntries.size();
+        }
+        return filteredFlightEntriesCnt; // for unit test only!
+    }
 
 }

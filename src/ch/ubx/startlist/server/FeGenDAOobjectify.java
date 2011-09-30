@@ -52,7 +52,7 @@ public class FeGenDAOobjectify<T extends FeNode<V, P>, P, V> extends DAOBase imp
 
     @Override
     public T getOrCreate(V value, Key<P> parentKey) {
-        T elem = ofy().query(clazz).filter(VALUE, value).filter(PARENT, parentKey).get();
+        T elem = ofy().query(clazz).filter(PARENT, parentKey).filter(VALUE, value).get();
         if (elem == null) {
             elem = newNode(value, parentKey);
             ofy().put(elem);
@@ -64,6 +64,12 @@ public class FeGenDAOobjectify<T extends FeNode<V, P>, P, V> extends DAOBase imp
     public T get(Key<T> key) {
         return (T) ofy().get(key);
     }
+
+    @Override
+    public T get(V value, Key<P> parentKey) {
+        return ofy().query(clazz).filter(VALUE, value).filter(PARENT, parentKey).get();
+    }
+
 
     @Override
     public void delete(Key<T> key) {
@@ -78,13 +84,28 @@ public class FeGenDAOobjectify<T extends FeNode<V, P>, P, V> extends DAOBase imp
     @Override
     public List<T> list() {
         return ofy().query(clazz).list();
-
     }
 
     @Override
     public List<T> list(Key<P> parentKey) {
         return (List<T>) ofy().query(clazz).filter(PARENT, parentKey).list();
     }
+
+    @Override
+    public List<T> list(P parent) {
+        return (List<T>) ofy().query(clazz).filter(PARENT, parent).list();
+    }
+
+    @Override
+    public  List<T> list(V valueL, V valueH, P parent) {
+        return ofy().query(clazz).filter(PARENT, parent).filter(VALUE + ">=", valueL).filter(VALUE + "<=", valueH).list();
+    }
+
+    @Override
+    public List<T> find(V value) {
+        return (List<T>) ofy().query(clazz).filter(VALUE, value).list();
+    }
+
 
     private T newNode(V value) {
         return newNode(value, null);

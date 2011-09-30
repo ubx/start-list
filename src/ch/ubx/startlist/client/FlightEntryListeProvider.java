@@ -3,6 +3,7 @@ package ch.ubx.startlist.client;
 import java.util.Date;
 import java.util.List;
 
+import ch.ubx.startlist.shared.FeDate;
 import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.gwt.core.client.GWT;
@@ -36,7 +37,7 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
 
 	private String currentPlace;
 
-	private long currentDateInMillies;
+    private FeDate currentDate;
 
 	public FlightEntryListeProvider() {
 		// Initialize the service.
@@ -60,7 +61,7 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
 
 		// Fetch the data remotely.
 		//
-		flightEntryService.listFlightEntries(currentPlace, currentDateInMillies, startRow, maxRows, new AsyncCallback<List<FlightEntry>>() {
+		flightEntryService.listFlightEntrie(currentDate, startRow, maxRows, new AsyncCallback<List<FlightEntry>>() {
 			public void onFailure(Throwable caught) {
 				acceptor.failed(caught);
 			}
@@ -140,16 +141,16 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
 		currentPlace = null;
 	}
 
-	public long getCurrentDate() {
-		return currentDateInMillies;
+	public FeDate getCurrentDate() {
+		return currentDate;
 	}
 
-	public void setCurrentDate(long date) {
-		currentDateInMillies = date;
+	public void setCurrentDate(FeDate date) {
+		currentDate = date;
 	}
 
 	public void clearCurrentDate() {
-		currentDateInMillies = 0;
+		currentDate = null;
 	}
 
 	public void reset() {

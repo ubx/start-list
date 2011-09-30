@@ -1,10 +1,13 @@
 package ch.ubx.startlist.server;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
+import ch.ubx.startlist.shared.FeDate;
+import ch.ubx.startlist.shared.FePlace;
+import ch.ubx.startlist.shared.FeStore;
+import ch.ubx.startlist.shared.FeYear;
 import ch.ubx.startlist.shared.FlightEntry;
 import ch.ubx.startlist.shared.LoginInfo;
 
@@ -12,320 +15,265 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.util.DAOBase;
 
-public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO {
+public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2 {
 
-	static {
-		ObjectifyService.register(FlightEntry.class);
-		ObjectifyService.register(LoginInfo.class);
-	}
+    private static final String PARENT = "parent";
 
-	private LoginInfo loginInfo = null;
-	private UserService userService;
-	private User adminUser;
+    static {
+        try { // TODO -- eliminate duplicate register error
+            ObjectifyService.register(FlightEntry.class);
+            ObjectifyService.register(LoginInfo.class);
+        } catch (Exception e) {
+        }
+    }
 
-	public FlightEntryDAOobjectify2() {
-		userService = UserServiceFactory.getUserService();
-		adminUser = new User("admin.cron@" + SystemProperty.applicationId.get() + ".appspotmail.com", "gmail.com");
-	}
+    private LoginInfo loginInfo = null;
+    private UserService userService;
+    private User adminUser;
+    private final FeGenDAOobjectify<FeDate, FePlace, Long> dateDAO = new FeGenDAOobjectify<FeDate, FePlace, Long>(FeDate.class);
+    private final FeGenDAOobjectify<FeStore, FeStore, String> storeDAO = new FeGenDAOobjectify<FeStore, FeStore, String>(
+            FeStore.class);
+    private final FeGenDAOobjectify<FeYear, FeStore, Long> yearDAO = new FeGenDAOobjectify<FeYear, FeStore, Long>(FeYear.class);
+    private final FeGenDAOobjectify<FePlace, FeYear, String> placeDAO = new FeGenDAOobjectify<FePlace, FeYear, String>(
+            FePlace.class);
+    private static Key<FeStore> storeActiveKey;
 
-	@Override
-	public List<FlightEntry> listflightEntry() {
-		return ofy().query(FlightEntry.class).list();
-	}
+    public FlightEntryDAOobjectify2() {
+        userService = UserServiceFactory.getUserService();
+        adminUser = new User("admin.cron@" + SystemProperty.applicationId.get() + ".appspotmail.com", "gmail.com");
+        storeActiveKey = storeDAO.getOrCreateKey("Active");
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#listflightEntry(java.lang.String, long, int, int)
-	 */
-	@Override
-	public List<FlightEntry> listflightEntry(String place, long dateTimeInMillis, int startIndex, int maxCount) {
-		Calendar date = Calendar.getInstance();
-		date.setTimeInMillis(dateTimeInMillis);
-		List<FlightEntry> list = listflightEntry(date, place);
-		// TODO - use Query methods limit/ offset
-		list = list.subList(startIndex, Math.min(startIndex + maxCount, list.size()));
-		for (FlightEntry flightEntry : list) {
-			doPostLoad(flightEntry);
-		}
-		return list;
-	}
+    @Override
+    public List<FlightEntry> listflightEntry() {
+        return ofy().query(FlightEntry.class).list();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#removeFlightEntry(ch.ubx.startlist.shared.FlightEntry)
-	 */
-	@Override
-	public FlightEntry removeFlightEntry(FlightEntry flightEntry) {
-		ofy().delete(flightEntry);
-		return flightEntry;
-	}
+    @Override
+    public List<FlightEntry> listflightEntry(FeDate date, int startIndex, int maxCount) {
+        Query<FlightEntry> query = ofy().query(FlightEntry.class).filter(PARENT, date);
+        List<FlightEntry> list = query.list();
+        // TODO - use Query methods limit/ offset
+        list = list.subList(startIndex, Math.min(startIndex + maxCount, list.size()));
+        for (FlightEntry flightEntry : list) {
+            doPostLoad(flightEntry);
+        }
+        return list;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#createOrUpdateFlightEntry(ch.ubx.startlist.shared.FlightEntry)
-	 */
+    @Override
+    public List<FlightEntry> listflightEntry(FeDate date) {
+        return listflightEntry(date, 0, 100000);
+    }
 
-	@Override
-	public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry) {
-		doPrePersist(flightEntry);
-		ofy().put(flightEntry);
-		return flightEntry;
-	}
+    @Override
+    public List<FlightEntry> listflightEntry(int yearInt) {
+        List<FlightEntry> fes = new ArrayList<FlightEntry>();
+        for (FePlace fePlace : listAirfield(yearInt)) {
+            for (FeDate feDate : listDate(fePlace)) {
+                fes.addAll(listflightEntry(feDate));
+            }
+        }
+        return fes;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#listDates(java.lang.String, int)
-	 */
-	@Override
-	public Set<Long> listDates(String place, int year) {
-		List<FlightEntry> list = listflightEntry(year, place);
-		Set<Long> dateList = new TreeSet<Long>();
-		Calendar ymd = Calendar.getInstance();
-		Calendar cal = Calendar.getInstance();
-		for (FlightEntry flightEntry : list) {
-			cal.setTimeInMillis(flightEntry.getStartTimeInMillis());
-			ymd.setTimeInMillis(0);
-			ymd.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-			ymd.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR));
-			dateList.add(ymd.getTimeInMillis());
-		}
-		if (dateList.size() == 0) {
-			dateList.add(ymd.getTime().getTime());
-		}
-		return dateList;
-	}
+    @Override
+    public List<FlightEntry> listflightEntry(int startYearInt, int endYearInt, String placeStr) {
+        List<FlightEntry> fes = new ArrayList<FlightEntry>();
+        if (startYearInt <= endYearInt) {
+            List<FePlace> ys = new ArrayList<FePlace>();
+            for (int y = startYearInt; y <= endYearInt; y++) {
+                ys.addAll(listAirfield(y));
+            }
+            List<FeDate> ds = new ArrayList<FeDate>();
+            for (FePlace fePlace : ys) {
+                if (fePlace.getValue().equals(placeStr)) {
+                    ds.addAll(listDate(fePlace));
+                }
+            }
+            for (FeDate feDate : ds) {
+                fes.addAll(listflightEntry(feDate));
+            }
+        }
+        return fes;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#listAirfields(int)
-	 */
-	@Override
-	public Set<String> listAirfields(int year) {
-		List<FlightEntry> list = listflightEntry(year);
-		Set<String> places = new TreeSet<String>();
-		for (FlightEntry flightEntry : list) {
-			places.add(flightEntry.getPlace());
-		}
-		return places;
-	}
+    @Override
+    public List<FlightEntry> listflightEntry(long startDateLong, long endDateLong, String placeStr) {
+        List<FlightEntry> fes = new ArrayList<FlightEntry>();
+        if (startDateLong <= endDateLong) {
+            List<FeDate> ds = new ArrayList<FeDate>();
+            for (FePlace fePlace : placeDAO.list()) {
+                if (fePlace.getValue().equals(placeStr)) {
+                    ds.addAll(dateDAO.list(startDateLong, endDateLong, fePlace));
+                }
+            }
+            for (FeDate feDate : ds) {
+                fes.addAll(listflightEntry(feDate));
+            }
+        }
+        return fes;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#listYears()
-	 */
-	@Override
-	public Set<Integer> listYears() {
-		List<FlightEntry> list = ofy().query(FlightEntry.class).list();
-		Set<Integer> years = new TreeSet<Integer>();
-		Calendar cal = Calendar.getInstance();
-		for (FlightEntry flightEntry : list) {
-			cal.setTimeInMillis(flightEntry.getStartTimeInMillis());
-			years.add(new Integer(cal.get(Calendar.YEAR)));
-		}
-		if (years.size() == 0) {
-			years.add(cal.get(Calendar.YEAR));
-		}
-		return years;
-	}
+    @Override
+    public List<FlightEntry> listflightEntry(int yearInt, int month, int day, String placeStr) {
+        List<FlightEntry> fes = new ArrayList<FlightEntry>();
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(0);
+        date.set(Calendar.YEAR, yearInt);
+        date.set(Calendar.MONTH, month);
+        date.set(Calendar.DAY_OF_MONTH, day);
+        List<FeDate> ds = new ArrayList<FeDate>();
+        for (FePlace fePlace : listAirfield(yearInt)) {
+            if (fePlace.getValue().equals(placeStr)) {
+                ds.addAll(listDate(fePlace));
+            }
+        }
+        for (FeDate feDate : ds) {
+            if (feDate.getValue() == date.getTimeInMillis()) {
+                fes.addAll(listflightEntry(feDate));
+            }
+        }
+        return fes;
+    }
 
-	// --------------------------------------------------------------------------------------
-	// server internal access methods
+    @Override
+    public FlightEntry removeFlightEntry(FlightEntry flightEntry) {
+        Key<FeDate> dk = flightEntry.getParent();
+        ofy().delete(flightEntry);
+        flightEntry.setParent(null);
+        Query<FlightEntry> query = ofy().query(FlightEntry.class).filter(PARENT, dk);
+        if (query.list().size() == 0) {
+            Key<FePlace> pk = dateDAO.get(dk).getParent();
+            dateDAO.delete(dk);
+            if (dateDAO.list(pk).size() == 0) {
+                Key<FeYear> yk = placeDAO.get(pk).getParent();
+                placeDAO.delete(pk);
+                if (placeDAO.list(yk).size() == 0) {
+                    yearDAO.delete(yk);
+                }
+            }
+        }
+        return flightEntry;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#listflightEntry(int)
-	 */
-	@Override
-	public List<FlightEntry> listflightEntry(int year) {
-		Calendar yearStart = Calendar.getInstance();
-		yearStart.setTimeInMillis(0);
-		yearStart.set(Calendar.YEAR, year);
+    @Override
+    public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry) {
+        if (flightEntry.getParent() != null) {
+            removeFlightEntry(flightEntry);
+        }
+        doPrePersist(flightEntry);
+        Key<FeYear> yearKey = yearDAO.getOrCreateKey(evalYear(flightEntry), storeActiveKey);
+        Key<FePlace> placeKey = placeDAO.getOrCreateKey(evalPlace(flightEntry), yearKey);
+        Key<FeDate> dateKey = dateDAO.getOrCreateKey(evalDate(flightEntry), placeKey);
+        flightEntry.setParent(dateKey);
+        ofy().put(flightEntry);
+        return flightEntry;
+    }
 
-		Calendar yearEnd = Calendar.getInstance();
-		yearEnd.setTimeInMillis(0);
-		yearEnd.set(Calendar.YEAR, year + 1);
+    @Override
+    public List<FeDate> listDate(FePlace place) {
+        return dateDAO.list(place);
+    }
 
-		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("startTimeInMillis >=", yearStart.getTimeInMillis())
-				.filter("startTimeInMillis <", yearEnd.getTimeInMillis()).order("startTimeInMillis");
+    @Override
+    public List<FeDate> listDate(String placeStr, int yearInt) {
+        List<FeDate> ds = new ArrayList<FeDate>();
+        for (FePlace fePlace : listAirfield(yearDAO.get(new Long(yearInt), storeActiveKey))) {
+            ds.addAll(listDate(fePlace));
+        }
+        return ds;
+    }
 
-		return query.list();
-	}
+    @Override
+    public List<FePlace> listAirfield(FeYear year) {
+        return placeDAO.list(year);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#listflightEntry(java.util.Calendar, java.lang.String)
-	 */
-	@Override
-	public List<FlightEntry> listflightEntry(Calendar date, String place) {
-		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateStart.setTimeInMillis(date.getTimeInMillis());
-		dateStart.set(Calendar.HOUR_OF_DAY, 0);
-		dateStart.set(Calendar.MINUTE, 0);
-		dateStart.set(Calendar.SECOND, 0);
-		dateStart.set(Calendar.MILLISECOND, 0);
-		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateEnd.setTimeInMillis(dateStart.getTimeInMillis());
-		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
+    @Override
+    public List<FePlace> listAirfield(int yearInt) {
+        return listAirfield(yearDAO.get(new Long(yearInt), storeActiveKey));
+    }
 
-		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place ==", place)
-				.filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <", dateEnd.getTimeInMillis())
-				.order("startTimeInMillis");
-		return query.list();
-	}
+    @Override
+    public List<FeYear> listYear() {
+        return yearDAO.list(storeActiveKey);
+    }
 
-	@Override
-	public List<FlightEntry> listflightEntry(Calendar startDate, Calendar endDate, String place) {
-		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateStart.setTimeInMillis(startDate.getTimeInMillis());
-		dateStart.set(Calendar.HOUR_OF_DAY, 0);
-		dateStart.set(Calendar.MINUTE, 0);
-		dateStart.set(Calendar.SECOND, 0);
-		dateStart.set(Calendar.MILLISECOND, 0);
+    /*
+     * NOTE: this method should be used only for testing!
+     */
+    public void addFlightEntries4Test(List<FlightEntry> flightEntries) {
+        for (FlightEntry flightEntry : flightEntries) {
+            createOrUpdateFlightEntry(flightEntry);
+        }
+    }
 
-		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateEnd.setTimeInMillis(endDate.getTimeInMillis());
-		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place", place)
-				.filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <=", dateEnd.getTimeInMillis());
-		return query.list();
-	}
+    // --------------------------------------------------------------------------------------
+    // private methods
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#listflightEntry(int, int, int, java.lang.String)
-	 */
-	@Override
-	public List<FlightEntry> listflightEntry(int year, int month, int day, String place) {
-		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateStart.setTimeInMillis(0);
-		dateStart.set(Calendar.YEAR, year);
-		dateStart.set(Calendar.MONTH, month);
-		dateStart.set(Calendar.DAY_OF_MONTH, day);
+    private void doPostLoad(FlightEntry flightEntry) {
+        if (userService.isUserLoggedIn()) {
+            boolean deletable = false;
+            boolean modifiable = false;
+            if (userService.isUserAdmin()) {
+                deletable = true;
+                modifiable = true;
+            } else {
+                if (loginInfo == null) {
+                    loginInfo = ofy().find(LoginInfo.class, userService.getCurrentUser().getEmail());
+                }
+                if (loginInfo != null) {
+                    modifiable = loginInfo.isCanModFlightEntry()
+                            || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+                    deletable = loginInfo.isCanDelFlightEntry()
+                            || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+                }
+            }
+            flightEntry.setModifiable(modifiable);
+            flightEntry.setDeletable(deletable);
+        }
+    }
 
-		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateEnd.setTimeInMillis(0);
-		dateEnd.set(Calendar.YEAR, year);
-		dateEnd.set(Calendar.MONTH, month);
-		dateEnd.set(Calendar.DAY_OF_MONTH, day);
-		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
-		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
-				.filter("startTimeInMillis <", dateEnd.getTimeInMillis()).filter("place ==", place).order("startTimeInMillis");
-		return query.list();
+    private void doPrePersist(FlightEntry flightEntry) {
+        User currentUser = userService.getCurrentUser();
+        // If we are called from a cron job, we need to create one!
+        // NOTE: for security reasons this should be done only if we running in a cron job!
+        // TODO - find a way to implement
+        if (currentUser == null) {
+            currentUser = adminUser;
+        }
+        flightEntry.setModifier(currentUser.getEmail());
+        flightEntry.setModified(System.currentTimeMillis());
+        if (flightEntry.getId() == null) {
+            flightEntry.setCreator(flightEntry.getModifier());
+            flightEntry.setCreated(flightEntry.getModified());
+        }
+    }
 
-	}
+    private Long evalYear(FlightEntry flightEntry) {
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(flightEntry.getStartTimeInMillis());
+        return new Long(date.get(Calendar.YEAR));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#listflightEntry(int, java.lang.String)
-	 */
-	@Override
-	public List<FlightEntry> listflightEntry(int year, String place) {
-		return listflightEntry(year, year, place);
-	}
+    private Long evalDate(FlightEntry flightEntry) {
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(flightEntry.getStartTimeInMillis());
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        return new Long(date.getTimeInMillis());
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#listflightEntry(int, int, java.lang.String)
-	 */
-	@Override
-	public List<FlightEntry> listflightEntry(int yearStart, int yearEnd, String place) {
-		Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateStart.setTimeInMillis(0);
-		dateStart.set(Calendar.YEAR, yearStart);
-		dateStart.set(Calendar.DAY_OF_YEAR, 1);
-
-		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
-		dateEnd.setTimeInMillis(0);
-		dateEnd.set(Calendar.YEAR, yearEnd);
-		dateEnd.set(Calendar.DAY_OF_YEAR, 1);
-		dateEnd.add(Calendar.YEAR, 1);
-		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
-				.filter("startTimeInMillis <", dateEnd.getTimeInMillis()).order("startTimeInMillis");
-		return query.list();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.X#addFlightEntries(java.util.List)
-	 */
-	@Override
-	public void addFlightEntries(List<FlightEntry> flightEntries) {
-		if (flightEntries.size() > 0) {
-			for (FlightEntry flightEntry : flightEntries) {
-				doPrePersist(flightEntry);
-			}
-			ofy().put(flightEntries);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.ubx.startlist.server.FlightEntryDAO#addFlightEntries4Test(java.util.List)
-	 * 
-	 * NOTE: this method should be used only for testing!
-	 */
-	@Override
-	public void addFlightEntries4Test(List<FlightEntry> flightEntries) {
-		ofy().put(flightEntries);
-	}
-
-	// --------------------------------------------------------------------------------------
-	// private methods
-
-	private void doPostLoad(FlightEntry flightEntry) {
-		if (userService.isUserLoggedIn()) {
-			boolean deletable = false;
-			boolean modifiable = false;
-			if (userService.isUserAdmin()) {
-				deletable = true;
-				modifiable = true;
-			} else {
-				if (loginInfo == null) {
-					loginInfo = ofy().find(LoginInfo.class, userService.getCurrentUser().getEmail());
-				}
-				if (loginInfo != null) {
-					modifiable = loginInfo.isCanModFlightEntry()
-							|| userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
-					deletable = loginInfo.isCanDelFlightEntry()
-							|| userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
-				}
-			}
-			flightEntry.setModifiable(modifiable);
-			flightEntry.setDeletable(deletable);
-		}
-	}
-
-	private void doPrePersist(FlightEntry flightEntry) {
-		User currentUser = userService.getCurrentUser();
-		// If we are called from a cron job, we need to create one!
-		// NOTE: for security reasons this should be done only if we running in a cron job!
-		// TODO - find a way to implement
-		if (currentUser == null) {
-			currentUser = adminUser;
-		}
-		flightEntry.setModifier(currentUser.getEmail());
-		flightEntry.setModified(System.currentTimeMillis());
-		if (flightEntry.getId() == null) {
-			flightEntry.setCreator(flightEntry.getModifier());
-			flightEntry.setCreated(flightEntry.getModified());
-		}
-	}
-
+    private String evalPlace(FlightEntry flightEntry) {
+        return flightEntry.getPlace();
+    }
 
 }

@@ -1,24 +1,26 @@
 package ch.ubx.startlist.client;
 
 import java.util.List;
-import java.util.Set;
 
+import ch.ubx.startlist.shared.FeDate;
+import ch.ubx.startlist.shared.FePlace;
+import ch.ubx.startlist.shared.FeYear;
 import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface FlightEntryServiceAsync {
 
-	void listFlightEntries(String place, long dateInMillies, int startIndex, int maxCount, AsyncCallback<List<FlightEntry>> callback);
+    void listYear(AsyncCallback<List<FeYear>> callback);
 
-	void removeFlightEntry(FlightEntry flightEntry, AsyncCallback<FlightEntry> callback);
+    void listPlace(FeYear year, AsyncCallback<List<FePlace>> callback);
 
-	void createOrUpdateFlightEntry(FlightEntry flightEntry, AsyncCallback<FlightEntry> callback);
+    void listDate(FePlace place, AsyncCallback<List<FeDate>> callback);
 
-	void listDates(String place, int year, AsyncCallback<Set<Long>> callback);
+    void listFlightEntrie(FeDate date, int startIndex, int maxCount, AsyncCallback<List<FlightEntry>> callback);
 
-	void listYears(AsyncCallback<Set<Integer>> callback);
+    void removeFlightEntry(FlightEntry flightEntry, AsyncCallback<FlightEntry> callback);
 
-	void listPlaces(int year, AsyncCallback<Set<String>> callback);
+    void createOrUpdateFlightEntry(FlightEntry flightEntry, AsyncCallback<FlightEntry> callback);
 
 }
