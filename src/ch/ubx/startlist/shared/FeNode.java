@@ -52,5 +52,4 @@ public class FeNode<V, P> implements Serializable {
     public void setValue(V value) {
         this.value = value;
     }
-
 }

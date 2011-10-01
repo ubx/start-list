@@ -1,9 +1,7 @@
 package ch.ubx.startlist.client.ui;
 
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -207,12 +205,11 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         selectionPanel.add(excelLinkHTML);
 
         // flight entry table starts here
-        String[] columns = new String[] { TXT_START_TIME, TXT_LANDING_TIME_TOWPLANE, TXT_DURATION_TOWPLANE,
-                TXT_SHORT_REGISTRATION_TOWPLANE, TXT_LANDING_TIME_GLIDER, TXT_DURATION_GLIDER, TXT_SHORT_REGISTRATION_GLIDER,
-                TXT_PILOT, TXT_PASSENGER_OR_INSTRUCTOR, TXT_TRAINING, TXT_REMARKS };
+        String[] columns = new String[] { TXT_START_TIME, TXT_LANDING_TIME_TOWPLANE, TXT_DURATION_TOWPLANE, TXT_SHORT_REGISTRATION_TOWPLANE,
+                TXT_LANDING_TIME_GLIDER, TXT_DURATION_GLIDER, TXT_SHORT_REGISTRATION_GLIDER, TXT_PILOT, TXT_PASSENGER_OR_INSTRUCTOR, TXT_TRAINING, TXT_REMARKS };
 
-        String[] styles = new String[] { "starttime", "endtimetowplane", "dauertowplane", "registrationtowplane", "endtimeglider",
-                "dauerglider", "registrationglider", "pilot", "passengerorinstructor", "schulung", "bemerkungen" };
+        String[] styles = new String[] { "starttime", "endtimetowplane", "dauertowplane", "registrationtowplane", "endtimeglider", "dauerglider",
+                "registrationglider", "pilot", "passengerorinstructor", "schulung", "bemerkungen" };
 
         verticaPanel_2 = new VerticalPanel();
         mainPanel.add(verticaPanel_2);
@@ -356,9 +353,9 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         operationsPanel.add(btnClose);
 
         // Set tab order
-        setTabOrder(dateBox, allPlacesListBox, landingPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox,
-                registrationTowplaneBox, registrationGliderBox, towplanePilotNameBox, pilotNameBox, passengerOrInstructorNameBox,
-                trainingCheckBox, remarksTextBox, saveButton, discardButton, btnClose);
+        setTabOrder(dateBox, allPlacesListBox, landingPlacesSuggestBox, startDateBox, endTowplaneDateBox, endGliderDateBox, registrationTowplaneBox,
+                registrationGliderBox, towplanePilotNameBox, pilotNameBox, passengerOrInstructorNameBox, trainingCheckBox, remarksTextBox, saveButton,
+                discardButton, btnClose);
 
         loadYears();
 
@@ -392,14 +389,15 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
     }
 
     private void reload(FlightEntry flightEntry) {
-        if (flightEntry != null) {
-            provider.setCurrentPlace(flightEntry.getPlace());
-            //  TODO -- rework: provider.setCurrentDate(flightEntry.getStartTimeInMillis());
-        } else {
-            provider.setCurrentPlace(placeListBox.getItemCount() > 0 ? placeListBox.getItemText(placeListBox.getSelectedIndex())
-                    : "");
-            provider.setCurrentDate(curFeDate.get(dateListBox.getSelectedIndex()));
-        }
+        // TODO ++ correct??
+        provider.setCurrentDate(curFeDate.get(dateListBox.getSelectedIndex()));
+        // if (flightEntry != null) {
+        // provider.setCurrentDate(new FeDate(flightEntry.getStartTimeInMillis(), null));
+        // } else {
+        // provider.setCurrentDate(curFeDate.get(dateListBox.getSelectedIndex()));
+        // }
+        // TODO -- correct??
+
         lastflightEntry = flightEntry;
         dynaTableWidget.reload();
 
@@ -637,8 +635,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
             enablePilotFields(true);
             flightEntryDialogBox.setTitle(TXT_TITLE_MODIFY_FLIGHT);
             flightEntryDialogBox.setHTML(TXT_MODIFY_FLIGHT);
-            flightEntryDialogBox.setPopupPosition(modifyButton.getAbsoluteLeft() + modifyButton.getOffsetWidth(),
-                    modifyButton.getAbsoluteTop() - flightEntryDialogBox.getOffsetHeight() - 260);
+            flightEntryDialogBox.setPopupPosition(modifyButton.getAbsoluteLeft() + modifyButton.getOffsetWidth(), modifyButton.getAbsoluteTop()
+                    - flightEntryDialogBox.getOffsetHeight() - 260);
 
             flightEntryDialogBox.setWidth("800px");
             flightEntryDialogBox.show();
@@ -691,8 +689,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         loadForm(flightEntry);
         flightEntryDialogBox.setTitle(TXT_TITLE_CREATE_NEW_FLIGHT);
         flightEntryDialogBox.setText(TXT_CREATE_NEW_FLIGHT);
-        flightEntryDialogBox.setPopupPosition(newButton.getAbsoluteLeft() + newButton.getOffsetWidth(), newButton.getAbsoluteTop()
-                - flightEntryDialogBox.getOffsetHeight() - 260);
+        flightEntryDialogBox.setPopupPosition(newButton.getAbsoluteLeft() + newButton.getOffsetWidth(),
+                newButton.getAbsoluteTop() - flightEntryDialogBox.getOffsetHeight() - 260);
         flightEntryDialogBox.setWidth("800px");
         flightEntryDialogBox.show();
         startDateBox.setFocus(true);
@@ -739,7 +737,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
     }
 
     private boolean hasDate(FlightEntry flightEntry) {
-        return curFeDate.contains(DATE_FORMAT.format(new Date(flightEntry.getStartTimeInMillis()))); // TODO -- rework
+        Set<String> items = getItemList(dateListBox);
+        return items.contains(DATE_FORMAT.format(new Date(flightEntry.getStartTimeInMillis()), timeZone));
     }
 
     private boolean hasPlace(FlightEntry flightEntry) {
@@ -750,8 +749,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
     @SuppressWarnings("deprecation")
     private boolean hasYear(FlightEntry flightEntry) {
         Set<String> items = getItemList(yearListBox);
-        Date date = new Date(flightEntry.getStartTimeInMillis());
-        return items.contains(String.valueOf(date.getYear() + 1900));
+        return items.contains(String.valueOf(new Date(flightEntry.getStartTimeInMillis()).getYear() + 1900));
     }
 
     private Set<String> getItemList(ListBox listBox) {
@@ -854,18 +852,15 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         if (!hasYear(flightEntry)) {
             loadYears();
         } else {
-            Date date = new Date(flightEntry.getStartTimeInMillis());
-            setSelected(yearListBox, String.valueOf(date.getYear() + 1900));
+            setSelected(yearListBox, String.valueOf(new Date(flightEntry.getStartTimeInMillis()).getYear() + 1900));
             if (!hasPlace(flightEntry)) {
-                date = new Date(flightEntry.getStartTimeInMillis());
-                //TODO -- rework: loadPlaces(date.getYear() + 1900);
+                loadPlaces(curFeYear.get(yearListBox.getSelectedIndex()));
             } else {
                 setSelected(placeListBox, flightEntry.getPlace());
                 if (!hasDate(flightEntry)) {
                     loadDates();
                 } else {
-                    String dateStr = DATE_FORMAT.format(new Date(flightEntry.getStartTimeInMillis()));
-                    setSelected(dateListBox, dateStr);
+                    setSelected(dateListBox, DATE_FORMAT.format(new Date(flightEntry.getStartTimeInMillis())));
                     reload(flightEntry);
                 }
             }
@@ -901,6 +896,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
     }
 
     public void service_eventListPlacesSuccessful(List<FePlace> places) {
+        curFePlace = places;
         String oldPlace = "";
         if (lastflightEntry != null) {
             oldPlace = lastflightEntry.getPlace();
@@ -983,8 +979,8 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
 
         // adjust link to excel file
         Date date = new Date(curFeDate.get(dateListBox.getSelectedIndex()).getValue());
-        String link = GWT.getModuleBaseURL() + "excelfile" + "/" + yearListBox.getValue(yearListBox.getSelectedIndex()) + "/"
-                + date.getMonth() + "/" + date.getDate() + "/" + placeListBox.getValue(placeListBox.getSelectedIndex());
+        String link = GWT.getModuleBaseURL() + "excelfile" + "/" + yearListBox.getValue(yearListBox.getSelectedIndex()) + "/" + date.getMonth() + "/"
+                + date.getDate() + "/" + placeListBox.getValue(placeListBox.getSelectedIndex());
         excelLinkHTML.setHTML("<a href=\"" + link + "\">Excel</a>");
 
         // reload table values
@@ -1012,7 +1008,6 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
     @SuppressWarnings("deprecation")
     public void service_eventListDatesSuccessful(List<FeDate> dates) {
         dateListBox.clear();
-        // strToFeDate.clear();
         curFeDate = dates;
         for (FeDate date : dates) {
             String dateStr = DATE_FORMAT.format(new Date(date.getValue()), timeZone);
@@ -1023,8 +1018,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
             Date feDate = new Date(lastflightEntry.getStartTimeInMillis());
             for (int i = 0; i < dateListBox.getItemCount(); i++) {
                 Date date = new Date(dates.get(i).getValue());
-                if (date.getYear() == feDate.getYear() && date.getMonth() == feDate.getMonth()
-                        && date.getDate() == feDate.getDate()) {
+                if (date.getYear() == feDate.getYear() && date.getMonth() == feDate.getMonth() && date.getDate() == feDate.getDate()) {
                     dateListBox.setSelectedIndex(i);
                     break;
                 }
