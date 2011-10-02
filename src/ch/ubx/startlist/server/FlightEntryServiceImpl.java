@@ -1,6 +1,7 @@
 package ch.ubx.startlist.server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.ubx.startlist.client.FlightEntryService;
@@ -13,12 +14,11 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class FlightEntryServiceImpl extends RemoteServiceServlet implements FlightEntryService {
     private static final long serialVersionUID = 1L;
-    private FlightEntryDAO flightEntryDAO = new FlightEntryDAOobjectify();
-    private FlightEntryDAO2 flightEntryDAO2 = new FlightEntryDAOobjectify2();
+    private FlightEntryDAO2 flightEntryDAO = new FlightEntryDAOobjectify2();
 
     @Override
     public List<FlightEntry> listFlightEntrie(FeDate date, int startIndex, int maxCount) {
-        List<FlightEntry> listFlightEntrys = flightEntryDAO2.listflightEntry(date, startIndex, maxCount);
+        List<FlightEntry> listFlightEntrys = flightEntryDAO.listflightEntry(date, startIndex, maxCount);
         return new ArrayList<FlightEntry>(listFlightEntrys);
     }
 
@@ -35,17 +35,23 @@ public class FlightEntryServiceImpl extends RemoteServiceServlet implements Flig
 
     @Override
     public List<FeDate> listDate(FePlace place) {
-        return flightEntryDAO2.listDate(place);
+        List<FeDate> list = flightEntryDAO.listDate(place);
+        Collections.sort(list);
+        return list;
     }
 
     @Override
     public List<FePlace> listPlace(FeYear year) {
-        return flightEntryDAO2.listAirfield(year);
+        List<FePlace> list = flightEntryDAO.listAirfield(year);
+        Collections.sort(list);
+        return list;
     }
 
     @Override
     public List<FeYear> listYear() {
-        return flightEntryDAO2.listYear();
+        List<FeYear> list = flightEntryDAO.listYear();
+        Collections.sort(list);
+        return list;
     }
 
 }

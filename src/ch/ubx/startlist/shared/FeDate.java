@@ -6,7 +6,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Subclass;
 
 @Subclass
-public class FeDate extends FeNode<Long, FePlace> implements Serializable {
+public class FeDate extends FeNode<Long, FePlace> implements Comparable<FeDate>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -16,6 +16,11 @@ public class FeDate extends FeNode<Long, FePlace> implements Serializable {
     public FeDate(Long value, Key<FePlace> parent) {
         setValue(value);
         setParent(parent);
+    }
+
+    @Override
+    public int compareTo(FeDate o) {
+        return o.getValue().compareTo(getValue()) * (-1);
     }
 
 }

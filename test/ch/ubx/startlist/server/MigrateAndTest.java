@@ -80,12 +80,11 @@ public class MigrateAndTest {
     }
 
     private void migrate() {
-        List<FlightEntry> flightEntries = dao.listflightEntry();
+        List<FlightEntry> flightEntries = dao2.listflightEntry();
         for (FlightEntry flightEntry : flightEntries) {
             flightEntry.setParent(null);
             dao2.createOrUpdateFlightEntry(flightEntry);
         }
-
     }
 
     private void performace() {
