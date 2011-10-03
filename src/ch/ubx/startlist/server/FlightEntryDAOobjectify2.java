@@ -27,6 +27,9 @@ public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2
     static {
         try { // TODO -- eliminate duplicate register error
             ObjectifyService.register(FlightEntry.class);
+        } catch (Exception e) {
+        }
+        try { // TODO -- eliminate duplicate register error
             ObjectifyService.register(LoginInfo.class);
         } catch (Exception e) {
         }
@@ -36,11 +39,9 @@ public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2
     private UserService userService;
     private User adminUser;
     private final FeGenDAOobjectify<FeDate, FePlace, Long> dateDAO = new FeGenDAOobjectify<FeDate, FePlace, Long>(FeDate.class);
-    private final FeGenDAOobjectify<FeStore, FeStore, String> storeDAO = new FeGenDAOobjectify<FeStore, FeStore, String>(
-            FeStore.class);
+    private final FeGenDAOobjectify<FeStore, FeStore, String> storeDAO = new FeGenDAOobjectify<FeStore, FeStore, String>(FeStore.class);
     private final FeGenDAOobjectify<FeYear, FeStore, Long> yearDAO = new FeGenDAOobjectify<FeYear, FeStore, Long>(FeYear.class);
-    private final FeGenDAOobjectify<FePlace, FeYear, String> placeDAO = new FeGenDAOobjectify<FePlace, FeYear, String>(
-            FePlace.class);
+    private final FeGenDAOobjectify<FePlace, FeYear, String> placeDAO = new FeGenDAOobjectify<FePlace, FeYear, String>(FePlace.class);
     private static Key<FeStore> storeActiveKey;
 
     public FlightEntryDAOobjectify2() {
@@ -229,10 +230,8 @@ public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2
                     loginInfo = ofy().find(LoginInfo.class, userService.getCurrentUser().getEmail());
                 }
                 if (loginInfo != null) {
-                    modifiable = loginInfo.isCanModFlightEntry()
-                            || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
-                    deletable = loginInfo.isCanDelFlightEntry()
-                            || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+                    modifiable = loginInfo.isCanModFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+                    deletable = loginInfo.isCanDelFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
                 }
             }
             flightEntry.setModifiable(modifiable);
