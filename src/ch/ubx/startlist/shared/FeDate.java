@@ -20,7 +20,7 @@ public class FeDate extends FeNode<Long, FePlace> implements Comparable<FeDate>,
 
     @Override
     public int compareTo(FeDate o) {
-        return o.getValue().compareTo(getValue()) * (-1);
+        return getValue().compareTo(o.getValue());
     }
 
 }
