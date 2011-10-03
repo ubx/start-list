@@ -20,7 +20,7 @@ public class FePlace extends FeNode<String, FeYear> implements Comparable<FePlac
 
     @Override
     public int compareTo(FePlace o) {
-        return o.getValue().compareTo(getValue()) * (-1);
+        return getValue().compareTo(o.getValue());
     }
 
 }

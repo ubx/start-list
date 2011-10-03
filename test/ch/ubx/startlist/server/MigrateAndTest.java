@@ -85,7 +85,6 @@ public class MigrateAndTest {
             flightEntry.setParent(null);
             dao2.createOrUpdateFlightEntry(flightEntry);
         }
-
     }
 
     private void performace() {

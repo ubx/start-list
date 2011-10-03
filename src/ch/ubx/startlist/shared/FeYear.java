@@ -20,7 +20,7 @@ public class FeYear extends FeNode<Long, FeStore> implements Comparable<FeYear>,
 
     @Override
     public int compareTo(FeYear o) {
-        return o.getValue().compareTo(getValue()) * (-1);
+        return getValue().compareTo(o.getValue());
     }
 
 }
