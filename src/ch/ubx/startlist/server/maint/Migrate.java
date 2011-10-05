@@ -25,9 +25,9 @@ public class Migrate {
                     cnt++;
                 }
             }
-            log.log(Level.INFO, "FlightEntry migration partly done(" + cnt + " of " + flightEntries.size() + " FlightEntries)");
-        } catch (DeadlineExceededException e) {
             log.log(Level.INFO, "FlightEntry migration done(" + cnt + " of " + flightEntries.size() + " FlightEntries)");
+        } catch (DeadlineExceededException e) {
+            log.log(Level.INFO, "FlightEntry migration partly done(" + cnt + " of " + flightEntries.size() + " FlightEntries)");
         }
     }
 }

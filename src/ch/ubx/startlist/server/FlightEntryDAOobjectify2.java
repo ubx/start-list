@@ -206,6 +206,48 @@ public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2
         return yearDAO.list(storeActiveKey);
     }
 
+    @Override
+    public void addFlightEntries(List<FlightEntry> flightEntries) {
+        if (flightEntries.size() > 0) {
+            for (FlightEntry flightEntry : flightEntries) {
+                createOrUpdateFlightEntry(flightEntry);
+            }
+        }
+    }
+
+    @Override
+    public List<FlightEntry> listflightEntry(Calendar date, String place) {
+        Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
+        dateStart.setTimeInMillis(date.getTimeInMillis());
+        dateStart.set(Calendar.HOUR_OF_DAY, 0);
+        dateStart.set(Calendar.MINUTE, 0);
+        dateStart.set(Calendar.SECOND, 0);
+        dateStart.set(Calendar.MILLISECOND, 0);
+        Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
+        dateEnd.setTimeInMillis(dateStart.getTimeInMillis());
+        dateEnd.add(Calendar.DAY_OF_MONTH, 1);
+
+        Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+                .filter("startTimeInMillis <", dateEnd.getTimeInMillis()).order("startTimeInMillis");
+        return query.list();
+    }
+
+    @Override
+    public List<FlightEntry> listflightEntry(Calendar startDate, Calendar endDate, String place) {
+        Calendar dateStart = Calendar.getInstance(); // TODO - set timezone UTC?
+        dateStart.setTimeInMillis(startDate.getTimeInMillis());
+        dateStart.set(Calendar.HOUR_OF_DAY, 0);
+        dateStart.set(Calendar.MINUTE, 0);
+        dateStart.set(Calendar.SECOND, 0);
+        dateStart.set(Calendar.MILLISECOND, 0);
+
+        Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
+        dateEnd.setTimeInMillis(endDate.getTimeInMillis());
+        Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+                .filter("startTimeInMillis <=", dateEnd.getTimeInMillis());
+        return query.list();
+    }
+
     /*
      * NOTE: this method should be used only for testing!
      */

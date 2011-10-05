@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ch.ubx.startlist.server.maint.Migrate;
 import ch.ubx.startlist.shared.FeDate;
 import ch.ubx.startlist.shared.FePlace;
 import ch.ubx.startlist.shared.FeYear;
@@ -74,17 +75,9 @@ public class MigrateAndTest {
     public void testMigrate() {
         performace();
         performace();
-        migrate();
+        Migrate.migrate();
         performace2();
         performace2();
-    }
-
-    private void migrate() {
-        List<FlightEntry> flightEntries = dao2.listflightEntry();
-        for (FlightEntry flightEntry : flightEntries) {
-            flightEntry.setParent(null);
-            dao2.createOrUpdateFlightEntry(flightEntry);
-        }
     }
 
     private void performace() {

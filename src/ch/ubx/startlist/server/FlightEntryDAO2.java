@@ -1,5 +1,6 @@
 package ch.ubx.startlist.server;
 
+import java.util.Calendar;
 import java.util.List;
 
 import ch.ubx.startlist.shared.FeDate;
@@ -36,5 +37,11 @@ public interface FlightEntryDAO2 {
     public List<FePlace> listAirfield(int yearInt);
 
     public List<FeYear> listYear();
+
+    public void addFlightEntries(List<FlightEntry> flightEntries);
+
+    public List<FlightEntry> listflightEntry(Calendar startDate, Calendar endDate, String place);
+
+    public List<FlightEntry> listflightEntry(Calendar date, String place);
 
 }

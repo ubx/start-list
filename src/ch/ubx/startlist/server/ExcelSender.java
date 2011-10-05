@@ -41,7 +41,7 @@ import com.google.appengine.api.utils.SystemProperty;
 public class ExcelSender implements TextConstants {
 
     private static SendExcelDAO sendExcelDAO = new SendExcelDAOobjectify();
-    private static FlightEntryDAO flightEntryDAO = new FlightEntryDAOobjectify();
+    private static FlightEntryDAO2 flightEntryDAO = new FlightEntryDAOobjectify2();
     private static SentFlightEntryDAO sentFlightEntryDAO = new SentFlightEntryDAOobjectify();
 
     private static final Logger log = Logger.getLogger(ExcelSender.class.getName());
