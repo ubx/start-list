@@ -14,13 +14,13 @@ public class FePlace extends FeNode<String, FeYear> implements Comparable<FePlac
     }
 
     public FePlace(String value, Key<FeYear> parent) {
-        setValue(value);
-        setParent(parent);
+        this.value = value;
+        this.parent = parent;
     }
 
     @Override
     public int compareTo(FePlace o) {
-        return getValue().compareTo(o.getValue());
+        return value.compareTo(o.value);
     }
 
 }

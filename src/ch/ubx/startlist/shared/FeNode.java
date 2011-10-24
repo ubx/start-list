@@ -14,8 +14,8 @@ public class FeNode<V, P> implements Serializable {
 
     @Id
     private Long id = null;
-    private Key<P> parent;
-    private V value;
+    protected Key<P> parent;
+    protected V value;
 
     public FeNode() {
     }

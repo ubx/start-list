@@ -248,3 +248,8 @@ http://www.giantflyingsaucer.com/blog/?p=1017
 ===============================================================================================================
 Web-Page Testing, HtmlUnit 
 http://htmlunit.sourceforge.net/gettingStarted.html
+
+
+===============================================================================================================
+Retrieves log data for the application running on App Engine
+appcfg.py  --num_days=20 --severity=0 request_logs  /Users/Andreas/git/start-list/   start-list-log
