@@ -14,13 +14,13 @@ public class FeDate extends FeNode<Long, FePlace> implements Comparable<FeDate>,
     }
 
     public FeDate(Long value, Key<FePlace> parent) {
-        setValue(value);
-        setParent(parent);
+        this.value = value;
+        this.parent = parent;
     }
 
     @Override
     public int compareTo(FeDate o) {
-        return getValue().compareTo(o.getValue());
+        return value.compareTo(o.value);
     }
 
 }

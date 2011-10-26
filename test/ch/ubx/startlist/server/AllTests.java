@@ -6,8 +6,8 @@ import org.junit.runners.Suite;
 import ch.ubx.startlist.server.admin.CronJobServletTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ SentFlightEntryDAOobjectifyTest.class, ExcelSenderTest.class, CronJobServletTest.class,
-        FlightEntryDAOobjectifyTest.class, FeStoreDAOobjectifyGenTest.class, FeYearDAOobjectifyGenTest.class,
-        FePlaceDAOobjectifyGenTest.class, FlightEntryDAOobjectify2Test.class, UseCaseTest.class, MigrateAndTest.class })
+@Suite.SuiteClasses({ ObjectifyTest.class, SentFlightEntryDAOobjectifyTest.class, ExcelSenderTest.class, CronJobServletTest.class,
+		FlightEntryDAOobjectifyTest.class, FeStoreDAOobjectifyGenTest.class, FeYearDAOobjectifyGenTest.class, FePlaceDAOobjectifyGenTest.class,
+		FlightEntryDAOobjectify2Test.class, UseCaseTest.class, MigrateAndTest.class })
 public class AllTests {
 }

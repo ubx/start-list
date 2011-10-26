@@ -282,7 +282,10 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 	 */
 	@Override
 	public void addFlightEntries4Test(List<FlightEntry> flightEntries) {
-		ofy().put(flightEntries);
+		//ofy().put(flightEntries);
+		for (FlightEntry flightEntry : flightEntries) {
+			ofy().put(flightEntry);
+		}
 	}
 
 	// --------------------------------------------------------------------------------------

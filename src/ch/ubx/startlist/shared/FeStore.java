@@ -13,7 +13,7 @@ public class FeStore extends FeNode<String, FeStore> implements Serializable {
     }
 
     public FeStore(String value) {
-        setValue(value);
+        this.value = value;
     }
 
 }

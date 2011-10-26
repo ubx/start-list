@@ -14,13 +14,13 @@ public class FeYear extends FeNode<Long, FeStore> implements Comparable<FeYear>,
     }
 
     public FeYear(Long value, Key<FeStore> parent) {
-        setValue(value);
-        setParent(parent);
+        this.value = value;
+        this.parent = parent;
     }
 
     @Override
     public int compareTo(FeYear o) {
-        return getValue().compareTo(o.getValue());
+        return value.compareTo(o.value);
     }
 
 }

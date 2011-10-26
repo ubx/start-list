@@ -25,9 +25,7 @@ public class PeriodicJob implements Serializable {
 	}
 
 	public PeriodicJob(String name) {
-		this();
 		this.name = name;
-
 	}
 
 	public String getName() {

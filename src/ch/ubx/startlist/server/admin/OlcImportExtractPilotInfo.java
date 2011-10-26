@@ -35,6 +35,7 @@ public class OlcImportExtractPilotInfo {
 		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 	private Cache cache;
+	private String webServer = "http://www.onlinecontest.org";
 
 	public OlcImportExtractPilotInfo(List<FlightEntry> storedFlightEntries) {
 		this.storedFlightEntries = new ArrayList<FlightEntry>(storedFlightEntries);
@@ -67,8 +68,8 @@ public class OlcImportExtractPilotInfo {
 		String sourceUrlString;
 		if (placeID != null) {
 			placeID = placeID.replace(" ", "%20");
-			sourceUrlString = "http://www.onlinecontest.org/olc-2.0/gliding/flightsOfAirfield.html?rt=olc&sp=" + String.valueOf(olcYear) + "&d-2348235-p=&aa="
-					+ placeID + "&sc=&c=" + country + "&st=olc&paging=100000";
+			sourceUrlString = webServer + "/olc-2.0/gliding/flightsOfAirfield.html?rt=olc&sp=" + String.valueOf(olcYear) + "&d-2348235-p=&aa=" + placeID
+					+ "&sc=&c=" + country + "&st=olc&paging=100000";
 		} else {
 			sourceUrlString = null; // TODO - implement
 		}
@@ -103,7 +104,7 @@ public class OlcImportExtractPilotInfo {
 		final int[] FLIGHTBOOK_IDX = { 0, 2, -1, 5, 6, 7, 8, 9 };
 
 		int[] idx;
-		final String reqUrl = "http://www.onlinecontest.org/olc-2.0/gliding/flightinfo.html";
+		final String reqUrl = webServer + "/olc-2.0/gliding/flightinfo.html";
 		String urlStr0;
 		if (placeID != null) {
 			idx = FLIGHTBOOK_IDX;

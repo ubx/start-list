@@ -17,6 +17,7 @@ public class Migrate {
     public static void migrate() {
         int cnt = 0;
         List<FlightEntry> flightEntries = dao2.listflightEntry();
+        log.log(Level.INFO, "FlightEntry read: " + flightEntries.size());
         try {
             log.log(Level.INFO, "Start migration FlightEntries...");
             for (FlightEntry flightEntry : flightEntries) {

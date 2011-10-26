@@ -49,6 +49,7 @@ public class MigrateAndTest {
         datastore.setBackingStoreLocation(tfName);
         datastore.setNoStorage(false);
         helper = new LocalServiceTestHelper(datastore);
+        helper.setEnvVersionId("x-2-0-0");
         helper.setEnvAppId("start-list");
         helper.setEnvAuthDomain("gmail.com");
     }
@@ -93,18 +94,18 @@ public class MigrateAndTest {
 
         List<FlightEntry> fesBefore = dao.listflightEntry();
         System.out.println("performace  listflightEntry elapsed: " + (System.currentTimeMillis() - beginTime));
-        assertEquals(3796, fesBefore.size());
-        assertEquals(2212, dao.listflightEntry(2011).size());
+        assertEquals(4644, fesBefore.size());
+        assertEquals(3060, dao.listflightEntry(2011).size());
         assertEquals(1578, dao.listflightEntry(2010).size());
         assertEquals(6, dao.listflightEntry(2009).size());
         assertEquals(0, dao.listflightEntry(2008).size());
 
-        assertEquals(112, dao.listflightEntry(2011, 2011, "Bellechasse").size());
-        assertEquals(216, dao.listflightEntry(2010, 2011, "Bellechasse").size());
-        assertEquals(216, dao.listflightEntry(2009, 2011, "Bellechasse").size());
-        assertEquals(216, dao.listflightEntry(2000, 2011, "Bellechasse").size());
+        assertEquals(141, dao.listflightEntry(2011, 2011, "Bellechasse").size());
+        assertEquals(245, dao.listflightEntry(2010, 2011, "Bellechasse").size());
+        assertEquals(245, dao.listflightEntry(2009, 2011, "Bellechasse").size());
+        assertEquals(245, dao.listflightEntry(2000, 2011, "Bellechasse").size());
 
-        assertEquals(16, dao.listAirfields(2011).size());
+        assertEquals(17, dao.listAirfields(2011).size());
         assertEquals(13, dao.listAirfields(2010).size());
         assertEquals(1, dao.listAirfields(2009).size());
         assertEquals(0, dao.listAirfields(2008).size());
@@ -144,7 +145,7 @@ public class MigrateAndTest {
 
         List<FlightEntry> fesBefore = dao2.listflightEntry();
         System.out.println("performace2 listflightEntry elapsed: " + (System.currentTimeMillis() - beginTime));
-        assertEquals(3796, fesBefore.size());
+        assertEquals(4644, fesBefore.size());
 
         List<FePlace> ps = new ArrayList<FePlace>();
         for (FeYear feYear : ys) {
@@ -161,7 +162,7 @@ public class MigrateAndTest {
         for (FeDate feDate : ds) {
             fes.addAll(dao2.listflightEntry(feDate));
         }
-        assertEquals(3796, fes.size());
+        assertEquals(4644, fes.size());
 
         ps = dao2.listAirfield(2011);
         ds = new ArrayList<FeDate>();
@@ -173,7 +174,7 @@ public class MigrateAndTest {
         for (FeDate feDate : ds) {
             fes.addAll(dao2.listflightEntry(feDate));
         }
-        assertEquals(2212, fes.size());
+        assertEquals(3060, fes.size());
 
         ps = dao2.listAirfield(2010);
         ds = new ArrayList<FeDate>();
@@ -202,12 +203,12 @@ public class MigrateAndTest {
         assertEquals(6, dao2.listflightEntry(2009).size());
         assertEquals(0, dao2.listflightEntry(2008).size());
 
-        assertEquals(112, dao2.listflightEntry(2011, 2011, "Bellechasse").size());
-        assertEquals(216, dao2.listflightEntry(2010, 2011, "Bellechasse").size());
-        assertEquals(216, dao2.listflightEntry(2009, 2011, "Bellechasse").size());
-        assertEquals(216, dao2.listflightEntry(2000, 2011, "Bellechasse").size());
+        assertEquals(141, dao2.listflightEntry(2011, 2011, "Bellechasse").size());
+        assertEquals(245, dao2.listflightEntry(2010, 2011, "Bellechasse").size());
+        assertEquals(245, dao2.listflightEntry(2009, 2011, "Bellechasse").size());
+        assertEquals(245, dao2.listflightEntry(2000, 2011, "Bellechasse").size());
 
-        assertEquals(16, dao2.listAirfield(2011).size());
+        assertEquals(17, dao2.listAirfield(2011).size());
         assertEquals(13, dao2.listAirfield(2010).size());
         assertEquals(1, dao2.listAirfield(2009).size());
         assertEquals(0, dao2.listAirfield(2008).size());

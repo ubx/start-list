@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ch.ubx.startlist.server.ExcelSender;
-import ch.ubx.startlist.server.OLCImporter;
+import ch.ubx.startlist.server.OlcImporter;
 import ch.ubx.startlist.server.PeriodicJobDAO;
 import ch.ubx.startlist.server.PeriodicJobDAOobjectify;
 import ch.ubx.startlist.shared.PeriodicJob;
@@ -64,7 +64,7 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 		// Run all expired jobs
 		for (PeriodicJob periodicJob : periodicJobs) {
 			if (periodicJob.getNextTimeInMillis() <= now.getTimeInMillis()) {
-				OLCImporter.doImport(periodicJob.getImportOLCJobList());
+				OlcImporter.doImport(periodicJob.getImportOLCJobList());
 				ExcelSender.doSend(periodicJob.getSendExcelJobList(), now);
 				adjustTimeInMillis(periodicJob, now);
 				periodicJobsMod.add(periodicJob);
