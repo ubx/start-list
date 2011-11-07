@@ -31,7 +31,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
-import ch.ubx.startlist.shared.FlightEntry;
+import ch.ubx.startlist.shared.FeFlightEntry;
 import ch.ubx.startlist.shared.SendExcel;
 import ch.ubx.startlist.shared.SentFlightEntry;
 import ch.ubx.startlist.shared.TextConstants;
@@ -65,7 +65,7 @@ public class ExcelSender implements TextConstants {
         for (SendExcel sendExcel : sendExcelMap.values()) {
             // TODO - use EntrySet to get job name
             String sheetname = String.format("%1$tY%1$tm%1$te", now) + "-" + sendExcel.getPlace().replace(" ", "_");
-            List<FlightEntry> flightEntries;
+            List<FeFlightEntry> flightEntries;
             List<SentFlightEntry> sentFlightEntries = null;
 
             // Handle already sent FlightEntries TODO - better comment!
@@ -76,7 +76,7 @@ public class ExcelSender implements TextConstants {
                 sentFlightEntries = sentFlightEntryDAO.listFlightEntry(sendExcel.getName());
 
                 for (SentFlightEntry sentFlightEntry : sentFlightEntries) {
-                    for (FlightEntry flightEntry : flightEntries) {
+                    for (FeFlightEntry flightEntry : flightEntries) {
                         // Compare Id values, not objects reference!
                         if (sentFlightEntry.getFlightEntry().compareTo(flightEntry.getId()) == 0) {
                             if (sentFlightEntry.getLastModified() == flightEntry.getModified()
@@ -91,7 +91,7 @@ public class ExcelSender implements TextConstants {
                 flightEntries = flightEntryDAO.listflightEntry(now, sendExcel.getPlace());
             }
 
-            List<FlightEntry> filteredFlightEntries = new ArrayList<FlightEntry>();
+            List<FeFlightEntry> filteredFlightEntries = new ArrayList<FeFlightEntry>();
             if (!flightEntries.isEmpty()) {
                 // Filter Gliders and Towplanes
                 Set<String> filterGliders = new TreeSet<String>();
@@ -102,7 +102,7 @@ public class ExcelSender implements TextConstants {
                 if (sendExcel.getFilterTowplanes() != null) {
                     filterTowplanes.addAll(Arrays.asList(sendExcel.getFilterTowplanes().split(";")));
                 }
-                for (FlightEntry flightEntry : flightEntries) {
+                for (FeFlightEntry flightEntry : flightEntries) {
                     if (filterGliders.isEmpty() & filterTowplanes.isEmpty()) {
                         filteredFlightEntries.add(flightEntry);
                     } else if (flightEntry.getRegistrationGlider() != null
@@ -151,7 +151,7 @@ public class ExcelSender implements TextConstants {
 
                 // Update SentFlightEntry
                 if (sendExcel.getDaysBehind() > 0) {
-                    for (FlightEntry flightEntry : filteredFlightEntries) {
+                    for (FeFlightEntry flightEntry : filteredFlightEntries) {
                         SentFlightEntry sentFlightEntry = sentFlightEntryDAO.getSentFlightEntry(sendExcel.getName(),
                                 flightEntry.getId());
                         if (sentFlightEntry == null) {

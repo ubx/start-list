@@ -3,7 +3,7 @@ package ch.ubx.startlist.client.admin;
 import java.util.List;
 
 import ch.ubx.startlist.client.admin.ui.AdminGUI;
-import ch.ubx.startlist.shared.FlightEntry;
+import ch.ubx.startlist.shared.FeFlightEntry;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,10 +19,10 @@ public class OlcImportServiceDelegate {
 	}
 
 	public void importFromPlace(String place, int year) {
-		olcImportServiceAsync.importFromPlace(place, year, new AsyncCallback<List<FlightEntry>>() {
+		olcImportServiceAsync.importFromPlace(place, year, new AsyncCallback<List<FeFlightEntry>>() {
 
 			@Override
-			public void onSuccess(List<FlightEntry> result) {
+			public void onSuccess(List<FeFlightEntry> result) {
 				gui.service_eventImportFromPlaceSuccessful(result);
 			}
 

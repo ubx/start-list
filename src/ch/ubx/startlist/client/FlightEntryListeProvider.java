@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import ch.ubx.startlist.shared.FeDate;
-import ch.ubx.startlist.shared.FlightEntry;
+import ch.ubx.startlist.shared.FeFlightEntry;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -31,7 +31,7 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
 
     private int lastMaxRows = -1;
 
-    private List<FlightEntry> flightEntryList;
+    private List<FeFlightEntry> flightEntryList;
 
     private int lastStartRow = -1;
 
@@ -58,12 +58,12 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
 
         // Fetch the data remotely.
         //
-        flightEntryService.listFlightEntrie(currentDate, startRow, maxRows, new AsyncCallback<List<FlightEntry>>() {
+        flightEntryService.listFlightEntrie(currentDate, startRow, maxRows, new AsyncCallback<List<FeFlightEntry>>() {
             public void onFailure(Throwable caught) {
                 acceptor.failed(caught);
             }
 
-            public void onSuccess(List<FlightEntry> result) {
+            public void onSuccess(List<FeFlightEntry> result) {
                 lastStartRow = startRow;
                 lastMaxRows = maxRows;
                 flightEntryList = result;
@@ -73,7 +73,7 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
         });
     }
 
-    private void pushResults(RowDataAcceptor acceptor, int startRow, List<FlightEntry> flightEntryList) {
+    private void pushResults(RowDataAcceptor acceptor, int startRow, List<FeFlightEntry> flightEntryList) {
         String[][] rows = new String[flightEntryList.size()][];
         for (int i = 0; i < rows.length; i++) {
             // init data structures
@@ -81,7 +81,7 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
             for (int j = 0; j < rows[i].length; j++) {
                 rows[i][j] = null;
             }
-            FlightEntry flightEntry = flightEntryList.get(i);
+            FeFlightEntry flightEntry = flightEntryList.get(i);
 
             // fill in data column per column
             Date date = new Date();
@@ -143,7 +143,7 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
         lastStartRow = -1;
     }
 
-    public FlightEntry getFlightEntry(int row) {
+    public FeFlightEntry getFlightEntry(int row) {
         return flightEntryList.size() > row ? flightEntryList.get(row) : null; // TODO - fin a better solution !
     }
 

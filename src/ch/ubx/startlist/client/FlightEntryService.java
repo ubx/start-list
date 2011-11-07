@@ -3,9 +3,9 @@ package ch.ubx.startlist.client;
 import java.util.List;
 
 import ch.ubx.startlist.shared.FeDate;
+import ch.ubx.startlist.shared.FeFlightEntry;
 import ch.ubx.startlist.shared.FePlace;
 import ch.ubx.startlist.shared.FeYear;
-import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -22,10 +22,10 @@ public interface FlightEntryService extends RemoteService {
 
     public List<FeDate> listDate(FePlace place);
 
-    public List<FlightEntry> listFlightEntrie(FeDate date, int startIndex, int maxCount);
+    public List<FeFlightEntry> listFlightEntrie(FeDate date, int startIndex, int maxCount);
 
-    public FlightEntry removeFlightEntry(FlightEntry flightEntry);
+    public FeFlightEntry removeFlightEntry(FeFlightEntry flightEntry);
 
-    public FlightEntry createOrUpdateFlightEntry(FlightEntry flightEntry);
+    public FeFlightEntry createOrUpdateFlightEntry(FeFlightEntry flightEntry);
 
 }

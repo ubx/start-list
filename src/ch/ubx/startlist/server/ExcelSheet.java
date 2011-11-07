@@ -18,26 +18,26 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import ch.ubx.startlist.shared.FlightEntry;
+import ch.ubx.startlist.shared.FeFlightEntry;
 import ch.ubx.startlist.shared.TextConstants;
 
 public class ExcelSheet implements TextConstants {
 
 	private static final String[] columns = new String[] { TXT_DATE, TXT_START_PLACE, TXT_START_TIME + "[UTC]", TXT_LANDING_TIME_TOWPLANE + "[UTC]",
-			TXT_DURATION_TOWPLANE + "[Min.]", TXT_SHORT_REGISTRATION_TOWPLANE, TXT_TOWPLANE_PILOT, TXT_LANDING_PLACE, TXT_LANDING_TIME_GLIDER + "[UTC]", TXT_DURATION_GLIDER + "[Min.]",
-			TXT_SHORT_REGISTRATION_GLIDER, TXT_PILOT, TXT_PASSENGER_OR_INSTRUCTOR, TXT_TRAINING, TXT_REMARKS };
+			TXT_DURATION_TOWPLANE + "[Min.]", TXT_SHORT_REGISTRATION_TOWPLANE, TXT_TOWPLANE_PILOT, TXT_LANDING_PLACE, TXT_LANDING_TIME_GLIDER + "[UTC]",
+			TXT_DURATION_GLIDER + "[Min.]", TXT_SHORT_REGISTRATION_GLIDER, TXT_PILOT, TXT_PASSENGER_OR_INSTRUCTOR, TXT_TRAINING, TXT_REMARKS };
 
 	private static final int[] columnswidth = new int[] { 10, 18, 18, 18, 15, 18, 18, 18, 18, 15, 18, 20, 20, 6, 60 };
 
-	private static final String TXT_COLUMN_LANDING_TIME_GLIDER = "I";
-	private static final String TXT_COLUMN_LANDING_TIME_TOWPLANE = "D";
-	private static final String TXT_COLUMN_START_TIME = "C";
-
-	public ExcelSheet() {
+	static {
 		if (columns.length != columnswidth.length) {
 			throw new RuntimeException("columns text array and width array have a different length");
 		}
 	}
+
+	private static final String TXT_COLUMN_LANDING_TIME_GLIDER = "I";
+	private static final String TXT_COLUMN_LANDING_TIME_TOWPLANE = "D";
+	private static final String TXT_COLUMN_START_TIME = "C";
 
 	/**
 	 * @param flightEnties
@@ -45,7 +45,7 @@ public class ExcelSheet implements TextConstants {
 	 * @param sheetLabel
 	 * @throws IOException
 	 */
-	public static void createExcel(final List<FlightEntry> flightEnties, final OutputStream outputStream, final String sheetLabel) throws IOException {
+	public static void createExcel(final List<FeFlightEntry> flightEnties, final OutputStream outputStream, final String sheetLabel) throws IOException {
 		final WorkbookSettings ws = new WorkbookSettings();
 		ws.setLocale(Locale.GERMAN);
 		final WritableWorkbook workbook = Workbook.createWorkbook(outputStream, ws);
@@ -54,7 +54,7 @@ public class ExcelSheet implements TextConstants {
 		final WritableCellFormat cellHeaderFormat = new WritableCellFormat(times12font);
 		final WritableCellFormat cellDateFormat = new WritableCellFormat(new DateFormat("dd.MM"));
 		final WritableCellFormat cellTimeFormat = new WritableCellFormat(new DateFormat("hh:mm"));
-		try {	
+		try {
 			cellDateFormat.setAlignment(Alignment.LEFT);
 			cellTimeFormat.setAlignment(Alignment.LEFT);
 
@@ -69,7 +69,7 @@ public class ExcelSheet implements TextConstants {
 			sheet.getSettings().setVerticalFreeze(row);
 
 			// write rows
-			for (FlightEntry flightEntry : flightEnties) {
+			for (FeFlightEntry flightEntry : flightEnties) {
 
 				col = 0;
 
@@ -102,12 +102,12 @@ public class ExcelSheet implements TextConstants {
 					sheet.addCell(new Formula(col++, row, durationFormulaTowplane));
 				} else {
 					// no tow duration because of unknown endTime of towplane
-					col++; 
+					col++;
 				}
 
 				// column F: registration towplane
 				sheet.addCell(new Label(col++, row, flightEntry.getRegistrationTowplane()));
-				
+
 				// column G: towplane pilot
 				sheet.addCell(new Label(col++, row, flightEntry.getTowplanePilot()));
 
@@ -129,7 +129,7 @@ public class ExcelSheet implements TextConstants {
 					sheet.addCell(new Formula(col++, row, durationFormulaGlider));
 				} else {
 					// no glider duration because of unknown endTime of glider
-					col++;	
+					col++;
 				}
 
 				// column K: registration glider

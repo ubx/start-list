@@ -3,7 +3,7 @@ package ch.ubx.startlist.server.admin;
 import java.util.List;
 
 import ch.ubx.startlist.client.admin.OlcImportService;
-import ch.ubx.startlist.shared.FlightEntry;
+import ch.ubx.startlist.shared.FeFlightEntry;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -12,8 +12,8 @@ public class OlcImportImpl extends RemoteServiceServlet implements OlcImportServ
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public List<FlightEntry> importFromPlace(String place, int year) {
-		return OlcImportMain.importFromOLC(place, year, 5);
+	public List<FeFlightEntry> importFromPlace(String place, int year) {
+		return OlcImport.importFromOLC(place, year, 5);
 	}
 
 }

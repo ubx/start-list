@@ -19,7 +19,7 @@ import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheFactory;
 import net.sf.jsr107cache.CacheManager;
-import ch.ubx.startlist.shared.FlightEntry;
+import ch.ubx.startlist.shared.FeFlightEntry;
 
 import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
 
@@ -30,14 +30,15 @@ public class OlcImportExtractPilotInfo {
 	private static final Logger log = Logger.getLogger(Olc2006AirfieldServlet.class.getName());
 
 	private final static SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-	private List<FlightEntry> storedFlightEntries;
+	private List<FeFlightEntry> storedFlightEntries;
 	static {
 		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 	private Cache cache;
+	private String webServer = "http://www.onlinecontest.org";
 
-	public OlcImportExtractPilotInfo(List<FlightEntry> storedFlightEntries) {
-		this.storedFlightEntries = new ArrayList<FlightEntry>(storedFlightEntries);
+	public OlcImportExtractPilotInfo(List<FeFlightEntry> storedFlightEntries) {
+		this.storedFlightEntries = new ArrayList<FeFlightEntry>(storedFlightEntries);
 
 		Map<Integer, Integer> props = new HashMap<Integer, Integer>();
 		props.put(GCacheFactory.EXPIRATION_DELTA, 600); // 600 seconds
@@ -49,8 +50,8 @@ public class OlcImportExtractPilotInfo {
 		}
 	}
 
-	public List<FlightEntry> olcImportFromPlace(String placeID, String place, int year, String country) throws Exception {
-		List<FlightEntry> retFightEntries = new ArrayList<FlightEntry>(olcImport(year, placeID, place, null, country));
+	public List<FeFlightEntry> olcImportFromPlace(String placeID, String place, int year, String country) throws Exception {
+		List<FeFlightEntry> retFightEntries = new ArrayList<FeFlightEntry>(olcImport(year, placeID, place, null, country));
 		// TODO - OLC starts in October, find a better solution.
 		if (retFightEntries.size() == 0 && Calendar.getInstance().get(Calendar.MONTH) >= Calendar.OCTOBER) {
 			retFightEntries.addAll(olcImport(year + 1, placeID, place, null, country));
@@ -62,13 +63,13 @@ public class OlcImportExtractPilotInfo {
 		this.maxImport = maxImport;
 	}
 
-	private List<FlightEntry> olcImport(int olcYear, String placeID, String place, String club, String country) throws Exception {
+	private List<FeFlightEntry> olcImport(int olcYear, String placeID, String place, String club, String country) throws Exception {
 
 		String sourceUrlString;
 		if (placeID != null) {
 			placeID = placeID.replace(" ", "%20");
-			sourceUrlString = "http://www.onlinecontest.org/olc-2.0/gliding/flightsOfAirfield.html?rt=olc&sp=" + String.valueOf(olcYear) + "&d-2348235-p=&aa="
-					+ placeID + "&sc=&c=" + country + "&st=olc&paging=100000";
+			sourceUrlString = webServer + "/olc-2.0/gliding/flightsOfAirfield.html?rt=olc&sp=" + String.valueOf(olcYear) + "&d-2348235-p=&aa=" + placeID
+					+ "&sc=&c=" + country + "&st=olc&paging=100000";
 		} else {
 			sourceUrlString = null; // TODO - implement
 		}
@@ -103,7 +104,7 @@ public class OlcImportExtractPilotInfo {
 		final int[] FLIGHTBOOK_IDX = { 0, 2, -1, 5, 6, 7, 8, 9 };
 
 		int[] idx;
-		final String reqUrl = "http://www.onlinecontest.org/olc-2.0/gliding/flightinfo.html";
+		final String reqUrl = webServer + "/olc-2.0/gliding/flightinfo.html";
 		String urlStr0;
 		if (placeID != null) {
 			idx = FLIGHTBOOK_IDX;
@@ -112,7 +113,7 @@ public class OlcImportExtractPilotInfo {
 			idx = WORLDWIDE_IDX;
 			urlStr0 = reqUrl + "?dsId=";
 		}
-		List<FlightEntry> flightEntries = new ArrayList<FlightEntry>();
+		List<FeFlightEntry> flightEntries = new ArrayList<FeFlightEntry>();
 		if (trElements != null) {
 			for (Element trElement : trElements) {
 				String cls = trElement.getAttributeValue("class");
@@ -129,8 +130,8 @@ public class OlcImportExtractPilotInfo {
 					break;
 				}
 
-				FlightEntry flightEntry = new FlightEntry();
-				flightEntry.setSource(FlightEntry.SRC_OLC);
+				FeFlightEntry flightEntry = new FeFlightEntry();
+				flightEntry.setSource(flightEntry.SRC_OLC);
 				String dateStr = "";
 				List<Element> tdElements = trElement.getAllElements(HTMLElementName.TD);
 				for (int j = 0; j < idx.length - 1; j++) {
@@ -199,8 +200,8 @@ public class OlcImportExtractPilotInfo {
 				}
 			}
 		}
-		List<FlightEntry> retFightEntries = new ArrayList<FlightEntry>();
-		for (FlightEntry flightEntry : flightEntries) {
+		List<FeFlightEntry> retFightEntries = new ArrayList<FeFlightEntry>();
+		for (FeFlightEntry flightEntry : flightEntries) {
 			if (!inList(retFightEntries, flightEntry)) {
 				retFightEntries.add(flightEntry);
 			}
@@ -247,8 +248,8 @@ public class OlcImportExtractPilotInfo {
 		}
 	}
 
-	private boolean inList(List<FlightEntry> storedFlightEntries2, FlightEntry storedFlightEntry) {
-		for (FlightEntry flightEntry : storedFlightEntries2) {
+	private boolean inList(List<FeFlightEntry> storedFlightEntries2, FeFlightEntry storedFlightEntry) {
+		for (FeFlightEntry flightEntry : storedFlightEntries2) {
 			if (flightEntry.compareToMajor(storedFlightEntry) == 0) {
 				return true;
 			}

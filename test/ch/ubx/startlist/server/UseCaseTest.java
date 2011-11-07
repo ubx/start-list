@@ -32,6 +32,7 @@ public class UseCaseTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
+
 		// copy local4junit_db.bin to a temporary db
 		try {
 			FileUtils.copyFile(sf, tf);
@@ -56,7 +57,7 @@ public class UseCaseTest {
 	public void setUp() throws Exception {
 		helper.setUp();
 		dao = new FlightEntryDAOobjectify();
-		new PilotDAOobjectify();
+		// new PilotDAOobjectify();
 	}
 
 	@After
@@ -74,18 +75,18 @@ public class UseCaseTest {
 		}
 
 		List<FlightEntry> fesBefore = dao.listflightEntry();
-		assertEquals(3796, fesBefore.size());
-		assertEquals(2212, dao.listflightEntry(2011).size());
+		assertEquals(4644, fesBefore.size());
+		assertEquals(3060, dao.listflightEntry(2011).size());
 		assertEquals(1578, dao.listflightEntry(2010).size());
 		assertEquals(6, dao.listflightEntry(2009).size());
 		assertEquals(0, dao.listflightEntry(2008).size());
 
-		assertEquals(112, dao.listflightEntry(2011, 2011, "Bellechasse").size());
-		assertEquals(216, dao.listflightEntry(2010, 2011, "Bellechasse").size());
-		assertEquals(216, dao.listflightEntry(2009, 2011, "Bellechasse").size());
-		assertEquals(216, dao.listflightEntry(2000, 2011, "Bellechasse").size());
+		assertEquals(141, dao.listflightEntry(2011, 2011, "Bellechasse").size());
+		assertEquals(245, dao.listflightEntry(2010, 2011, "Bellechasse").size());
+		assertEquals(245, dao.listflightEntry(2009, 2011, "Bellechasse").size());
+		assertEquals(245, dao.listflightEntry(2000, 2011, "Bellechasse").size());
 
-		assertEquals(16, dao.listAirfields(2011).size());
+		assertEquals(17, dao.listAirfields(2011).size());
 		assertEquals(13, dao.listAirfields(2010).size());
 		assertEquals(1, dao.listAirfields(2009).size());
 		assertEquals(0, dao.listAirfields(2008).size());
@@ -107,19 +108,6 @@ public class UseCaseTest {
 			}
 		}
 		assertEquals(0, fesBefore.size());
-
-		// assertEquals(1, daoP.getPilots().size());
-
-		// Pilot p = new Pilot();
-		// p.setName("FFFF");
-		// daoP.addPilot(p);
-		// Pilot p2 = daoP.getPilot("FFFF");
-		// assertEquals("FFFF", p2.getName());
-
-		// assertEquals(1, ys.size());
-
-		// assertEquals(3,dao.listflightEntry(2011).size());
-
 	}
 
 }

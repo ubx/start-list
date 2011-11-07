@@ -99,6 +99,7 @@ C:\google_appengine\bulkloader.py --dump --app_id=start-list --url=http://start-
 C:\google_appengine\bulkloader.py --restore --app_id=start-list --url=http://start-list.appspot.com/remote_api --filename=start-list.data
 C:\google_appengine\bulkloader.py --restore --app_id=start-list --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
 ~/google_appengine/bulkloader.py --restore --app_id=start-list --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
+~/google_appengine/bulkloader.py --restore --app_id=start-list-test --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
 
 
 ===================
@@ -248,3 +249,8 @@ http://www.giantflyingsaucer.com/blog/?p=1017
 ===============================================================================================================
 Web-Page Testing, HtmlUnit 
 http://htmlunit.sourceforge.net/gettingStarted.html
+
+
+===============================================================================================================
+Retrieves log data for the application running on App Engine
+appcfg.py  --num_days=20 --severity=0 request_logs  /Users/Andreas/git/start-list/   start-list-log

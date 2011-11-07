@@ -19,8 +19,14 @@ import com.googlecode.objectify.util.DAOBase;
 public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 
 	static {
-		ObjectifyService.register(FlightEntry.class);
-		ObjectifyService.register(LoginInfo.class);
+		try { // TODO -- eliminate duplicate register error
+			ObjectifyService.register(FlightEntry.class);
+		} catch (Exception e) {
+		}
+		try { // TODO -- eliminate duplicate register error
+			ObjectifyService.register(LoginInfo.class);
+		} catch (Exception e) {
+		}
 	}
 
 	private LoginInfo loginInfo = null;
@@ -179,9 +185,8 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 		dateEnd.setTimeInMillis(dateStart.getTimeInMillis());
 		dateEnd.add(Calendar.DAY_OF_MONTH, 1);
 
-		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place ==", place)
-				.filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <", dateEnd.getTimeInMillis())
-				.order("startTimeInMillis");
+		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place ==", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+				.filter("startTimeInMillis <", dateEnd.getTimeInMillis()).order("startTimeInMillis");
 		return query.list();
 	}
 
@@ -196,8 +201,8 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 
 		Calendar dateEnd = Calendar.getInstance(); // TODO - set timezone UTC?
 		dateEnd.setTimeInMillis(endDate.getTimeInMillis());
-		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place", place)
-				.filter("startTimeInMillis >=", dateStart.getTimeInMillis()).filter("startTimeInMillis <=", dateEnd.getTimeInMillis());
+		Query<FlightEntry> query = ofy().query(FlightEntry.class).filter("place", place).filter("startTimeInMillis >=", dateStart.getTimeInMillis())
+				.filter("startTimeInMillis <=", dateEnd.getTimeInMillis());
 		return query.list();
 	}
 
@@ -282,7 +287,10 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 	 */
 	@Override
 	public void addFlightEntries4Test(List<FlightEntry> flightEntries) {
-		ofy().put(flightEntries);
+		// ofy().put(flightEntries);
+		for (FlightEntry flightEntry : flightEntries) {
+			ofy().put(flightEntry);
+		}
 	}
 
 	// --------------------------------------------------------------------------------------
@@ -300,10 +308,8 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 					loginInfo = ofy().find(LoginInfo.class, userService.getCurrentUser().getEmail());
 				}
 				if (loginInfo != null) {
-					modifiable = loginInfo.isCanModFlightEntry()
-							|| userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
-					deletable = loginInfo.isCanDelFlightEntry()
-							|| userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+					modifiable = loginInfo.isCanModFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
+					deletable = loginInfo.isCanDelFlightEntry() || userService.getCurrentUser().getEmail().equals(flightEntry.getCreator());
 				}
 			}
 			flightEntry.setModifiable(modifiable);
@@ -326,6 +332,5 @@ public class FlightEntryDAOobjectify extends DAOBase implements FlightEntryDAO {
 			flightEntry.setCreated(flightEntry.getModified());
 		}
 	}
-
 
 }

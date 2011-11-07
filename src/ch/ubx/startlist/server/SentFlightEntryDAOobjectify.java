@@ -23,9 +23,12 @@ public class SentFlightEntryDAOobjectify extends DAOBase implements SentFlightEn
 
 	@Override
 	public void addSentFlightEntries(List<SentFlightEntry> sentFlightEntries) {
-		if (sentFlightEntries.size() > 0) {
-			ofy().put(sentFlightEntries);
+		for (SentFlightEntry sentFlightEntry : sentFlightEntries) {
+			ofy().put(sentFlightEntry);
 		}
+		// if (sentFlightEntries.size() > 0) {
+		// ofy().put(sentFlightEntries);
+		// }
 	}
 
 	@Override

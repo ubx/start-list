@@ -17,9 +17,9 @@ import ch.ubx.startlist.client.TimeFormat;
 import ch.ubx.startlist.client.admin.ui.AdminGUI;
 import ch.ubx.startlist.shared.Airfield;
 import ch.ubx.startlist.shared.FeDate;
+import ch.ubx.startlist.shared.FeFlightEntry;
 import ch.ubx.startlist.shared.FePlace;
 import ch.ubx.startlist.shared.FeYear;
-import ch.ubx.startlist.shared.FlightEntry;
 import ch.ubx.startlist.shared.LoginInfo;
 import ch.ubx.startlist.shared.Pilot;
 import ch.ubx.startlist.shared.TextConstants;
@@ -94,7 +94,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
     public PilotServiceDelegate pilotServiceDelegate;
 
     /* Data model */
-    private FlightEntry currentFlightEntry;
+    private FeFlightEntry currentFlightEntry;
     private VerticalPanel mainPanel;
     private DynaTableWidget dynaTableWidget;
 
@@ -116,7 +116,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
     private HTML excelLinkHTML;
 
     private AdminGUI adminGUI;
-    private FlightEntry lastflightEntry;
+    private FeFlightEntry lastflightEntry;
 
     private List<FeYear> curFeYear;
     private List<FePlace> curFePlace;
@@ -388,7 +388,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         reload(null);
     }
 
-    private void reload(FlightEntry flightEntry) {
+    private void reload(FeFlightEntry flightEntry) {
         // TODO ++ correct??
         provider.setCurrentDate(curFeDate.get(dateListBox.getSelectedIndex()));
         // if (flightEntry != null) {
@@ -407,7 +407,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
                 public void rowSelected(int row, boolean selected) {
                     enablePilotFields(false);
                     if (selected) {
-                        FlightEntry flightEntry = provider.getFlightEntry(row);
+                        FeFlightEntry flightEntry = provider.getFlightEntry(row);
                         if (flightEntry == null) {
                             clearForm();
                             newButton.setEnabled(true);
@@ -431,7 +431,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
                 @Override
                 public void rowDoubleclicked(int row) {
                     enablePilotFields(false);
-                    FlightEntry flightEntry = provider.getFlightEntry(row);
+                    FeFlightEntry flightEntry = provider.getFlightEntry(row);
                     if (flightEntry == null) {
                         clearForm();
                     } else {
@@ -503,7 +503,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         discardButton.setEnabled(false);
     }
 
-    private void loadForm(FlightEntry flightEntry) {
+    private void loadForm(FeFlightEntry flightEntry) {
         boolean newEntry = flightEntry.getId() == null;
         currentFlightEntry = flightEntry;
 
@@ -559,7 +559,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         registrationTowplaneBox.setValue(flightEntry.getRegistrationTowplane());
     }
 
-    private void saveForm(FlightEntry flightEntry) {
+    private void saveForm(FeFlightEntry flightEntry) {
         // set name of pilot
         String pilot = pilotNameBox.getValue();
         if (pilot.length() == 0) {
@@ -685,7 +685,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
     public void gui_eventNewButtonClicked() {
         disableCUDButtons();
         enablePilotFields(true);
-        FlightEntry flightEntry = new FlightEntry();
+        FeFlightEntry flightEntry = new FeFlightEntry();
         loadForm(flightEntry);
         flightEntryDialogBox.setTitle(TXT_TITLE_CREATE_NEW_FLIGHT);
         flightEntryDialogBox.setText(TXT_CREATE_NEW_FLIGHT);
@@ -736,18 +736,18 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         gui_eventDiscardClicked();
     }
 
-    private boolean hasDate(FlightEntry flightEntry) {
+    private boolean hasDate(FeFlightEntry flightEntry) {
         Set<String> items = getItemList(dateListBox);
         return items.contains(DATE_FORMAT.format(new Date(flightEntry.getStartTimeInMillis()), timeZone));
     }
 
-    private boolean hasPlace(FlightEntry flightEntry) {
+    private boolean hasPlace(FeFlightEntry flightEntry) {
         Set<String> items = getItemList(placeListBox);
         return items.contains(flightEntry.getPlace());
     }
 
     @SuppressWarnings("deprecation")
-    private boolean hasYear(FlightEntry flightEntry) {
+    private boolean hasYear(FeFlightEntry flightEntry) {
         Set<String> items = getItemList(yearListBox);
         return items.contains(String.valueOf(new Date(flightEntry.getStartTimeInMillis()).getYear() + 1900));
     }
@@ -806,7 +806,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         }
     }
 
-    private void showMidifiableDialog(FlightEntry flightEntry, String msg) {
+    private void showMidifiableDialog(FeFlightEntry flightEntry, String msg) {
         final DialogBox notmodDialogBox = new DialogBox();
         notmodDialogBox.setModal(true);
         notmodDialogBox.setPopupPosition(deleteButton.getAbsoluteLeft() + deleteButton.getOffsetWidth(),
@@ -844,7 +844,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
     }
 
     @SuppressWarnings("deprecation")
-    public void service_eventUpdateSuccessful(FlightEntry flightEntry) {
+    public void service_eventUpdateSuccessful(FeFlightEntry flightEntry) {
         status.setText(TXT_SUCCESS_ADD_FLIGHTENTRY);
         if (placeListBox.getItemCount() == 0) {
             placeListBox.addItem(flightEntry.getPlace());
@@ -867,7 +867,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         }
     }
 
-    public void service_eventRemoveFlightEntrySuccessful(FlightEntry flightEntry) {
+    public void service_eventRemoveFlightEntrySuccessful(FeFlightEntry flightEntry) {
         status.setText(TXT_SUCCESS_REMOVE_FLIGHTENTRY);
         reload();
 
@@ -1053,7 +1053,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         if (currentFlightEntry.getId() != null) {
             // compare only modified entry
             // TODO - should we use tmpFlightEntry for save?
-            FlightEntry tmpFlightEntry = currentFlightEntry.copy();
+            FeFlightEntry tmpFlightEntry = currentFlightEntry.copy();
             saveForm(tmpFlightEntry);
             enableSCButtons(tmpFlightEntry.compareTo(currentFlightEntry) != 0);
         }
