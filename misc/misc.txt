@@ -101,6 +101,10 @@ C:\google_appengine\bulkloader.py --restore --app_id=start-list --url=http://127
 ~/google_appengine/bulkloader.py --restore --app_id=start-list --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
 ~/google_appengine/bulkloader.py --restore --app_id=start-list-test --url=http://127.0.0.1:8888/remote_api --filename=start-list.data
 
+bulkloader.py --restore --app_id=start-list-test2 --url=http://start-list-test2.appspot.com/remote_api --filename=start-list-07-Nov-2011.data
+
+
+
 
 ===================
 Local Datastore Viewer
