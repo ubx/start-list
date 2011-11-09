@@ -21,8 +21,8 @@
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-local-runtime.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/testing/appengine-testing.jar"/>
 	<classpathentry kind="var" path="GAE_SDK"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpunit.jar"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.1b1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
