@@ -54,7 +54,7 @@ public class Migrate {
 		feFe.setPlace(fe.getPlace());
 		feFe.setLandingPlace(fe.getLandingPlace());
 		feFe.setRegistrationGlider(fe.getRegistrationGlider());
-		feFe.setRegistrationTowplane(fe.getRegistrationGlider());
+		feFe.setRegistrationTowplane(fe.getRegistrationTowplane());
 		feFe.setTraining(fe.isTraining());
 		feFe.setRemarks(fe.getRemarks());
 		feFe.setModifiable(fe.isModifiable());

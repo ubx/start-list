@@ -1,4 +1,4 @@
-application: start-list-test2
+application: start-list-test
 version: x-2-0-2
 runtime: python
 api_version: 1
