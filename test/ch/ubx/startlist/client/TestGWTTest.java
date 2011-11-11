@@ -19,6 +19,7 @@ public class TestGWTTest extends GWTTestCase {
 	@Test
 	public void test() {
 		FlightEntryListEntryPoint fep = new FlightEntryListEntryPoint();
+		assertNotNull(fep);
 
 	}
 
