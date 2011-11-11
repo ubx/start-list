@@ -1,0 +1,4 @@
+cron:
+- description: Periodic job scheduler
+  url: /cronjobs
+  schedule: every 1 hours synchronized

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <datastore-indexes autoGenerate="true">
 
-	<datastore-index kind="FlightEntry" ancestor="false">
+	<datastore-index kind="FeNode" ancestor="false" source="manual">
+		<property name="^i" direction="asc" />
 		<property name="place" direction="asc" />
 		<property name="startTimeInMillis" direction="asc" />
 	</datastore-index>
+
 
 	<datastore-index kind="PeriodicJob" ancestor="false">
 		<property name="enabled" direction="asc" />
