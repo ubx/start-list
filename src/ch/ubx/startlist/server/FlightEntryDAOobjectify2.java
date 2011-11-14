@@ -17,6 +17,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.ObjectifyOpts;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.util.DAOBase;
@@ -32,6 +33,7 @@ public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2
 			ObjectifyService.register(LoginInfo.class);
 		} catch (Exception e) {
 		}
+
 	}
 	static boolean test;
 
@@ -48,7 +50,13 @@ public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2
 	private final IFeGenDAO<FeNode<?>, ?> gDAO = new FeGenDAOobjectify(FeNode.class);
 	private static Key<FeStore> storeActiveKey;
 
+	private static ObjectifyOpts opts = new ObjectifyOpts();
+	static {
+		opts.setGlobalCache(true);
+	}
+
 	public FlightEntryDAOobjectify2() {
+		super(opts);
 		FlightEntryDAOobjectify2.test = false;
 		storeActiveKey = storeDAO.getOrCreateKey("Active");
 		userService = UserServiceFactory.getUserService();

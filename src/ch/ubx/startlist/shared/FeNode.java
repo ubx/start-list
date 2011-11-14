@@ -5,8 +5,10 @@ import java.io.Serializable;
 import javax.persistence.Id;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
 
+@Cached
 @Entity
 public class FeNode<V> implements Serializable {
 
