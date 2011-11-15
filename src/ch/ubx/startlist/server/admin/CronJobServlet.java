@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,18 +18,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ch.ubx.startlist.server.ExcelSender;
-import ch.ubx.startlist.server.OlcImporter;
-import ch.ubx.startlist.server.PeriodicJobDAO;
-import ch.ubx.startlist.server.PeriodicJobDAOobjectify;
-import ch.ubx.startlist.shared.PeriodicJob;
+import ch.ubx.startlist.server.JobDAO;
+import ch.ubx.startlist.server.JobDAOobjectify;
+import ch.ubx.startlist.server.PeriodicJobDAO2;
+import ch.ubx.startlist.server.PeriodicJobDAOobjectify2;
+import ch.ubx.startlist.shared.Job;
+import ch.ubx.startlist.shared.PeriodicJob2;
 import ch.ubx.startlist.shared.TextConstants;
 
 public class CronJobServlet extends HttpServlet implements TextConstants {
 
 	private static final long serialVersionUID = 1L;
 
-	private static PeriodicJobDAO periodicJobDAO = new PeriodicJobDAOobjectify();
+	private static PeriodicJobDAO2 periodicJobDAO = new PeriodicJobDAOobjectify2();
+	private static JobDAO jobDAO = new JobDAOobjectify();
 	private static SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
 	private static SimpleDateFormat nowTimeFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm z");
 
@@ -50,11 +54,11 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 		}
 
 		// Get all expired (or not yet initialized, i.e. timeInMillis == 0).
-		List<PeriodicJob> periodicJobs = periodicJobDAO.listExpiredPeriodicJob(now.getTimeInMillis());
-		List<PeriodicJob> periodicJobsMod = new ArrayList<PeriodicJob>();
+		List<PeriodicJob2> periodicJobs = periodicJobDAO.listExpiredPeriodicJob(now.getTimeInMillis());
+		List<PeriodicJob2> periodicJobsMod = new ArrayList<PeriodicJob2>();
 
 		// Adjust all with timeInMillis == 0
-		for (PeriodicJob periodicJob : periodicJobs) {
+		for (PeriodicJob2 periodicJob : periodicJobs) {
 			if (periodicJob.getNextTimeInMillis() == 0) {
 				adjustTimeInMillis(periodicJob, now);
 				periodicJobsMod.add(periodicJob);
@@ -62,19 +66,16 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 		}
 
 		// Run all expired jobs
-		for (PeriodicJob periodicJob : periodicJobs) {
+		for (PeriodicJob2 periodicJob : periodicJobs) {
 			if (periodicJob.getNextTimeInMillis() <= now.getTimeInMillis()) {
-				OlcImporter.doImport(periodicJob.getImportOLCJobList());
-				ExcelSender.doSend(periodicJob.getSendExcelJobList(), now);
+				Set<Entry<String, Job>> entrySet = jobDAO.listJob(periodicJob.getJobList()).entrySet();
+				for (Entry<String, Job> entry : entrySet) {
+					entry.getValue().execute(entry.getKey(), now);
+				}
 				adjustTimeInMillis(periodicJob, now);
 				periodicJobsMod.add(periodicJob);
 			}
 		}
-
-		// // Adjust all timeInMillis for next execution
-		// for (PeriodicJob periodicJob : periodicJobs) {
-		// adjustTimeInMillis(periodicJob, now);
-		// }
 
 		// Update all
 		if (periodicJobsMod.size() > 0) {
@@ -82,7 +83,7 @@ public class CronJobServlet extends HttpServlet implements TextConstants {
 		}
 	}
 
-	protected void adjustTimeInMillis(PeriodicJob periodicJob, Calendar now) {
+	protected void adjustTimeInMillis(PeriodicJob2 periodicJob, Calendar now) {
 		log.log(Level.INFO, "For periodicJob=" + periodicJob.getName());
 
 		// Parse time string

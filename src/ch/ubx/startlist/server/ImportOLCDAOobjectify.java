@@ -17,14 +17,12 @@ public class ImportOLCDAOobjectify extends DAOBase implements ImportOLCDAO {
 
 	@Override
 	public void removeImportOLC(ImportOLC importOLC) {
-		// TODO Auto-generated method stub
-
+		ofy().delete(importOLC);
 	}
 
 	@Override
 	public void createOrUpdateImportOLC(ImportOLC importOLC) {
 		ofy().put(importOLC);
-
 	}
 
 	@Override

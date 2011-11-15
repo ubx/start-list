@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ch.ubx.startlist.shared.SendExcel;
 
+@Deprecated
 public interface SendExcelDAO {
 
 	public void removeSendExcel(SendExcel sendExcel);

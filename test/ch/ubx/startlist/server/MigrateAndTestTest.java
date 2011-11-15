@@ -26,14 +26,14 @@ import ch.ubx.startlist.shared.FlightEntry;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 
-public class MigrateAndTest {
+public class MigrateAndTestTest {
 
 	private static LocalDatastoreServiceTestConfig datastore;
 	private static LocalServiceTestHelper helper;
 	private static FlightEntryDAOobjectify dao;
 	private static FlightEntryDAOobjectify2 dao2;
-	private static String sfName = "testdata/" + ClassUtils.getPackageName(MigrateAndTest.class) + "/local4junit_db.bin";
-	private static String tfName = "testdata/" + ClassUtils.getPackageName(MigrateAndTest.class) + "/temp.bin";
+	private static String sfName = "testdata/" + ClassUtils.getPackageName(MigrateAndTestTest.class) + "/local4junit_db.bin";
+	private static String tfName = "testdata/" + ClassUtils.getPackageName(MigrateAndTestTest.class) + "/temp.bin";
 	private static File sf = new File(sfName);
 	private static File tf = new File(tfName);
 

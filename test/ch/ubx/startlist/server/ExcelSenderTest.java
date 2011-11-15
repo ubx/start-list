@@ -9,13 +9,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import ch.ubx.startlist.shared.FeFlightEntry;
-import ch.ubx.startlist.shared.SendExcel;
+import ch.ubx.startlist.shared.Job;
+import ch.ubx.startlist.shared.JobSendExcel;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -28,14 +31,13 @@ public class ExcelSenderTest {
 
 	private static FlightEntryDAO2 flightEntryDAO;
 	private static SentFlightEntryDAO sentFlightEntryDAO;
-	private static SendExcelDAO sendExcelDAO;
+	private static JobDAO jobDAO = new JobDAOobjectify();
 
 	@Before
 	public void setUp() throws Exception {
 		helper.setUp();
 		flightEntryDAO = new FlightEntryDAOobjectify2(true); // Note: create an instance for test
 		sentFlightEntryDAO = new SentFlightEntryDAOobjectify();
-		sendExcelDAO = new SendExcelDAOobjectify();
 		errOutHelper.setUp();
 	}
 
@@ -76,27 +78,35 @@ public class ExcelSenderTest {
 		flightEntryDAO.addFlightEntries4Test(flightEntries);
 		assertEquals(200, flightEntryDAO.listflightEntry(now.get(Calendar.YEAR) - 1, now.get(Calendar.YEAR), PLACE).size());
 
-		SendExcel sendExcel = new SendExcel(NAME, "testtesttest", PLACE, "mr.mail@test.com");
+		JobSendExcel sendExcel = new JobSendExcel(NAME, "testtesttest", PLACE, "mr.mail@test.com");
 		sendExcel.setDaysBehind(daysBehind);
-		sendExcelDAO.createOrUpdateSendExcel(sendExcel);
-		assertEquals(1, sendExcelDAO.listAllSendExcel().size());
+		jobDAO.createOrUpdateJob(sendExcel);
+		assertEquals(1, jobDAO.listAllJob().size());
 
 		// Sent all pending flights
 		List<String> names = new ArrayList<String>();
 		names.add(NAME);
+		Set<Entry<String, Job>> entrySet = jobDAO.listJob(names).entrySet();
 
-		assertEquals("No SentFlightEnties should be pending", 0, sentFlightEntryDAO.listFlightEntry(NAME).size());
+		filteredFlightEntriesCnt = 0;
 		try {
-			filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
+			for (Entry<String, Job> entry : entrySet) {
+				JobSendExcel job = (JobSendExcel) entry.getValue();
+				filteredFlightEntriesCnt = filteredFlightEntriesCnt + ExcelSender.execute(job, now);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
 		}
 		assertEquals("Flights should be sent", 26, filteredFlightEntriesCnt);
 
+		filteredFlightEntriesCnt = 0;
 		for (int i = 0; i < 5; i++) {
 			try {
-				filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
+				for (Entry<String, Job> entry : entrySet) {
+					JobSendExcel job = (JobSendExcel) entry.getValue();
+					filteredFlightEntriesCnt = filteredFlightEntriesCnt + ExcelSender.execute(job, now);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				fail();
@@ -106,10 +116,14 @@ public class ExcelSenderTest {
 		}
 
 		// Check if old SentFlightEnties are purged.
+		filteredFlightEntriesCnt = 0;
 		for (int i = 0; i < 100; i++) {
 			try {
 				now.setTimeInMillis(now.getTimeInMillis() + oneDayMillies);
-				filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
+				for (Entry<String, Job> entry : entrySet) {
+					JobSendExcel job = (JobSendExcel) entry.getValue();
+					filteredFlightEntriesCnt = filteredFlightEntriesCnt + ExcelSender.execute(job, now);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				fail();
@@ -151,24 +165,30 @@ public class ExcelSenderTest {
 			flightEntries.add(fe);
 			millies = millies - oneDayMillies;
 		}
+
 		flightEntryDAO.addFlightEntries4Test(flightEntries);
 		assertEquals(100, flightEntryDAO.listflightEntry(now.get(Calendar.YEAR) - 1, now.get(Calendar.YEAR), PLACE).size());
 
-		SendExcel sendExcel = new SendExcel(NAME, "testtesttest2", PLACE, "mr.mail@test.com");
+		JobSendExcel sendExcel = new JobSendExcel(NAME, "testtesttest2", PLACE, "mr.mail@test.com");
 		sendExcel.setDaysBehind(daysBehind);
-		sendExcelDAO.createOrUpdateSendExcel(sendExcel);
-		assertEquals(1, sendExcelDAO.listAllSendExcel().size());
+		jobDAO.createOrUpdateJob(sendExcel);
+		assertEquals(1, jobDAO.listAllJob().size());
 
 		// Sent all pending flights
 		List<String> names = new ArrayList<String>();
 		names.add(NAME);
+		Set<Entry<String, Job>> entrySet = jobDAO.listJob(names).entrySet();
 
 		// String syserr = errOutHelper.getSysErr();
 		// assertEquals("Output buffer must be empty, got>>" + syserr + "<<", 0, syserr.length());
 
 		assertEquals("No SentFlightEnties should be pending", 0, sentFlightEntryDAO.listFlightEntry(NAME).size());
+		filteredFlightEntriesCnt = 0;
 		try {
-			filteredFlightEntriesCnt = ExcelSender.doSend(names, now);
+			for (Entry<String, Job> entry : entrySet) {
+				JobSendExcel job = (JobSendExcel) entry.getValue();
+				filteredFlightEntriesCnt = filteredFlightEntriesCnt + ExcelSender.execute(job, now);
+			}
 		} catch (IOException e) {
 			fail();
 		}
@@ -182,9 +202,13 @@ public class ExcelSenderTest {
 		Calendar now2 = Calendar.getInstance();
 		now2.setTimeInMillis(TestUtil.parseTimeString("23.02.2011 04:30 utc").getTime());
 		for (long i = 0; i < 5; i++) {
+			filteredFlightEntriesCnt = 0;
 			now2.setTimeInMillis(now2.getTimeInMillis() + (i * oneHours));
 			try {
-				filteredFlightEntriesCnt = ExcelSender.doSend(names, now2);
+				for (Entry<String, Job> entry : entrySet) {
+					JobSendExcel job = (JobSendExcel) entry.getValue();
+					filteredFlightEntriesCnt = filteredFlightEntriesCnt + ExcelSender.execute(job, now2);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				fail();
@@ -216,8 +240,12 @@ public class ExcelSenderTest {
 			flightEntryDAO.createOrUpdateFlightEntry(fe);
 		}
 
+		filteredFlightEntriesCnt = 0;
 		try {
-			filteredFlightEntriesCnt = ExcelSender.doSend(names, now3);
+			for (Entry<String, Job> entry : entrySet) {
+				JobSendExcel job = (JobSendExcel) entry.getValue();
+				filteredFlightEntriesCnt = filteredFlightEntriesCnt + ExcelSender.execute(job, now3);
+			}
 		} catch (IOException e) {
 			fail();
 		}
@@ -232,7 +260,6 @@ public class ExcelSenderTest {
 		Calendar now4 = Calendar.getInstance();
 		now4.setTimeInMillis(TestUtil.parseTimeString("23.02.2011 04:30 utc").getTime());
 		for (int i = 30; i < 40; i++) {
-			// public List<FlightEntry> listflightEntry(String place, long dateTimeInMillis, int startIndex, int maxCount);
 			long mil = now4.getTimeInMillis() - (i * oneDayMillies);
 			Calendar date = Calendar.getInstance();
 			date.setTimeInMillis(mil);
@@ -247,8 +274,12 @@ public class ExcelSenderTest {
 			flightEntryDAO.createOrUpdateFlightEntry(fe);
 		}
 
+		filteredFlightEntriesCnt = 0;
 		try {
-			filteredFlightEntriesCnt = ExcelSender.doSend(names, now4);
+			for (Entry<String, Job> entry : entrySet) {
+				JobSendExcel job = (JobSendExcel) entry.getValue();
+				filteredFlightEntriesCnt = filteredFlightEntriesCnt + ExcelSender.execute(job, now4);
+			}
 		} catch (IOException e) {
 			fail();
 		}
@@ -263,8 +294,12 @@ public class ExcelSenderTest {
 		Calendar now5 = Calendar.getInstance();
 		now5.setTimeInMillis(TestUtil.parseTimeString("03.09.2999 04:30 utc").getTime());
 
+		filteredFlightEntriesCnt = 0;
 		try {
-			filteredFlightEntriesCnt = ExcelSender.doSend(names, now5);
+			for (Entry<String, Job> entry : entrySet) {
+				JobSendExcel job = (JobSendExcel) entry.getValue();
+				filteredFlightEntriesCnt = filteredFlightEntriesCnt + ExcelSender.execute(job, now5);
+			}
 		} catch (IOException e) {
 			fail();
 		}

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ch.ubx.startlist.shared.ImportOLC;
 
+@Deprecated
 public interface ImportOLCDAO {
 
 	public void removeImportOLC(ImportOLC importOLC);

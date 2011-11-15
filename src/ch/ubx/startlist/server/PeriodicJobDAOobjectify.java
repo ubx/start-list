@@ -16,7 +16,7 @@ public class PeriodicJobDAOobjectify extends DAOBase implements PeriodicJobDAO {
 
 	@Override
 	public void removePeriodicJob(PeriodicJob periodicJob) {
-		// TODO Auto-generated method stub
+		ofy().delete(periodicJob);
 
 	}
 

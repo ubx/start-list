@@ -9,9 +9,8 @@ import javax.persistence.Id;
 
 import com.googlecode.objectify.annotation.Cached;
 
-@Deprecated
 @Cached
-public class PeriodicJob implements Serializable {
+public class PeriodicJob2 implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -19,16 +18,15 @@ public class PeriodicJob implements Serializable {
 	private String name;
 	private long nextTimeInMillis = 0; // in milisec
 	private boolean enabled = true;
-	private String sendExcels;
-	private String importOLCJobs;
+	private String jobs;
 	private boolean[] days = new boolean[] { true, true, true, true, true, true, true }; // SO..SA
 	private String time; // "hh:mm"
 	private String timeZone; // "UTC+0";
 
-	public PeriodicJob() {
+	public PeriodicJob2() {
 	}
 
-	public PeriodicJob(String name) {
+	public PeriodicJob2(String name) {
 		this.name = name;
 	}
 
@@ -59,28 +57,16 @@ public class PeriodicJob implements Serializable {
 		}
 	}
 
-	public String getSendExcels() {
-		return sendExcels;
+	public String getJobs() {
+		return jobs;
 	}
 
-	public List<String> getSendExcelJobList() {
-		return sendExcels == null ? new ArrayList<String>() : Arrays.asList(sendExcels.split(";"));
+	public List<String> getJobList() {
+		return jobs == null ? new ArrayList<String>() : Arrays.asList(jobs.split(";"));
 	}
 
-	public void setSendExcels(String sendExcels) {
-		this.sendExcels = sendExcels;
-	}
-
-	public String getImportOLCJobs() {
-		return importOLCJobs;
-	}
-
-	public List<String> getImportOLCJobList() {
-		return importOLCJobs == null ? new ArrayList<String>() : Arrays.asList(importOLCJobs.split(";"));
-	}
-
-	public void setImportOLCJobs(String importOLCJobs) {
-		this.importOLCJobs = importOLCJobs;
+	public void setJobs(String jobs) {
+		this.jobs = jobs;
 	}
 
 	public boolean[] getDays() {

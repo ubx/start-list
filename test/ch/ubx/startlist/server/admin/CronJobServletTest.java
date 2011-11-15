@@ -15,10 +15,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import ch.ubx.startlist.server.PeriodicJobDAO;
-import ch.ubx.startlist.server.PeriodicJobDAOobjectify;
+import ch.ubx.startlist.server.PeriodicJobDAO2;
+import ch.ubx.startlist.server.PeriodicJobDAOobjectify2;
 import ch.ubx.startlist.server.TestUtil;
-import ch.ubx.startlist.shared.PeriodicJob;
+import ch.ubx.startlist.shared.PeriodicJob2;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -31,9 +31,9 @@ public class CronJobServletTest {
 	private static final String NULL_TIME_STR = "01.01.1970 00:00 utc";
 	private final static LocalDatastoreServiceTestConfig datastore = new LocalDatastoreServiceTestConfig();
 	private final static LocalServiceTestHelper helper = new LocalServiceTestHelper(datastore);
-	private static PeriodicJobDAO periodicJobDAO;
+	private static PeriodicJobDAO2 periodicJobDAO;
 
-	private PeriodicJob periodicJob;
+	private PeriodicJob2 periodicJob;
 	private CronJobServlet cronJobServlet;
 
 	private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm z");
@@ -42,7 +42,7 @@ public class CronJobServletTest {
 	public void setUp() throws Exception {
 		helper.setUp();
 		cronJobServlet = new CronJobServlet();
-		periodicJobDAO = new PeriodicJobDAOobjectify();
+		periodicJobDAO = new PeriodicJobDAOobjectify2();
 		timeFormat.setTimeZone(TimeZone.getTimeZone("utc"));
 	}
 
@@ -53,7 +53,7 @@ public class CronJobServletTest {
 
 	@Test
 	public void testAdjustTimeInMillisWrongDays() {
-		PeriodicJob periodicJob = new PeriodicJob();
+		PeriodicJob2 periodicJob = new PeriodicJob2();
 		try {
 			periodicJob.setDays(new boolean[] { false, true, false, false, false, false, false, false });
 		} catch (Exception e) {
@@ -64,7 +64,7 @@ public class CronJobServletTest {
 
 	@Test
 	public void testAdjustTimeInMillisCorrectDays() {
-		PeriodicJob periodicJob = new PeriodicJob();
+		PeriodicJob2 periodicJob = new PeriodicJob2();
 		try {
 			periodicJob.setDays(new boolean[] { true, false, false, false, false, false, false });
 		} catch (Exception e) {
@@ -182,7 +182,7 @@ public class CronJobServletTest {
 
 	@Test
 	public void testDoGetHttpServletRequestHttpServletResponseEveryDay() {
-		PeriodicJob periodicJob = new PeriodicJob("Test-Job");
+		PeriodicJob2 periodicJob = new PeriodicJob2("Test-Job");
 		periodicJob.setTime("09:00");
 		periodicJob.setDays(new boolean[] { true, true, true, true, true, true, true });
 		periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
@@ -202,7 +202,7 @@ public class CronJobServletTest {
 
 	@Test
 	public void testDoGetHttpServletRequestHttpServletResponseFridaysOnly() {
-		PeriodicJob periodicJob = new PeriodicJob("Test-Job");
+		PeriodicJob2 periodicJob = new PeriodicJob2("Test-Job");
 		periodicJob.setTime("08:00");
 		periodicJob.setDays(new boolean[] { false, false, false, false, false, true, false });
 		periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
@@ -238,7 +238,7 @@ public class CronJobServletTest {
 
 	@Test
 	public void testDoGetHttpServletRequestHttpServletResponseMultipleCronJobRun() {
-		PeriodicJob periodicJob = new PeriodicJob("Test-Job");
+		PeriodicJob2 periodicJob = new PeriodicJob2("Test-Job");
 		periodicJob.setTime("08:00");
 		periodicJob.setDays(new boolean[] { false, false, false, false, false, true, false }); // Fridays only
 		periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
@@ -264,7 +264,7 @@ public class CronJobServletTest {
 
 	@Test
 	public void testDoGetHttpServletRequestHttpServletEnablePeriodicJob() {
-		PeriodicJob periodicJob = new PeriodicJob("Test-Job");
+		PeriodicJob2 periodicJob = new PeriodicJob2("Test-Job");
 		periodicJob.setTime("09:00");
 		periodicJob.setDays(new boolean[] { true, true, true, true, true, true, true });
 		periodicJob.setEnabled(false);
@@ -293,7 +293,7 @@ public class CronJobServletTest {
 		String[] dateSerie = generateDateSerie("23.01.2011", 100); // start on SO
 
 		for (int i = 0; i < Math.pow(2, 7) - 1; i++) {
-			PeriodicJob periodicJob = new PeriodicJob("Test-Job");
+			PeriodicJob2 periodicJob = new PeriodicJob2("Test-Job");
 			periodicJob.setTime("13:00");
 			final boolean[] days = booleanArrayFromByte(i);
 			periodicJob.setDays(days);
@@ -317,7 +317,7 @@ public class CronJobServletTest {
 
 		// Cron job scheduling does not work is expended if time is 23:59
 
-		PeriodicJob periodicJob = new PeriodicJob("Test-Job");
+		PeriodicJob2 periodicJob = new PeriodicJob2("Test-Job");
 		periodicJob.setTime("23:59");
 		periodicJob.setDays(new boolean[] { true, true, true, true, true, true, true });
 		periodicJobDAO.createOrUpdatePeriodicJob(periodicJob);
@@ -365,7 +365,7 @@ public class CronJobServletTest {
 
 	private void testAdjustTime(boolean init, boolean[] days, String nowStr, String timeStr, String expectedTimeStr) {
 		if (init) {
-			periodicJob = new PeriodicJob();
+			periodicJob = new PeriodicJob2();
 			periodicJob.setName("Test");
 			periodicJob.setDays(days);
 			periodicJob.setTime(timeStr);

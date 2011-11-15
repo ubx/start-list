@@ -17,8 +17,7 @@ public class SendExcelDAOobjectify extends DAOBase implements SendExcelDAO {
 
 	@Override
 	public void removeSendExcel(SendExcel sendExcel) {
-		// TODO Auto-generated method stub
-
+		ofy().delete(sendExcel);
 	}
 
 	@Override
@@ -31,13 +30,10 @@ public class SendExcelDAOobjectify extends DAOBase implements SendExcelDAO {
 		Query<SendExcel> query = ofy().query(SendExcel.class);
 		return query.list();
 	}
-	
-	
 
 	@Override
 	public Map<String, SendExcel> listSendExcel(List<String> names) {
 		return ofy().get(SendExcel.class, names);
 	}
-
 
 }
