@@ -5,6 +5,9 @@ import java.io.Serializable;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import com.googlecode.objectify.annotation.Cached;
+
+@Cached
 public class LoginInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
