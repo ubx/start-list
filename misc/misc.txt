@@ -144,6 +144,15 @@ curl http://localhost:8888/cronjobs
 curl http://localhost:8888/cronjobs?now=26.02.2011%2023:00%20utc
 
 
+====================
+Update cron job scheduler
+F:\workspaces\ws0\start-list>appcfg.py update_cron .
+Application: start-list-test
+Host: appengine.google.com
+Uploading cron entries.
+Email: andreas.luethi@gmx.net
+Password for andreas.luethi@gmx.net:
+
 =====================
 Caution: Cron requests are always sent to the default version of the application.
 
