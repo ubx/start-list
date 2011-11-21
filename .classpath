@@ -51,9 +51,9 @@
 	<classpathentry kind="var" path="GAE_SDK/lib/testing/appengine-testing.jar"/>
 	<classpathentry kind="var" path="GAE_SDK"/>
 	<classpathentry kind="lib" path="lib/httpunit.jar"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/appengine-java-sdk-1.6.0"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jericho-html-3.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-java-2.12.0.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
