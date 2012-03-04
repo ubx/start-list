@@ -24,6 +24,10 @@ import ch.ubx.startlist.shared.PeriodicJob2;
 import ch.ubx.startlist.shared.SendExcel;
 
 public class MigrateJobs {
+	private static final String EXCEL_PREFIX = "Excel-";
+
+	private static final String OLC_IMPORT_PREFIX = "OlcImport-";
+
 	private static final Logger log = Logger.getLogger(MigrateJobs.class.getName());
 
 	private static final PeriodicJobDAO dao = new PeriodicJobDAOobjectify();
@@ -43,7 +47,16 @@ public class MigrateJobs {
 			periodicJob2.setNextTimeInMillis(periodicJob.getNextTimeInMillis());
 			periodicJob2.setTime(periodicJob.getTime());
 			periodicJob2.setTimeZone(periodicJob.getTimeZone());
-			periodicJob2.setJobs(periodicJob.getImportOLCJobs() + ";" + periodicJob.getSendExcels());
+
+			StringBuffer all = new StringBuffer();
+			for (String string : periodicJob.getImportOLCJobList()) {
+				all.append(OLC_IMPORT_PREFIX + string + ";");
+			}
+
+			for (String string2 : periodicJob.getSendExcelJobList()) {
+				all.append(EXCEL_PREFIX + string2 + ";");
+			}
+			periodicJob2.setJobs(all.substring(0, all.length() - 1));
 			dao2.createOrUpdatePeriodicJob(periodicJob2);
 			dao.removePeriodicJob(periodicJob);
 		}
@@ -56,7 +69,7 @@ public class MigrateJobs {
 			job.setDaysBehind(sendExcel.getDaysBehind());
 			job.setFilterGliders(sendExcel.getFilterGliders());
 			job.setFilterTowplanes(sendExcel.getFilterTowplanes());
-			job.setName(sendExcel.getName());
+			job.setName(EXCEL_PREFIX + sendExcel.getName());
 			job.setPlace(sendExcel.getPlace());
 			job.setRecipients(sendExcel.getRecipients());
 			job.setSubject(sendExcel.getSubject());
@@ -71,7 +84,7 @@ public class MigrateJobs {
 		List<ImportOLC> olcImport = importOLCdao.listAllImportOLC();
 		for (ImportOLC importOLC : olcImport) {
 			JobImportOLC job = new JobImportOLC();
-			String n = importOLC.getName();
+			String n = OLC_IMPORT_PREFIX + importOLC.getName();
 			int i = 2;
 			while (names.contains(n)) {
 				n = n + i++;
