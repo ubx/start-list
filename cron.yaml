@@ -1,4 +1,4 @@
 cron:
 - description: Periodic job scheduler
   url: /cronjobs
-  schedule: every day 20:01
+  schedule: every day 23:55
