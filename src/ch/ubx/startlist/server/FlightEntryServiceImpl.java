@@ -16,12 +16,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class FlightEntryServiceImpl extends RemoteServiceServlet implements FlightEntryService {
 	private static final long serialVersionUID = 1L;
 	private FlightEntryDAO2 flightEntryDAO = new FlightEntryDAOobjectify2();
-	private StartTimeComperator startTimeComperator = new StartTimeComperator();
 
 	@Override
 	public List<FeFlightEntry> listFlightEntrie(FeDate date, int startIndex, int maxCount) {
 		List<FeFlightEntry> listFlightEntrys = flightEntryDAO.listflightEntry(date, startIndex, maxCount);
-		Collections.sort(listFlightEntrys, startTimeComperator);
 		return new ArrayList<FeFlightEntry>(listFlightEntrys);
 	}
 
@@ -55,15 +53,6 @@ public class FlightEntryServiceImpl extends RemoteServiceServlet implements Flig
 		List<FeYear> list = flightEntryDAO.listYear();
 		Collections.sort(list);
 		return list;
-	}
-
-	private class StartTimeComperator implements Comparator<FeFlightEntry> {
-
-		@Override
-		public int compare(FeFlightEntry o1, FeFlightEntry o2) {
-			return ((Long) o1.getStartTimeInMillis()).compareTo(o2.getStartTimeInMillis());
-		}
-
 	}
 
 }

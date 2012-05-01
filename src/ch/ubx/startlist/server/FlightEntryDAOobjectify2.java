@@ -2,6 +2,8 @@ package ch.ubx.startlist.server;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.ubx.startlist.shared.FeDate;
@@ -49,6 +51,8 @@ public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2
 	private final IFeGenDAO<FeNode<?>, ?> gDAO = new FeGenDAOobjectify(FeNode.class);
 	private static Key<FeStore> storeActiveKey;
 
+	private StartTimeComperator startTimeComperator = new StartTimeComperator();
+
 	public FlightEntryDAOobjectify2() {
 		FlightEntryDAOobjectify2.test = false;
 		storeActiveKey = storeDAO.getOrCreateKey("Active");
@@ -70,6 +74,7 @@ public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2
 	public List<FeFlightEntry> listflightEntry(FeDate date, int startIndex, int maxCount) {
 		Query<FeFlightEntry> query = ofy().query(FeFlightEntry.class).filter(PARENT, date);
 		List<FeFlightEntry> list = query.list();
+		Collections.sort(list, startTimeComperator);
 		// TODO - use Query methods limit/ offset
 		list = list.subList(startIndex, Math.min(startIndex + maxCount, list.size()));
 		for (FeFlightEntry flightEntry : list) {
@@ -330,6 +335,15 @@ public class FlightEntryDAOobjectify2 extends DAOBase implements FlightEntryDAO2
 
 	private String evalPlace(FeFlightEntry flightEntry) {
 		return flightEntry.getPlace();
+	}
+
+	private class StartTimeComperator implements Comparator<FeFlightEntry> {
+
+		@Override
+		public int compare(FeFlightEntry o1, FeFlightEntry o2) {
+			return ((Long) o1.getStartTimeInMillis()).compareTo(o2.getStartTimeInMillis());
+		}
+
 	}
 
 }
