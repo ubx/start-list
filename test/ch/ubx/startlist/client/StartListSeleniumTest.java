@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -32,7 +33,7 @@ public class StartListSeleniumTest {
 		}
 	}
 
-	@Test
+	@Test @Ignore
 	public void testStartList() throws Exception {
 		for (int i = 0; i < 100; i++) {
 			testStartListX();

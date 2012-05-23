@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.ubx.startlist.shared.FeFlightEntry;
@@ -28,7 +29,7 @@ public class OlcImportTest {
 		helper.tearDown();
 	}
 
-	@Test
+	@Test @Ignore
 	public void testImportFromOLC() {
 		List<FeFlightEntry> list = OlcImport.importFromOLC("TOCUM1", 2012, 5);
 		fail("Not yet implemented");

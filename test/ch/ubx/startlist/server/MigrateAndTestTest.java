@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.ubx.startlist.server.maint.Migrate;
@@ -73,7 +74,7 @@ public class MigrateAndTestTest {
 		helper.tearDown();
 	}
 
-	@Test
+	@Test @Ignore
 	public void testMigrate() {
 		performace();
 		performace();
