@@ -1,7 +1,6 @@
 package ch.ubx.startlist.server.admin;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ public class OlcImportTest {
 	private static FeGenDAOobjectify<FePlace, String> placeDAO;
 	private static AirfieldDAOobjectify airfieldDAO;
 	private static Key<FeYear> currentYear;
-	private static Key<FePlace> p1k;
 	private static String aa = "TOCUM1";
 	private static String c = "AU";
 
@@ -38,6 +36,7 @@ public class OlcImportTest {
 		yearDAO = new FeGenDAOobjectify<FeYear, Long>(FeYear.class);
 		currentYear = yearDAO.getOrCreateKey(2012L);
 		placeDAO = new FeGenDAOobjectify<FePlace, String>(FePlace.class);
+		placeDAO.getOrCreateKey(aa, currentYear);
 		airfieldDAO = new AirfieldDAOobjectify();
 		Airfield af = new Airfield();
 		af.setName(aa);
@@ -53,7 +52,6 @@ public class OlcImportTest {
 
 	@Test
 	public void testImportFromOLC() {
-		p1k = placeDAO.getOrCreateKey(aa, currentYear);
 		List<FeFlightEntry> list = OlcImport.importFromOLC(aa, 2012, 5);
 		assertEquals("Should import 5 Flight", 5, list.size());
 		for (FeFlightEntry fe : list) {
