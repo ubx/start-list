@@ -68,8 +68,8 @@ public class OlcImportExtractPilotInfo {
 		String sourceUrlString;
 		if (placeID != null) {
 			placeID = placeID.replace(" ", "%20");
-			sourceUrlString = webServer + "/olc-2.0/gliding/flightsOfAirfield.html?rt=olc&sp=" + String.valueOf(olcYear) + "&d-2348235-p=&aa=" + placeID
-					+ "&sc=&c=" + country + "&st=olc&paging=100000";
+			sourceUrlString = webServer + "/olc-2.0/gliding/flightsOfAirfield.html?rt=olc&sp=" + String.valueOf(olcYear)
+					+ "&d-2348235-p=&aa=" + placeID + "&sc=&c=" + country + "&st=olc&paging=100000";
 		} else {
 			sourceUrlString = null; // TODO - implement
 		}
@@ -191,8 +191,8 @@ public class OlcImportExtractPilotInfo {
 						flightEntry.setRegistrationGlider("");
 						flightEntry.setCompetitionID("");
 					} else {
-						String[] t = href.split("=");
-						OlcImportExtractAircraftinfo aircraftinfo = new OlcImportExtractAircraftinfo(urlStr0 + t[t.length - 1]);
+						OlcImportExtractAircraftinfo aircraftinfo = new OlcImportExtractAircraftinfo(webServer + "/olc-2.0/gliding/"
+								+ href);
 						flightEntry.setRegistrationGlider(aircraftinfo.getCallsign());
 						flightEntry.setCompetitionID(aircraftinfo.getCompetitionID());
 					}
