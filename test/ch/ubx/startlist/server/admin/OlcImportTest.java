@@ -27,22 +27,11 @@ public class OlcImportTest {
 	private static FeGenDAOobjectify<FePlace, String> placeDAO;
 	private static AirfieldDAOobjectify airfieldDAO;
 	private static Key<FeYear> currentYear;
-	private static String aa = "TOCUM1";
-	private static String c = "AU";
 
 	@Before
 	public void setUp() throws Exception {
 		helper.setUp();
 		yearDAO = new FeGenDAOobjectify<FeYear, Long>(FeYear.class);
-		currentYear = yearDAO.getOrCreateKey(2012L);
-		placeDAO = new FeGenDAOobjectify<FePlace, String>(FePlace.class);
-		placeDAO.getOrCreateKey(aa, currentYear);
-		airfieldDAO = new AirfieldDAOobjectify();
-		Airfield af = new Airfield();
-		af.setName(aa);
-		af.setId(aa);
-		af.setCountry(c);
-		airfieldDAO.addAirfield(af);
 	}
 
 	@After
@@ -52,6 +41,17 @@ public class OlcImportTest {
 
 	@Test
 	public void testImportFromOLC() {
+		String aa = "TOCUM1";
+		String c = "AU";
+		currentYear = yearDAO.getOrCreateKey(2012L);
+		placeDAO = new FeGenDAOobjectify<FePlace, String>(FePlace.class);
+		placeDAO.getOrCreateKey(aa, currentYear);
+		airfieldDAO = new AirfieldDAOobjectify();
+		Airfield af = new Airfield();
+		af.setName(aa);
+		af.setId(aa);
+		af.setCountry(c);
+		airfieldDAO.addAirfield(af);
 		List<FeFlightEntry> list = OlcImport.importFromOLC(aa, 2012, 5);
 		assertEquals("Should import 5 Flight", 5, list.size());
 		for (FeFlightEntry fe : list) {
@@ -62,6 +62,31 @@ public class OlcImportTest {
 		assertEquals("Club wrong", "Southern Riverina GC", fe.getClub());
 		assertEquals("Pilot wrong", "Bernie Sizer", fe.getPilot());
 		assertEquals("RegistrationGlider wrong", "VH-GES", fe.getRegistrationGlider());
+	}
+	
+	@Test
+	public void testImportFromOLC2() {
+		String aa = "BELCS1";
+		String c = "CH";
+		currentYear = yearDAO.getOrCreateKey(2012L);
+		placeDAO = new FeGenDAOobjectify<FePlace, String>(FePlace.class);
+		placeDAO.getOrCreateKey(aa, currentYear);
+		airfieldDAO = new AirfieldDAOobjectify();
+		Airfield af = new Airfield();
+		af.setName(aa);
+		af.setId(aa);
+		af.setCountry(c);
+		airfieldDAO.addAirfield(af);
+		List<FeFlightEntry> list = OlcImport.importFromOLC(aa, 2012, 10);
+		assertEquals("Should import 10 Flight", 10, list.size());
+		for (FeFlightEntry fe : list) {
+			assertEquals("Landing place should be " + aa, aa, fe.getLandingPlace());
+		}
+		FeFlightEntry fe = list.get(4);
+		assertEquals("CompetitionID wrong", "HB-2474", fe.getCompetitionID());
+		assertEquals("Club wrong", "GVV Fribourg", fe.getClub());
+		assertEquals("Pilot wrong", "Walter Willi Goetschi", fe.getPilot());
+		assertEquals("RegistrationGlider wrong", "", fe.getRegistrationGlider());
 	}
 
 }

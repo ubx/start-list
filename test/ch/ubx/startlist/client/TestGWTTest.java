@@ -2,6 +2,7 @@ package ch.ubx.startlist.client;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.gwt.junit.client.GWTTestCase;
@@ -16,7 +17,7 @@ public class TestGWTTest extends GWTTestCase {
 	public static void tearDownAfterClass() throws Exception {
 	}
 
-	@Test
+	@Test @Ignore
 	public void test() {
 		FlightEntryListEntryPoint fep = new FlightEntryListEntryPoint();
 
