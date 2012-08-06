@@ -1,4 +1,10 @@
-<!-- Indices written at Wed, 20 Jun 2012 13:38:00 UTC -->
+<!-- Indices written at Fri, 3 Aug 2012 23:12:18 UTC -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="FeNode" ancestor="false" source="auto">
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>
