@@ -23,6 +23,9 @@ public class ValidateDb {
 		List<FePlace> emptyPlaces = new ArrayList<FePlace>();
 		List<FeDate> emptyDates = new ArrayList<FeDate>();
 		List<FeYear> years = dao.listYear();
+		int totalFlightEntries = dao.listflightEntry().size();
+		int inTreeFlightEntries = 0;
+		
 		for (FeYear year : years) {
 			log.log(Level.INFO, "Doing Year, id=" + year.getId());
 			List<FePlace> places = dao.listAirfield(year);
@@ -38,6 +41,8 @@ public class ValidateDb {
 							List<FeFlightEntry> flightEntries = dao.listflightEntry(date);
 							if (flightEntries.size() == 0) {
 								emptyDates.add(date);
+							} else {
+								inTreeFlightEntries = inTreeFlightEntries + flightEntries.size();
 							}
 						}
 					}
@@ -55,6 +60,10 @@ public class ValidateDb {
 
 		for (FeDate date : emptyDates) {
 			log.log(Level.WARNING, "Empty Date, id=" + date.getId());
+		}
+		
+		if (totalFlightEntries != inTreeFlightEntries) {
+			log.log(Level.WARNING, "FlightEntries, total="+ totalFlightEntries + ", in Tree="+inTreeFlightEntries);
 		}
 
 	}
