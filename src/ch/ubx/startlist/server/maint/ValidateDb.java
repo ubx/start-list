@@ -15,7 +15,15 @@ public class ValidateDb {
 	private static final Logger log = Logger.getLogger(ValidateDb.class.getName());
 	private static final FlightEntryDAOobjectify2 dao = new FlightEntryDAOobjectify2();
 
-	public static void validate() {
+	public static class Result {
+		public int numEmptyYears;
+		public int numEmptyPlaces;
+		public int numEmptyDates;
+		public int totalFlightEntries;
+		public int inTreeFlightEntries;
+	}
+
+	public static Result validate() {
 
 		log.log(Level.INFO, "Start...");
 
@@ -25,7 +33,7 @@ public class ValidateDb {
 		List<FeYear> years = dao.listYear();
 		int totalFlightEntries = dao.listflightEntry().size();
 		int inTreeFlightEntries = 0;
-		
+
 		for (FeYear year : years) {
 			log.log(Level.INFO, "Doing Year, id=" + year.getId());
 			List<FePlace> places = dao.listAirfield(year);
@@ -61,11 +69,19 @@ public class ValidateDb {
 		for (FeDate date : emptyDates) {
 			log.log(Level.WARNING, "Empty Date, id=" + date.getId());
 		}
-		
+
 		if (totalFlightEntries != inTreeFlightEntries) {
-			log.log(Level.WARNING, "FlightEntries, total="+ totalFlightEntries + ", in Tree="+inTreeFlightEntries);
+			log.log(Level.WARNING, "FlightEntries, total=" + totalFlightEntries + ", in Tree=" + inTreeFlightEntries);
 		}
 
+		final Result res = new Result();
+		res.numEmptyYears = emptyYears.size();
+		res.numEmptyPlaces = emptyPlaces.size();
+		res.numEmptyDates = emptyDates.size();
+		res.totalFlightEntries = totalFlightEntries;
+		res.inTreeFlightEntries = inTreeFlightEntries;
+
+		return res;
 	}
 
 }

@@ -25,7 +25,8 @@ public class TestGWTTest extends GWTTestCase {
 
 	@Override
 	public String getModuleName() {
-		return "ch.ubx.startlist.StartList";
+		//return "ch.ubx.startlist.Startlist";
+		return null; // TODO -- fix!
 	}
 
 }
