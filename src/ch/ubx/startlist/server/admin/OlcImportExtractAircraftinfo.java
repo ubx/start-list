@@ -26,6 +26,13 @@ public class OlcImportExtractAircraftinfo {
 		}
 
 		if (ddElements != null) {
+			/*
+			 * Element:
+			 * 0: Type of Glider
+			 * 1: Callsign
+			 * 2: Competition Id
+			 * 3: Index
+			 */
 			Element e = ddElements.get(1);
 			callsign = e != null ? e.getContent().toString() : null;
 			e = ddElements.get(2);
