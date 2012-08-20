@@ -53,16 +53,18 @@ public class OlcImportTest {
 		af.setId(aa);
 		af.setCountry(c);
 		airfieldDAO.addAirfield(af);
-		List<FeFlightEntry> list = OlcImport.importFromOLC(aa, 2012, 5);
+		List<FeFlightEntry> list = OlcImport.importFromOLC(aa, 2011, 5);
 		assertEquals("Should import 5 Flight", 5, list.size());
 		for (FeFlightEntry fe : list) {
 			assertEquals("Landing place should be " + aa, aa, fe.getLandingPlace());
 		}
-		FeFlightEntry fe = list.get(0);
-		assertEquals("CompetitionID wrong", "ES", fe.getCompetitionID());
-		assertEquals("Club wrong", "Southern Riverina GC", fe.getClub());
-		assertEquals("Pilot wrong", "Bernie Sizer", fe.getPilot());
-		assertEquals("RegistrationGlider wrong", "VH-GES", fe.getRegistrationGlider());
+		
+		// Assumption: this entry is the 2nd in the list from Tocumwal, year 2011. The list is 'static'. 
+		FeFlightEntry fe = list.get(1);
+		assertEquals("CompetitionID wrong", "kyo", fe.getCompetitionID());
+		assertEquals("Club wrong", "SportAviation Tocumwal", fe.getClub());
+		assertEquals("Pilot wrong", "Rhys Dyer", fe.getPilot());
+		assertEquals("RegistrationGlider wrong", "KYO", fe.getRegistrationGlider());
 	}
 	
 	@Test @Ignore
