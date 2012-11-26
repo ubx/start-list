@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.ubx.startlist.shared.FeFlightEntry;
@@ -12,7 +13,7 @@ import ch.ubx.startlist.shared.FeYear;
 
 public class UseCaseTest extends TestWithDb {
 
-	@Test
+	@Test @Ignore
 	public void test_00() {
 		FlightEntryDAOobjectify2 dao = new FlightEntryDAOobjectify2();
 

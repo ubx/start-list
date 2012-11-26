@@ -22,9 +22,11 @@ public class TestWithDb {
 	private static File sf = new File(sfName);
 	private static File tf = new File(tfName);
 
+	public static FlightEntryDAOobjectify2 flightEntryDAOobjectify;
+
 	@BeforeClass
 	public static void setUpBeforeClass() {
-	
+
 		// copy local_db-01-Aug-2012.bin to a temporary db
 		try {
 			FileUtils.copyFile(sf, tf);
@@ -48,6 +50,8 @@ public class TestWithDb {
 	@Before
 	public void setUp() throws Exception {
 		helper.setUp();
+		flightEntryDAOobjectify = new FlightEntryDAOobjectify2();
+
 	}
 
 	@After
