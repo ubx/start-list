@@ -42,11 +42,12 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
 		<nature>com.google.gwt.eclipse.core.gwtNature</nature>
-		<nature>com.google.gdt.eclipse.core.webAppNature</nature>
+		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
+		<nature>com.cloudbees.eclipse.core.cloudbeesNature</nature>
 		<nature>ccw.nature</nature>
+		<nature>com.google.gdt.eclipse.core.webAppNature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 	</natures>
 </projectDescription>

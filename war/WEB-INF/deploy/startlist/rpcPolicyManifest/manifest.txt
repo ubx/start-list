@@ -1,2 +1,7 @@
 # Module startlist
 # RPC service class, partial path of RPC policy file
+ch.ubx.startlist.client.LoginService, 49A570850F096B5A5B4C160CA86B9FEB.gwt.rpc
+ch.ubx.startlist.client.PilotService, 42379AFA0F9CFF614808241194648ECF.gwt.rpc
+ch.ubx.startlist.client.admin.OlcImportService, A2F1249A401F3586ED4A2F7A4ABBCC25.gwt.rpc
+ch.ubx.startlist.client.AirfieldService, FD4E1181864B576C0D0C7449A6B59E8F.gwt.rpc
+ch.ubx.startlist.client.FlightEntryService, E4872DA833D5B7A4BD3F06B2A94745B5.gwt.rpc
