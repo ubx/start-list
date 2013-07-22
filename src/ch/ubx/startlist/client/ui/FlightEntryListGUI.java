@@ -554,7 +554,14 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
                 }
             }
         }
-        landingPlacesSuggestBox.setValue(flightEntry.getLandingPlace());
+        if (newEntry)
+        {
+            String place = placeListBox.getItemCount() > 0 ? placeListBox.getValue(placeListBox.getSelectedIndex()) : "";
+            landingPlacesSuggestBox.setValue(place);
+
+        } else {        
+        	landingPlacesSuggestBox.setValue(flightEntry.getLandingPlace());
+        }
         registrationGliderBox.setValue(flightEntry.getRegistrationGlider());
         registrationTowplaneBox.setValue(flightEntry.getRegistrationTowplane());
     }
