@@ -1,0 +1,35 @@
+﻿Load local test data:
+
+1  Make sure google_appengine is installed
+2. Pull startlist from github (to get db-dumps/start-list.data)
+3. Start server in localmod
+4. Upload, for example (Please enter login credentials: anything?) :
+
+F:\workspaces\ws1\start-list\misc\db-dumps>"C:\Program Files (x86)\Google\google_appengine\bulkloader.py" --restore --app_id=start-list --url=http://127.0.0.1:8888/remote_api --filenam
+C:\Program Files (x86)\Google\google_appengine\google\appengine\api\search\search.py:232: UserWarning: DocumentOperationResult._code is deprecated. Use OperationResult._code instead.
+  'Use OperationResult.%s instead.' % (name, name))
+C:\Program Files (x86)\Google\google_appengine\google\appengine\api\search\search.py:232: UserWarning: DocumentOperationResult._CODES is deprecated. Use OperationResult._CODES instead.
+  'Use OperationResult.%s instead.' % (name, name))
+--app_id is deprecated, please use --application.
+[INFO    ] Logging to bulkloader-log-20130829.161302
+[INFO    ] Throttling transfers:
+[INFO    ] Bandwidth: 250000 bytes/second
+[INFO    ] HTTP connections: 8/second
+[INFO    ] Entities inserted/fetched/modified: 20/second
+[INFO    ] Batch Size: 10
+[INFO    ] Opening database: bulkloader-progress-20130829.161302.sql3
+[INFO    ] Connecting to 127.0.0.1:8888/remote_api
+Please enter login credentials for 127.0.0.1
+Email: andreas.luethi@gmx.net
+Password for andreas.luethi@gmx.net:
+[INFO    ] Starting import; maximum 10 entities per post
+........................................................................................................................................................................................
+........................................................................................................................................................................................
+........................................................................................................................................................................................
+........................................................................................................................................................................................
+........................................................................................................................................................................................
+[INFO    ] 10967 entities total, 0 previously transferred
+[INFO    ] 10967 entities (6241963 bytes) transferred in 543.0 seconds
+[INFO    ] All entities successfully transferred
+
+F:\workspaces\ws1\start-list\misc\db-dumps>
