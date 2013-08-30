@@ -544,6 +544,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
             pilotNameBox.setValue(""); // don't set pilot name from login info at the moment
             // pilotNameBox.setValue(currentLoginInfo.getLastName() + " " + currentLoginInfo.getFirstName());
         }
+        
         if (allAirfields != null) {
             GwtUtil.setItems(allPlacesListBox, GwtUtil.toAirfieldNames(allAirfields));
             // TODO - it may be slow if lots of airfields -> optimize!
@@ -554,6 +555,7 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
                 }
             }
         }
+        
         if (newEntry)
         {
             String place = placeListBox.getItemCount() > 0 ? placeListBox.getValue(placeListBox.getSelectedIndex()) : "";
@@ -562,8 +564,20 @@ public class FlightEntryListGUI implements TimeFormat, TextConstants {
         } else {        
         	landingPlacesSuggestBox.setValue(flightEntry.getLandingPlace());
         }
-        registrationGliderBox.setValue(flightEntry.getRegistrationGlider());
-        registrationTowplaneBox.setValue(flightEntry.getRegistrationTowplane());
+        
+        if (newEntry)
+        {
+        	registrationGliderBox.setValue("HB-");
+        } else {
+        	registrationGliderBox.setValue(flightEntry.getRegistrationGlider());
+        }
+        
+        if (newEntry)
+        {
+        	registrationTowplaneBox.setValue("HB-");
+        } else {
+        	registrationTowplaneBox.setValue(flightEntry.getRegistrationTowplane());
+        }
     }
 
     private void saveForm(FeFlightEntry flightEntry) {
