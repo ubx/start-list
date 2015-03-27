@@ -44,7 +44,8 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
         clearCurrentDate();
     }
 
-    public void updateRowData(final int startRow, final int maxRows, final RowDataAcceptor acceptor) {
+    @Override
+	public void updateRowData(final int startRow, final int maxRows, final RowDataAcceptor acceptor) {
         // Check the simple cache first.
         //
         if (startRow == lastStartRow) {
@@ -59,11 +60,13 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
         // Fetch the data remotely.
         //
         flightEntryService.listFlightEntrie(currentDate, startRow, maxRows, new AsyncCallback<List<FeFlightEntry>>() {
-            public void onFailure(Throwable caught) {
+            @Override
+			public void onFailure(Throwable caught) {
                 acceptor.failed(caught);
             }
 
-            public void onSuccess(List<FeFlightEntry> result) {
+            @Override
+			public void onSuccess(List<FeFlightEntry> result) {
                 lastStartRow = startRow;
                 lastMaxRows = maxRows;
                 flightEntryList = result;
@@ -138,7 +141,8 @@ public class FlightEntryListeProvider implements DynaTableDataProvider, TimeForm
         currentDate = null;
     }
 
-    public void reset() {
+    @Override
+	public void reset() {
         lastMaxRows = -1;
         lastStartRow = -1;
     }

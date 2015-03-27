@@ -131,7 +131,7 @@ public class OlcImportExtractPilotInfo {
 				}
 
 				FeFlightEntry flightEntry = new FeFlightEntry();
-				flightEntry.setSource(flightEntry.SRC_OLC);
+				flightEntry.setSource(FeFlightEntry.SRC_OLC);
 				String dateStr = "";
 				List<Element> tdElements = trElement.getAllElements(HTMLElementName.TD);
 				for (int j = 0; j < idx.length - 1; j++) {
@@ -230,7 +230,7 @@ public class OlcImportExtractPilotInfo {
 		if (cache != null) {
 			String cont = (String) cache.get(sourceUrlString);
 			if (cont != null) {
-				Source source = new Source((CharSequence) cont);
+				Source source = new Source(cont);
 				if (source != null) {
 					log.log(Level.INFO, "Page get from cache, URL=" + sourceUrlString);
 					return source;

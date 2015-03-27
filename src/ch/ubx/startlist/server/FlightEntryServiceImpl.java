@@ -2,7 +2,6 @@ package ch.ubx.startlist.server;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import ch.ubx.startlist.client.FlightEntryService;

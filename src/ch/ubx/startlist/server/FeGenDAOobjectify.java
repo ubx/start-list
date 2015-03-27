@@ -100,12 +100,12 @@ public class FeGenDAOobjectify<T extends FeNode<V>, V> extends DAOBase implement
 
 	@Override
 	public List<T> list(Key<?> parentKey) {
-		return (List<T>) ofy().query(clazz).filter(PARENT, parentKey).list();
+		return ofy().query(clazz).filter(PARENT, parentKey).list();
 	}
 
 	@Override
 	public List<T> list(FeNode<?> parent) {
-		return (List<T>) ofy().query(clazz).filter(PARENT, parent).list();
+		return ofy().query(clazz).filter(PARENT, parent).list();
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class FeGenDAOobjectify<T extends FeNode<V>, V> extends DAOBase implement
 
 	@Override
 	public List<T> find(V value) {
-		return (List<T>) ofy().query(clazz).filter(VALUE, value).list();
+		return ofy().query(clazz).filter(VALUE, value).list();
 	}
 
 	private T newNode(V value) {

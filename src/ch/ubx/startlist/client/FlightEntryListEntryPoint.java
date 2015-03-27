@@ -33,6 +33,7 @@ public class FlightEntryListEntryPoint implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
+	@Override
 	public void onModuleLoad() {
 		doFlightEntry();
 	}
@@ -61,48 +62,56 @@ public class FlightEntryListEntryPoint implements EntryPoint {
 	private void wireGUIEvents() {
 
 		gui.newButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventNewButtonClicked();
 			}
 		});
 
 		gui.modifyButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventModifyButtonClicked();
 			}
 		});
 
 		gui.saveButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventSaveButtonClicked();
 			}
 		});
 
 		gui.deleteButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventDeleteButtonClicked();
 			}
 		});
 
 		gui.discardButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventDiscardClicked();
 			}
 		});
 
 		gui.btnClose.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventCloseClicked();
 			}
 		});
 
 		gui.yearListBox.addChangeHandler(new ChangeHandler() {
+			@Override
 			public void onChange(ChangeEvent event) {
 				gui.gui_eventYearListBoxChanged();
 			}
 		});
 
 		gui.placeListBox.addChangeHandler(new ChangeHandler() {
+			@Override
 			public void onChange(ChangeEvent event) {
 				gui.gui_eventPlaceListBoxChanged();
 
@@ -110,18 +119,21 @@ public class FlightEntryListEntryPoint implements EntryPoint {
 		});
 
 		gui.dateListBox.addChangeHandler(new ChangeHandler() {
+			@Override
 			public void onChange(ChangeEvent event) {
 				gui.gui_eventDateListBoxChanged();
 			}
 		});
 
 		gui.nextDayPushButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventNextDayPushButtonClicked();
 			}
 		});
 
 		gui.prevDayPushButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventPrevDayPushButtonClicked();
 			}

@@ -13,6 +13,7 @@ public class SuggestBox2 extends SuggestBox {
 		super(oracle);
 	}
 
+	@Override
 	public void setEnabled(boolean enabled) {
 		getFocusWidget().setEnabled(enabled);
 	}

@@ -12,6 +12,7 @@ public class LoginServiceDelegate {
 
 	public void login(String user) {
 		loginService.login(user, new AsyncCallback<LoginInfo>() {
+			@Override
 			public void onFailure(Throwable caught) {
 				gui.service_eventLoginFailed(caught);
 			}

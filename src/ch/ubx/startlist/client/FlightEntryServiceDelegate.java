@@ -17,11 +17,13 @@ public class FlightEntryServiceDelegate {
 
     public void createOrUpdateFlightEntry(final FeFlightEntry flightEntry) {
         flightEntryService.createOrUpdateFlightEntry(flightEntry, new AsyncCallback<FeFlightEntry>() {
-            public void onFailure(Throwable caught) {
+            @Override
+			public void onFailure(Throwable caught) {
                 gui.service_eventUpdateFlightEntryFailed(caught);
             }
 
-            public void onSuccess(FeFlightEntry result) {
+            @Override
+			public void onSuccess(FeFlightEntry result) {
                 gui.service_eventUpdateSuccessful(result);
             }
         });
@@ -29,11 +31,13 @@ public class FlightEntryServiceDelegate {
 
     public void removeFlightEntry(final FeFlightEntry flightEntry) {
         flightEntryService.removeFlightEntry(flightEntry, new AsyncCallback<FeFlightEntry>() {
-            public void onFailure(Throwable caught) {
+            @Override
+			public void onFailure(Throwable caught) {
                 gui.service_eventRemoveFlightEntryFailed(caught);
             }
 
-            public void onSuccess(FeFlightEntry result) {
+            @Override
+			public void onSuccess(FeFlightEntry result) {
                 gui.service_eventRemoveFlightEntrySuccessful(result);
             }
         });
@@ -41,11 +45,13 @@ public class FlightEntryServiceDelegate {
 
     public void listDate(final FePlace place) {
         flightEntryService.listDate(place, new AsyncCallback<List<FeDate>>() {
-            public void onFailure(Throwable caught) {
+            @Override
+			public void onFailure(Throwable caught) {
                 gui.service_eventListDatesFailed(caught);
             }
 
-            public void onSuccess(List<FeDate> result) {
+            @Override
+			public void onSuccess(List<FeDate> result) {
                 gui.service_eventListDatesSuccessful(result);
             }
 
@@ -54,11 +60,13 @@ public class FlightEntryServiceDelegate {
 
     public void listYears() {
         flightEntryService.listYear(new AsyncCallback<List<FeYear>>() {
-            public void onFailure(Throwable caught) {
+            @Override
+			public void onFailure(Throwable caught) {
                 gui.service_eventListYearsFailed(caught);
             }
 
-            public void onSuccess(List<FeYear> result) {
+            @Override
+			public void onSuccess(List<FeYear> result) {
                 gui.service_eventListYearsSuccessful(result);
 
             }
@@ -67,11 +75,13 @@ public class FlightEntryServiceDelegate {
 
     public void listPlaces(FeYear year) {
         flightEntryService.listPlace(year, new AsyncCallback<List<FePlace>>() {
-            public void onFailure(Throwable caught) {
+            @Override
+			public void onFailure(Throwable caught) {
                 gui.service_eventListPlacesFailed(caught);
             }
 
-            public void onSuccess(List<FePlace> result) {
+            @Override
+			public void onSuccess(List<FePlace> result) {
                 gui.service_eventListPlacesSuccessful(result);
 
             }

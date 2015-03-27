@@ -25,30 +25,35 @@ public class AdminGUIevents {
 
 		// Add a 'submit' button.
 		gui.analyzeFileButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventAnalyzeButtonClicked();
 			}
 		});
 		
 		gui.storeFileButton.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
 				gui.gui_eventStoreFileButtonClicked();
 			}
 		});
 
 		gui.addSubmitHandler(new FormPanel.SubmitHandler() {
+			@Override
 			public void onSubmit(SubmitEvent event) {
 				gui.eventSubmit(event);
 			}
 		});
 
 		gui.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 				gui.eventSubmitComplete(event);
 			}
 		});
 
 		gui.excelYearListBox.addChangeHandler(new ChangeHandler() {
+			@Override
 			public void onChange(ChangeEvent event) {
 				gui.gui_eventExcelYearListBoxChanged();
 			}

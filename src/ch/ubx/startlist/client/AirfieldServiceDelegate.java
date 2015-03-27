@@ -21,9 +21,11 @@ public class AirfieldServiceDelegate {
 
 	public void listAirfields() {
 		airfieldServiceAsync.getAirfields(new AsyncCallback<Set<Airfield>>() {
+			@Override
 			public void onFailure(Throwable caught) {
 			}
 
+			@Override
 			public void onSuccess(Set<Airfield> result) {
 				gui.service_eventAllListPlacesSuccessful(result);
 			}

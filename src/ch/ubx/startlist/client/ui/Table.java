@@ -32,6 +32,7 @@ public class Table extends Grid {
 		sinkEvents(Event.ONMOUSEDOWN | Event.ONMOUSEUP | Event.ONMOUSEOVER | Event.ONMOUSEOUT | Event.ONDBLCLICK);
 	}
 
+	@Override
 	public void onBrowserEvent(Event event) {
 		if (ignoreMouseEvents) {
 			return;

@@ -9,8 +9,6 @@ import ch.ubx.startlist.client.admin.OlcImportServiceDelegate;
 import ch.ubx.startlist.client.ui.FlightEntryListGUI;
 import ch.ubx.startlist.shared.Airfield;
 import ch.ubx.startlist.shared.FeFlightEntry;
-import ch.ubx.startlist.shared.FlightEntry;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;

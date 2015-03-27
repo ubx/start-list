@@ -30,6 +30,8 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -91,10 +93,11 @@ public class DynaTableWidget extends Composite {
 			panel.setSpacing(4);
 			panel.add(body);
 			panel.add(closeButton);
-			panel.setCellHorizontalAlignment(closeButton, VerticalPanel.ALIGN_RIGHT);
+			panel.setCellHorizontalAlignment(closeButton, HasHorizontalAlignment.ALIGN_RIGHT);
 			setWidget(panel);
 		}
 
+		@Override
 		public void onClick(ClickEvent event) {
 			hide();
 		}
@@ -122,11 +125,11 @@ public class DynaTableWidget extends Composite {
 			buttons.add(gotoPrev);
 			buttons.add(gotoNext);
 			bar.add(buttons, DockPanel.EAST);
-			bar.setCellHorizontalAlignment(buttons, DockPanel.ALIGN_RIGHT);
+			bar.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_RIGHT);
 			bar.add(status, DockPanel.CENTER);
-			bar.setVerticalAlignment(DockPanel.ALIGN_MIDDLE);
-			bar.setCellHorizontalAlignment(status, HasAlignment.ALIGN_RIGHT);
-			bar.setCellVerticalAlignment(status, HasAlignment.ALIGN_MIDDLE);
+			bar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+			bar.setCellHorizontalAlignment(status, HasHorizontalAlignment.ALIGN_RIGHT);
+			bar.setCellVerticalAlignment(status, HasVerticalAlignment.ALIGN_MIDDLE);
 			bar.setCellWidth(status, "100%");
 
 			// Initialize prev & first button to disabled.
@@ -135,6 +138,7 @@ public class DynaTableWidget extends Composite {
 			gotoFirst.setEnabled(false);
 		}
 
+		@Override
 		public void onClick(ClickEvent event) {
 			Object source = event.getSource();
 			if (source == gotoNext) {
@@ -154,6 +158,7 @@ public class DynaTableWidget extends Composite {
 	}
 
 	private class RowDataAcceptorImpl implements RowDataAcceptor {
+		@Override
 		public void accept(int startRow, String[][] data) {
 
 			int destRowCount = getDataRowCount();
@@ -192,6 +197,7 @@ public class DynaTableWidget extends Composite {
 			setStatusText((startRow + 1) + " - " + (startRow + srcRowCount));
 		}
 
+		@Override
 		public void failed(Throwable caught) {
 			setStatusText("Error");
 			if (errorDialog == null) {

@@ -21,10 +21,12 @@ public class PilotServiceDelegate {
 
 	public void listPilots() {
 		pilotServiceAsync.getPilots(new AsyncCallback<Set<Pilot>>() {
+			@Override
 			public void onFailure(Throwable caught) {
 				System.out.println("Error loading pilot names");
 			}
 
+			@Override
 			public void onSuccess(Set<Pilot> result) {
 				gui.service_eventAllListPilotsSuccessful(result);
 			}

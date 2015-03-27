@@ -1,15 +1,7 @@
 package ch.ubx.startlist.server;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Set;
-
 import org.junit.Test;
-
-import ch.ubx.startlist.shared.FlightEntry;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
